@@ -8,7 +8,7 @@
 
 .inner {
   display: flex;
-  width: 1280px;
+  width: min(100% - 48px, 1280px);
   height: 100%;
   margin: 0 auto;
   align-items: center;
@@ -53,4 +53,28 @@
   background: #111111;
   font-size: 14px;
   font-weight: 700;
+}
+
+.mobileMenu {
+  display: none;
+}
+
+@media (max-width: 780px) {
+  .header {
+    height: 64px;
+  }
+
+  .inner {
+    width: calc(100% - 40px);
+  }
+
+  .navigation,
+  .login {
+    display: none;
+  }
+
+  .mobileMenu {
+    display: block;
+    margin-left: auto;
+  }
 }
