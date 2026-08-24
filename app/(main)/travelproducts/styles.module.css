@@ -1,0 +1,69 @@
+.page {
+  min-height: 100vh;
+}
+
+.banner {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  overflow: hidden;
+  background: #eeeeee;
+}
+
+.banner img {
+  object-fit: cover;
+}
+
+.container {
+  width: 1280px;
+  margin: 0 auto;
+  padding: 60px 0 120px;
+}
+
+.container h1 {
+  margin-bottom: 32px;
+  font-size: 28px;
+}
+
+.searchArea {
+  display: grid;
+  grid-template-columns: 260px 1fr 64px 178px;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.searchArea input,
+.searchArea button {
+  height: 48px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+}
+
+.searchArea input {
+  padding: 0 16px;
+}
+
+.searchArea button {
+  color: #ffffff;
+  background: #111111;
+}
+
+.searchArea .sellButton {
+  border-color: #2979ff;
+  background: #2979ff;
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  padding: 24px 0;
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+  list-style: none;
+}
+
+.categories li {
+  color: #777777;
+  font-size: 13px;
+  text-align: center;
+}

@@ -1,0 +1,56 @@
+.header {
+  position: relative;
+  z-index: 10;
+  height: 80px;
+  border-bottom: 1px solid #eeeeee;
+  background: #ffffff;
+}
+
+.inner {
+  display: flex;
+  width: 1280px;
+  height: 100%;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.logo {
+  position: relative;
+  width: 52px;
+  height: 32px;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+
+.logo img {
+  position: absolute;
+  top: -20px;
+  left: -92px;
+  width: 164px;
+  height: 112px;
+  max-width: none;
+}
+
+.navigation {
+  display: flex;
+  margin-left: 72px;
+  align-items: center;
+  gap: 40px;
+  color: #777777;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.navigation a[aria-current="page"] {
+  color: #111111;
+}
+
+.login {
+  margin-left: auto;
+  padding: 10px 22px;
+  border-radius: 999px;
+  color: #ffffff;
+  background: #111111;
+  font-size: 14px;
+  font-weight: 700;
+}
