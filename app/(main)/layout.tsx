@@ -25,6 +25,13 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </nav>
 
           <span className={styles.login}>로그인</span>
+          <Image
+            className={styles.mobileMenu}
+            src="/icon/outline/menu.svg"
+            alt=""
+            width={24}
+            height={24}
+          />
         </div>
       </header>
       {children}
