@@ -1,0 +1,252 @@
+.page {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.content {
+  width: min(100% - 48px, 820px);
+  margin: 0 auto;
+  padding: 40px 0 120px;
+}
+
+.back {
+  display: inline-flex;
+  margin-bottom: 32px;
+  align-items: center;
+  gap: 6px;
+  color: #555555;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.content h1 {
+  font-size: 32px;
+  letter-spacing: -0.04em;
+}
+
+.intro {
+  margin-top: 12px;
+  color: #777777;
+  font-size: 14px;
+}
+
+.form {
+  display: grid;
+  margin-top: 48px;
+  gap: 48px;
+}
+
+.form fieldset {
+  display: grid;
+  padding: 0;
+  gap: 28px;
+  border: 0;
+}
+
+.form legend {
+  width: 100%;
+  margin-bottom: 28px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid #111111;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.field {
+  display: grid;
+  gap: 10px;
+}
+
+.field label {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  color: #222222;
+  background: #ffffff;
+  font: inherit;
+}
+
+.field input {
+  height: 48px;
+  padding: 0 14px;
+}
+
+.field textarea {
+  min-height: 220px;
+  padding: 14px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #aaaaaa;
+}
+
+.field small,
+.uploadButton small {
+  color: #999999;
+  font-size: 12px;
+}
+
+.priceField {
+  position: relative;
+}
+
+.priceField input {
+  padding-right: 48px;
+}
+
+.priceField span {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  color: #777777;
+  font-size: 14px;
+}
+
+.addressField {
+  display: grid;
+  grid-template-columns: 1fr 112px;
+  gap: 10px;
+}
+
+.addressField button {
+  border: 1px solid #111111;
+  border-radius: 6px;
+  color: #111111;
+  background: #ffffff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.uploadArea {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.uploadButton,
+.preview {
+  position: relative;
+  overflow: hidden;
+  width: 160px;
+  aspect-ratio: 1;
+  border-radius: 8px;
+}
+
+.uploadButton {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 6px;
+  border: 1px dashed #bbbbbb;
+  color: #555555;
+  background: #fafafa;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.preview {
+  background: #eeeeee;
+}
+
+.preview img {
+  object-fit: cover;
+}
+
+.fileInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.actions a,
+.actions button {
+  display: inline-flex;
+  height: 52px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  background: #ffffff;
+  font: inherit;
+  font-weight: 800;
+}
+
+.actions button {
+  border-color: #2979ff;
+  color: #ffffff;
+  background: #2979ff;
+  cursor: pointer;
+}
+
+.status {
+  min-height: 20px;
+  color: #2979ff;
+  font-size: 14px;
+  text-align: center;
+}
+
+.back:focus-visible,
+.form :focus-visible,
+.actions a:focus-visible {
+  outline: 3px solid #2979ff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 780px) {
+  .content {
+    width: calc(100% - 40px);
+    padding: 24px 0 72px;
+  }
+
+  .back {
+    margin-bottom: 24px;
+  }
+
+  .content h1 {
+    font-size: 26px;
+  }
+
+  .form {
+    margin-top: 36px;
+    gap: 40px;
+  }
+
+  .form legend {
+    font-size: 18px;
+  }
+
+  .addressField {
+    grid-template-columns: 1fr;
+  }
+
+  .addressField button {
+    height: 44px;
+  }
+
+  .uploadButton,
+  .preview {
+    width: calc((100% - 12px) / 2);
+  }
+}

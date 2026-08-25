@@ -1,4 +1,8 @@
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 import styles from "./styles.module.css";
 
 const categories = [
@@ -46,22 +50,74 @@ const products = [
 
 const imagePath = "/images/숙박권 구매화면 이미지";
 
+const banners = [
+  {
+    image: "01.png",
+    eyebrow: "나를 위한 잠깐의 쉼",
+    title: "이번 주말, 어디로 떠나볼까요?",
+    alt: "푸른 바다와 오렌지색 파라솔이 있는 해변",
+  },
+  {
+    image: "02.png",
+    eyebrow: "일상에서 한 걸음 멀리",
+    title: "오래 기억될 하루를 만나보세요",
+    alt: "여행지 풍경",
+  },
+  {
+    image: "03.png",
+    eyebrow: "지금 떠나기 좋은 곳",
+    title: "나만의 숙소를 찾아보세요",
+    alt: "여행 숙소 풍경",
+  },
+];
+
 export default function TravelProductsPage() {
+  const [bannerIndex, setBannerIndex] = useState(0);
+  const banner = banners[bannerIndex];
+
+  const moveBanner = (direction: number) => {
+    setBannerIndex((current) => (current + direction + banners.length) % banners.length);
+  };
+
   return (
     <main className={styles.page}>
       <section className={styles.hero} aria-label="추천 여행지">
         <Image
-          src="/images/배너 이미지/01.png"
-          alt="푸른 바다와 오렌지색 파라솔이 있는 해변"
+          key={banner.image}
+          src={`/images/배너 이미지/${banner.image}`}
+          alt={banner.alt}
           fill
           priority
           sizes="100vw"
         />
         <div className={styles.heroText}>
-          <p>나를 위한 잠깐의 쉼</p>
-          <strong>이번 주말, 어디로 떠나볼까요?</strong>
+          <p>{banner.eyebrow}</p>
+          <strong>{banner.title}</strong>
         </div>
-        <span className={styles.indicator} aria-hidden="true" />
+        <div className={styles.heroControls}>
+          <button type="button" onClick={() => moveBanner(-1)} aria-label="이전 배너">
+            <Image src="/icon/outline/left_arrow.svg" alt="" width={24} height={24} />
+          </button>
+          <div
+            className={styles.dots}
+            role="group"
+            aria-label={`${bannerIndex + 1} / ${banners.length}`}
+          >
+            {banners.map((item, index) => (
+              <button
+                className={index === bannerIndex ? styles.activeDot : ""}
+                type="button"
+                onClick={() => setBannerIndex(index)}
+                aria-label={`${index + 1}번 배너 보기`}
+                aria-current={index === bannerIndex ? "true" : undefined}
+                key={item.image}
+              />
+            ))}
+          </div>
+          <button type="button" onClick={() => moveBanner(1)} aria-label="다음 배너">
+            <Image src="/icon/outline/right_arrow.svg" alt="" width={24} height={24} />
+          </button>
+        </div>
       </section>
 
       <div className={styles.content}>
@@ -147,7 +203,9 @@ export default function TravelProductsPage() {
             <button className={styles.searchButton} type="submit">
               검색
             </button>
-            <span className={styles.sellButton}>숙박권 판매하기</span>
+            <Link className={styles.sellButton} href="/travelproducts/new">
+              숙박권 판매하기
+            </Link>
           </form>
 
           <ul className={styles.categories} aria-label="숙소 유형">
@@ -166,7 +224,11 @@ export default function TravelProductsPage() {
 
           <div className={styles.productGrid}>
             {products.map((product, index) => (
-              <article className={styles.productCard} key={product.image}>
+              <Link
+                className={styles.productCard}
+                href={`/travelproducts/${index + 1}`}
+                key={product.image}
+              >
                 <div className={styles.productImage}>
                   <Image
                     src={`${imagePath}/${product.image}`}
@@ -195,11 +257,25 @@ export default function TravelProductsPage() {
                     <strong>{product.price}</strong>
                   </div>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </section>
       </div>
+
+      <aside className={styles.recent} aria-label="최근 본 숙박권">
+        <strong>최근 본</strong>
+        {products.slice(0, 3).map((product, index) => (
+          <Link href={`/travelproducts/${index + 1}`} key={product.image}>
+            <Image
+              src={`${imagePath}/${product.image}`}
+              alt={`${product.location} 숙박권`}
+              fill
+              sizes="56px"
+            />
+          </Link>
+        ))}
+      </aside>
     </main>
   );
 }
