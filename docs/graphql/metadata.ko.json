@@ -1,0 +1,1634 @@
+{
+  "OBJECT": {
+    "Query": {
+      "description": "서버의 데이터를 조회하는 GraphQL 작업입니다.",
+      "fields": {
+        "fetchBoard": {
+          "description": "게시글 ID로 게시글 한 건을 조회합니다.",
+          "auth": "불필요",
+          "args": {
+            "boardId": {
+              "description": "조회할 게시글의 고유 ID입니다.",
+              "documentation": {
+                "example": "BOARD_ID"
+              }
+            }
+          }
+        },
+        "fetchBoards": {
+          "description": "기간, 검색어와 페이지 조건으로 게시글 목록을 조회합니다.",
+          "auth": "불필요",
+          "note": "페이지당 항목 수와 검색 대상 필드는 스키마에 명시되어 있지 않습니다.",
+          "args": {
+            "endDate": {
+              "description": "조회 기간의 종료 일시입니다.",
+              "documentation": {
+                "example": "2026-12-31T23:59:59.999Z"
+              }
+            },
+            "startDate": {
+              "description": "조회 기간의 시작 일시입니다.",
+              "documentation": {
+                "example": "2026-01-01T00:00:00.000Z"
+              }
+            },
+            "search": {
+              "description": "게시글을 검색할 문자열입니다.",
+              "documentation": {
+                "example": "여행"
+              }
+            },
+            "page": {
+              "description": "조회할 페이지 번호입니다.",
+              "documentation": {
+                "example": 1
+              }
+            }
+          }
+        },
+        "fetchBoardsCount": {
+          "description": "기간과 검색어 조건에 맞는 게시글의 전체 개수를 조회합니다.",
+          "auth": "불필요",
+          "args": {
+            "endDate": {
+              "description": "조회 기간의 종료 일시입니다.",
+              "documentation": {
+                "example": "2026-12-31T23:59:59.999Z"
+              }
+            },
+            "startDate": {
+              "description": "조회 기간의 시작 일시입니다.",
+              "documentation": {
+                "example": "2026-01-01T00:00:00.000Z"
+              }
+            },
+            "search": {
+              "description": "게시글을 검색할 문자열입니다.",
+              "documentation": {
+                "example": "여행"
+              }
+            }
+          }
+        },
+        "fetchBoardsCountOfMine": {
+          "description": "현재 로그인 사용자가 작성한 게시글의 개수를 조회합니다.",
+          "auth": "access token 필요"
+        },
+        "fetchBoardsOfMine": {
+          "description": "현재 로그인 사용자가 작성한 게시글 목록을 조회합니다.",
+          "auth": "access token 필요"
+        },
+        "fetchBoardsOfTheBest": {
+          "description": "베스트 게시글 목록을 조회합니다.",
+          "auth": "불필요",
+          "note": "선정 기준과 반환 개수는 스키마에 명시되어 있지 않습니다."
+        },
+        "fetchBoardComments": {
+          "description": "게시글에 등록된 댓글 목록을 페이지 단위로 조회합니다.",
+          "auth": "불필요",
+          "args": {
+            "page": {
+              "description": "조회할 페이지 번호입니다.",
+              "documentation": {
+                "example": 1
+              }
+            },
+            "boardId": {
+              "description": "댓글을 조회할 게시글의 고유 ID입니다.",
+              "documentation": {
+                "example": "BOARD_ID"
+              }
+            }
+          }
+        },
+        "fetchPointTransactions": {
+          "description": "현재 로그인 사용자의 전체 포인트 거래 내역을 조회합니다.",
+          "auth": "access token 필요",
+          "args": {
+            "search": {
+              "description": "포인트 내역을 검색할 문자열입니다.",
+              "documentation": {
+                "example": ""
+              }
+            },
+            "page": {
+              "description": "조회할 페이지 번호입니다.",
+              "documentation": {
+                "example": 1
+              }
+            }
+          }
+        },
+        "fetchPointTransactionsCountOfBuying": {
+          "description": "현재 로그인 사용자의 구매 포인트 내역 개수를 조회합니다.",
+          "auth": "access token 필요"
+        },
+        "fetchPointTransactionsCountOfLoading": {
+          "description": "현재 로그인 사용자의 충전 포인트 내역 개수를 조회합니다.",
+          "auth": "access token 필요"
+        },
+        "fetchPointTransactionsCountOfSelling": {
+          "description": "현재 로그인 사용자의 판매 포인트 내역 개수를 조회합니다.",
+          "auth": "access token 필요"
+        },
+        "fetchPointTransactionsOfBuying": {
+          "description": "현재 로그인 사용자의 구매 포인트 내역을 조회합니다.",
+          "auth": "access token 필요",
+          "args": {
+            "search": {
+              "description": "구매 포인트 내역을 검색할 문자열입니다.",
+              "documentation": {
+                "example": ""
+              }
+            },
+            "page": {
+              "description": "조회할 페이지 번호입니다.",
+              "documentation": {
+                "example": 1
+              }
+            }
+          }
+        },
+        "fetchPointTransactionsOfLoading": {
+          "description": "현재 로그인 사용자의 충전 포인트 내역을 조회합니다.",
+          "auth": "access token 필요",
+          "args": {
+            "search": {
+              "description": "충전 포인트 내역을 검색할 문자열입니다.",
+              "documentation": {
+                "example": ""
+              }
+            },
+            "page": {
+              "description": "조회할 페이지 번호입니다.",
+              "documentation": {
+                "example": 1
+              }
+            }
+          }
+        },
+        "fetchPointTransactionsOfSelling": {
+          "description": "현재 로그인 사용자의 판매 포인트 내역을 조회합니다.",
+          "auth": "access token 필요",
+          "args": {
+            "search": {
+              "description": "판매 포인트 내역을 검색할 문자열입니다.",
+              "documentation": {
+                "example": ""
+              }
+            },
+            "page": {
+              "description": "조회할 페이지 번호입니다.",
+              "documentation": {
+                "example": 1
+              }
+            }
+          }
+        },
+        "fetchTravelproduct": {
+          "description": "숙박권 ID로 숙박권 한 건을 조회합니다.",
+          "auth": "불필요",
+          "args": {
+            "travelproductId": {
+              "description": "조회할 숙박권의 고유 ID입니다.",
+              "documentation": {
+                "example": "TRAVELPRODUCT_ID"
+              }
+            }
+          }
+        },
+        "fetchTravelproducts": {
+          "description": "판매 완료 여부, 검색어와 페이지 조건으로 숙박권 목록을 조회합니다.",
+          "auth": "불필요",
+          "note": "페이지당 항목 수와 검색 대상 필드는 스키마에 명시되어 있지 않습니다.",
+          "args": {
+            "isSoldout": {
+              "description": "판매 완료 여부로 목록을 필터링합니다.",
+              "documentation": {
+                "example": false
+              }
+            },
+            "search": {
+              "description": "숙박권을 검색할 문자열입니다.",
+              "documentation": {
+                "example": "제주"
+              }
+            },
+            "page": {
+              "description": "조회할 페이지 번호입니다.",
+              "documentation": {
+                "example": 1
+              }
+            }
+          }
+        },
+        "fetchTravelproductsCountIBought": {
+          "description": "현재 로그인 사용자가 구매한 숙박권의 개수를 조회합니다.",
+          "auth": "access token 필요"
+        },
+        "fetchTravelproductsCountIPicked": {
+          "description": "현재 로그인 사용자가 찜한 숙박권의 개수를 조회합니다.",
+          "auth": "access token 필요"
+        },
+        "fetchTravelproductsCountISold": {
+          "description": "현재 로그인 사용자가 판매한 숙박권의 개수를 조회합니다.",
+          "auth": "access token 필요"
+        },
+        "fetchTravelproductsIBought": {
+          "description": "현재 로그인 사용자가 구매한 숙박권 목록을 조회합니다.",
+          "auth": "access token 필요",
+          "args": {
+            "search": {
+              "description": "구매한 숙박권을 검색할 문자열입니다.",
+              "documentation": {
+                "example": ""
+              }
+            },
+            "page": {
+              "description": "조회할 페이지 번호입니다.",
+              "documentation": {
+                "example": 1
+              }
+            }
+          }
+        },
+        "fetchTravelproductsIPicked": {
+          "description": "현재 로그인 사용자가 찜한 숙박권 목록을 조회합니다.",
+          "auth": "access token 필요",
+          "args": {
+            "search": {
+              "description": "찜한 숙박권을 검색할 문자열입니다.",
+              "documentation": {
+                "example": ""
+              }
+            },
+            "page": {
+              "description": "조회할 페이지 번호입니다.",
+              "documentation": {
+                "example": 1
+              }
+            }
+          }
+        },
+        "fetchTravelproductsISold": {
+          "description": "현재 로그인 사용자가 판매한 숙박권 목록을 조회합니다.",
+          "auth": "access token 필요",
+          "args": {
+            "search": {
+              "description": "판매한 숙박권을 검색할 문자열입니다.",
+              "documentation": {
+                "example": ""
+              }
+            },
+            "page": {
+              "description": "조회할 페이지 번호입니다.",
+              "documentation": {
+                "example": 1
+              }
+            }
+          }
+        },
+        "fetchTravelproductsOfTheBest": {
+          "description": "베스트 숙박권 목록을 조회합니다.",
+          "auth": "불필요",
+          "note": "선정 기준과 반환 개수는 스키마에 명시되어 있지 않습니다."
+        },
+        "fetchTravelproductQuestions": {
+          "description": "숙박권에 등록된 문의 목록을 페이지 단위로 조회합니다.",
+          "auth": "불필요",
+          "args": {
+            "page": {
+              "description": "조회할 페이지 번호입니다.",
+              "documentation": {
+                "example": 1
+              }
+            },
+            "travelproductId": {
+              "description": "문의를 조회할 숙박권의 고유 ID입니다.",
+              "documentation": {
+                "example": "TRAVELPRODUCT_ID"
+              }
+            }
+          }
+        },
+        "fetchTravelproductQuestionAnswers": {
+          "description": "숙박권 문의에 등록된 답변 목록을 페이지 단위로 조회합니다.",
+          "auth": "불필요",
+          "args": {
+            "page": {
+              "description": "조회할 페이지 번호입니다.",
+              "documentation": {
+                "example": 1
+              }
+            },
+            "travelproductQuestionId": {
+              "description": "답변을 조회할 문의의 고유 ID입니다.",
+              "documentation": {
+                "example": "QUESTION_ID"
+              }
+            }
+          }
+        },
+        "fetchUser": {
+          "description": "이메일 주소로 사용자 한 명을 조회합니다.",
+          "auth": "불필요",
+          "args": {
+            "email": {
+              "description": "조회할 사용자의 이메일 주소입니다.",
+              "documentation": {
+                "example": "user@example.com"
+              }
+            }
+          }
+        },
+        "fetchUserLoggedIn": {
+          "description": "현재 로그인한 사용자 정보를 조회합니다.",
+          "auth": "access token 필요"
+        }
+      }
+    },
+    "Mutation": {
+      "description": "서버의 데이터를 생성, 수정 또는 삭제하는 GraphQL 작업입니다.",
+      "fields": {
+        "createBoard": {
+          "description": "새 게시글을 생성합니다.",
+          "auth": "불필요 또는 선택",
+          "note": "비로그인 작성 시 작성자와 비밀번호 입력을 사용하는 구조입니다.",
+          "args": {
+            "createBoardInput": {
+              "description": "게시글 생성에 필요한 입력값입니다.",
+              "documentation": {
+                "example": {
+                  "writer": "작성자",
+                  "password": "CHANGE_ME",
+                  "title": "여행 후기",
+                  "contents": "게시글 내용",
+                  "youtubeUrl": "",
+                  "boardAddress": {
+                    "zipcode": "00000",
+                    "address": "서울특별시",
+                    "addressDetail": "상세 주소"
+                  },
+                  "images": []
+                }
+              }
+            }
+          }
+        },
+        "deleteBoard": {
+          "description": "게시글 한 건을 삭제하고 삭제된 게시글 ID를 반환합니다.",
+          "auth": "확인 필요",
+          "note": "스키마에 비밀번호 인자가 없어 실제 권한 조건을 연동 전에 확인해야 합니다.",
+          "args": {
+            "boardId": {
+              "description": "삭제할 게시글의 고유 ID입니다.",
+              "documentation": {
+                "example": "BOARD_ID"
+              }
+            }
+          }
+        },
+        "deleteBoards": {
+          "description": "여러 게시글을 한 번에 삭제하고 삭제된 ID 목록을 반환합니다.",
+          "auth": "확인 필요",
+          "args": {
+            "boardIds": {
+              "description": "삭제할 게시글 ID 목록입니다.",
+              "documentation": {
+                "example": [
+                  "BOARD_ID_1",
+                  "BOARD_ID_2"
+                ]
+              }
+            }
+          }
+        },
+        "dislikeBoard": {
+          "description": "게시글의 싫어요 수를 증가시키고 변경된 개수를 반환합니다.",
+          "auth": "스키마상 확인 불가",
+          "args": {
+            "boardId": {
+              "description": "싫어요를 반영할 게시글의 고유 ID입니다.",
+              "documentation": {
+                "example": "BOARD_ID"
+              }
+            }
+          }
+        },
+        "likeBoard": {
+          "description": "게시글의 좋아요 수를 증가시키고 변경된 개수를 반환합니다.",
+          "auth": "스키마상 확인 불가",
+          "args": {
+            "boardId": {
+              "description": "좋아요를 반영할 게시글의 고유 ID입니다.",
+              "documentation": {
+                "example": "BOARD_ID"
+              }
+            }
+          }
+        },
+        "updateBoard": {
+          "description": "게시글의 입력된 필드를 수정합니다.",
+          "auth": "비밀번호 또는 access token 사용 추정",
+          "args": {
+            "updateBoardInput": {
+              "description": "수정할 게시글 필드입니다.",
+              "documentation": {
+                "example": {
+                  "title": "수정된 제목",
+                  "contents": "수정된 내용"
+                }
+              }
+            },
+            "password": {
+              "description": "비로그인 작성 게시글을 수정할 때 사용하는 비밀번호입니다.",
+              "documentation": {
+                "example": "CHANGE_ME"
+              }
+            },
+            "boardId": {
+              "description": "수정할 게시글의 고유 ID입니다.",
+              "documentation": {
+                "example": "BOARD_ID"
+              }
+            }
+          }
+        },
+        "createBoardComment": {
+          "description": "게시글에 새 댓글을 생성합니다.",
+          "auth": "불필요 또는 선택",
+          "args": {
+            "createBoardCommentInput": {
+              "description": "댓글 생성에 필요한 입력값입니다.",
+              "documentation": {
+                "example": {
+                  "writer": "작성자",
+                  "password": "CHANGE_ME",
+                  "contents": "댓글 내용",
+                  "rating": 5
+                }
+              }
+            },
+            "boardId": {
+              "description": "댓글을 등록할 게시글의 고유 ID입니다.",
+              "documentation": {
+                "example": "BOARD_ID"
+              }
+            }
+          }
+        },
+        "deleteBoardComment": {
+          "description": "댓글을 삭제하고 삭제된 댓글 ID를 반환합니다.",
+          "auth": "비밀번호 또는 access token 사용 추정",
+          "args": {
+            "password": {
+              "description": "비로그인 작성 댓글을 삭제할 때 사용하는 비밀번호입니다.",
+              "documentation": {
+                "example": "CHANGE_ME"
+              }
+            },
+            "boardCommentId": {
+              "description": "삭제할 댓글의 고유 ID입니다.",
+              "documentation": {
+                "example": "COMMENT_ID"
+              }
+            }
+          }
+        },
+        "updateBoardComment": {
+          "description": "댓글의 내용 또는 평점을 수정합니다.",
+          "auth": "비밀번호 또는 access token 사용 추정",
+          "args": {
+            "updateBoardCommentInput": {
+              "description": "수정할 댓글 필드입니다.",
+              "documentation": {
+                "example": {
+                  "contents": "수정된 댓글",
+                  "rating": 4
+                }
+              }
+            },
+            "password": {
+              "description": "비로그인 작성 댓글을 수정할 때 사용하는 비밀번호입니다.",
+              "documentation": {
+                "example": "CHANGE_ME"
+              }
+            },
+            "boardCommentId": {
+              "description": "수정할 댓글의 고유 ID입니다.",
+              "documentation": {
+                "example": "COMMENT_ID"
+              }
+            }
+          }
+        },
+        "uploadFile": {
+          "description": "파일을 업로드하고 저장된 파일 정보를 반환합니다.",
+          "auth": "확인 필요",
+          "note": "GraphQL multipart request 형식을 사용합니다.",
+          "args": {
+            "file": {
+              "description": "업로드할 파일입니다.",
+              "documentation": {
+                "example": "image.png"
+              }
+            }
+          }
+        },
+        "createPointTransactionOfBuyingAndSelling": {
+          "description": "숙박권 구매자와 판매자의 포인트 거래를 처리하고 구매된 숙박권을 반환합니다.",
+          "auth": "access token 필요 추정",
+          "args": {
+            "useritemId": {
+              "description": "구매할 숙박권의 고유 ID입니다.",
+              "documentation": {
+                "example": "TRAVELPRODUCT_ID"
+              }
+            }
+          }
+        },
+        "createPointTransactionOfLoading": {
+          "description": "결제 결과를 반영해 포인트 충전 내역을 생성합니다.",
+          "auth": "access token 필요 추정",
+          "note": "paymentId의 발급 주체와 사전 결제 과정은 스키마에 명시되어 있지 않습니다.",
+          "args": {
+            "paymentId": {
+              "description": "포인트 충전에 사용할 결제 고유 ID입니다.",
+              "documentation": {
+                "example": "PAYMENT_ID"
+              }
+            }
+          }
+        },
+        "restoreAccessToken": {
+          "description": "refresh token을 이용해 새 access token을 발급합니다.",
+          "auth": "refresh token 쿠키 필요"
+        },
+        "createTravelproduct": {
+          "description": "새 숙박권을 생성합니다.",
+          "auth": "access token 필요 추정",
+          "args": {
+            "createTravelproductInput": {
+              "description": "숙박권 생성에 필요한 입력값입니다.",
+              "documentation": {
+                "example": {
+                  "name": "제주 숙박권",
+                  "remarks": "바다 근처 숙소",
+                  "contents": "숙박권 상세 설명",
+                  "price": 100000,
+                  "tags": [
+                    "제주",
+                    "바다"
+                  ],
+                  "travelproductAddress": {
+                    "zipcode": "00000",
+                    "address": "제주특별자치도",
+                    "addressDetail": "상세 주소",
+                    "lat": 33.4996,
+                    "lng": 126.5312
+                  },
+                  "images": []
+                }
+              }
+            }
+          }
+        },
+        "deleteTravelproduct": {
+          "description": "숙박권을 삭제하고 삭제된 숙박권 ID를 반환합니다.",
+          "auth": "access token 필요 추정",
+          "args": {
+            "travelproductId": {
+              "description": "삭제할 숙박권의 고유 ID입니다.",
+              "documentation": {
+                "example": "TRAVELPRODUCT_ID"
+              }
+            }
+          }
+        },
+        "updateTravelproduct": {
+          "description": "숙박권의 입력된 필드를 수정합니다.",
+          "auth": "access token 필요 추정",
+          "args": {
+            "updateTravelproductInput": {
+              "description": "수정할 숙박권 필드입니다.",
+              "documentation": {
+                "example": {
+                  "name": "수정된 숙박권 이름",
+                  "remarks": "수정된 한 줄 설명",
+                  "price": 120000
+                }
+              }
+            },
+            "travelproductId": {
+              "description": "수정할 숙박권의 고유 ID입니다.",
+              "documentation": {
+                "example": "TRAVELPRODUCT_ID"
+              }
+            }
+          }
+        },
+        "toggleTravelproductPick": {
+          "description": "숙박권의 찜 상태를 전환하고 변경된 찜 개수를 반환합니다.",
+          "auth": "access token 필요 추정",
+          "args": {
+            "travelproductId": {
+              "description": "찜 상태를 전환할 숙박권의 고유 ID입니다.",
+              "documentation": {
+                "example": "TRAVELPRODUCT_ID"
+              }
+            }
+          }
+        },
+        "createTravelproductQuestion": {
+          "description": "숙박권에 새 문의를 생성합니다.",
+          "auth": "access token 필요 추정",
+          "args": {
+            "createTravelproductQuestionInput": {
+              "description": "문의 생성에 필요한 입력값입니다.",
+              "documentation": {
+                "example": {
+                  "contents": "사용 가능한 날짜가 궁금합니다."
+                }
+              }
+            },
+            "travelproductId": {
+              "description": "문의를 등록할 숙박권의 고유 ID입니다.",
+              "documentation": {
+                "example": "TRAVELPRODUCT_ID"
+              }
+            }
+          }
+        },
+        "deleteTravelproductQuestion": {
+          "description": "숙박권 문의를 삭제하고 삭제된 문의 ID를 반환합니다.",
+          "auth": "access token 필요 추정",
+          "args": {
+            "travelproductQuestionId": {
+              "description": "삭제할 문의의 고유 ID입니다.",
+              "documentation": {
+                "example": "QUESTION_ID"
+              }
+            }
+          }
+        },
+        "updateTravelproductQuestion": {
+          "description": "숙박권 문의 내용을 수정합니다.",
+          "auth": "access token 필요 추정",
+          "args": {
+            "updateTravelproductQuestionInput": {
+              "description": "수정할 문의 내용입니다.",
+              "documentation": {
+                "example": {
+                  "contents": "수정된 문의 내용"
+                }
+              }
+            },
+            "travelproductQuestionId": {
+              "description": "수정할 문의의 고유 ID입니다.",
+              "documentation": {
+                "example": "QUESTION_ID"
+              }
+            }
+          }
+        },
+        "createTravelproductQuestionAnswer": {
+          "description": "숙박권 문의에 새 답변을 생성합니다.",
+          "auth": "access token 필요 추정",
+          "args": {
+            "createTravelproductQuestionAnswerInput": {
+              "description": "답변 생성에 필요한 입력값입니다.",
+              "documentation": {
+                "example": {
+                  "contents": "해당 날짜에 사용할 수 있습니다."
+                }
+              }
+            },
+            "travelproductQuestionId": {
+              "description": "답변을 등록할 문의의 고유 ID입니다.",
+              "documentation": {
+                "example": "QUESTION_ID"
+              }
+            }
+          }
+        },
+        "deleteTravelproductQuestionAnswer": {
+          "description": "숙박권 문의 답변을 삭제하고 처리 결과 문자열을 반환합니다.",
+          "auth": "access token 필요 추정",
+          "args": {
+            "travelproductQuestionAnswerId": {
+              "description": "삭제할 답변의 고유 ID입니다.",
+              "documentation": {
+                "example": "ANSWER_ID"
+              }
+            }
+          }
+        },
+        "updateTravelproductQuestionAnswer": {
+          "description": "숙박권 문의 답변 내용을 수정합니다.",
+          "auth": "access token 필요 추정",
+          "args": {
+            "updateTravelproductQuestionAnswerInput": {
+              "description": "수정할 답변 내용입니다.",
+              "documentation": {
+                "example": {
+                  "contents": "수정된 답변 내용"
+                }
+              }
+            },
+            "travelproductQuestionAnswerId": {
+              "description": "수정할 답변의 고유 ID입니다.",
+              "documentation": {
+                "example": "ANSWER_ID"
+              }
+            }
+          }
+        },
+        "createUser": {
+          "description": "새 사용자를 생성합니다.",
+          "auth": "불필요",
+          "args": {
+            "createUserInput": {
+              "description": "회원가입에 필요한 사용자 입력값입니다.",
+              "documentation": {
+                "example": {
+                  "email": "user@example.com",
+                  "password": "CHANGE_ME",
+                  "name": "사용자"
+                }
+              }
+            }
+          }
+        },
+        "loginUser": {
+          "description": "이메일과 비밀번호로 로그인하고 access token을 반환합니다.",
+          "auth": "불필요",
+          "args": {
+            "password": {
+              "description": "로그인할 사용자의 비밀번호입니다.",
+              "documentation": {
+                "example": "CHANGE_ME"
+              }
+            },
+            "email": {
+              "description": "로그인할 사용자의 이메일 주소입니다.",
+              "documentation": {
+                "example": "user@example.com"
+              }
+            }
+          }
+        },
+        "loginUserExample": {
+          "description": "예제용 로그인 작업으로 access token을 반환합니다.",
+          "auth": "불필요",
+          "note": "loginUser와의 동작 차이는 스키마에 명시되어 있지 않습니다.",
+          "args": {
+            "password": {
+              "description": "로그인할 사용자의 비밀번호입니다.",
+              "documentation": {
+                "example": "CHANGE_ME"
+              }
+            },
+            "email": {
+              "description": "로그인할 사용자의 이메일 주소입니다.",
+              "documentation": {
+                "example": "user@example.com"
+              }
+            }
+          }
+        },
+        "logoutUser": {
+          "description": "현재 사용자를 로그아웃 처리하고 성공 여부를 반환합니다.",
+          "auth": "access token 또는 인증 쿠키 필요 추정"
+        },
+        "resetUserPassword": {
+          "description": "현재 로그인 사용자의 비밀번호를 변경합니다.",
+          "auth": "access token 필요 추정",
+          "args": {
+            "password": {
+              "description": "변경할 새 비밀번호입니다.",
+              "documentation": {
+                "example": "NEW_PASSWORD"
+              }
+            }
+          }
+        },
+        "updateUser": {
+          "description": "현재 로그인 사용자의 이름 또는 프로필 이미지를 수정합니다.",
+          "auth": "access token 필요 추정",
+          "args": {
+            "updateUserInput": {
+              "description": "수정할 사용자 정보입니다.",
+              "documentation": {
+                "example": {
+                  "name": "수정된 이름",
+                  "picture": "https://example.com/profile.png"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Board": {
+      "description": "트립토크 게시글 정보입니다.",
+      "fields": {
+        "_id": {
+          "description": "게시글의 고유 ID입니다."
+        },
+        "writer": {
+          "description": "비로그인 작성 시 입력한 작성자 이름입니다."
+        },
+        "title": {
+          "description": "게시글 제목입니다."
+        },
+        "contents": {
+          "description": "게시글 본문입니다."
+        },
+        "youtubeUrl": {
+          "description": "게시글에 첨부한 YouTube URL입니다."
+        },
+        "likeCount": {
+          "description": "좋아요 개수입니다."
+        },
+        "dislikeCount": {
+          "description": "싫어요 개수입니다."
+        },
+        "images": {
+          "description": "게시글에 첨부한 이미지 경로 목록입니다."
+        },
+        "boardAddress": {
+          "description": "게시글에 등록한 위치 정보입니다."
+        },
+        "user": {
+          "description": "로그인 상태로 작성한 사용자 정보입니다."
+        },
+        "createdAt": {
+          "description": "게시글 생성 일시입니다."
+        },
+        "updatedAt": {
+          "description": "게시글 최종 수정 일시입니다."
+        },
+        "deletedAt": {
+          "description": "게시글 삭제 일시이며 삭제되지 않았다면 null입니다."
+        }
+      }
+    },
+    "BoardAddress": {
+      "description": "게시글에 연결된 주소 정보입니다.",
+      "fields": {
+        "_id": {
+          "description": "게시글 주소의 고유 ID입니다."
+        },
+        "zipcode": {
+          "description": "우편번호입니다."
+        },
+        "address": {
+          "description": "기본 주소입니다."
+        },
+        "addressDetail": {
+          "description": "상세 주소입니다."
+        },
+        "createdAt": {
+          "description": "주소 정보 생성 일시입니다."
+        },
+        "updatedAt": {
+          "description": "주소 정보 최종 수정 일시입니다."
+        },
+        "deletedAt": {
+          "description": "주소 정보 삭제 일시이며 삭제되지 않았다면 null입니다."
+        }
+      }
+    },
+    "BoardComment": {
+      "description": "게시글에 등록된 댓글 정보입니다.",
+      "fields": {
+        "_id": {
+          "description": "댓글의 고유 ID입니다."
+        },
+        "writer": {
+          "description": "비로그인 작성 시 입력한 작성자 이름입니다."
+        },
+        "contents": {
+          "description": "댓글 내용입니다."
+        },
+        "rating": {
+          "description": "댓글에 등록한 평점입니다."
+        },
+        "user": {
+          "description": "로그인 상태로 작성한 사용자 정보입니다."
+        },
+        "createdAt": {
+          "description": "댓글 생성 일시입니다."
+        },
+        "updatedAt": {
+          "description": "댓글 최종 수정 일시입니다."
+        },
+        "deletedAt": {
+          "description": "댓글 삭제 일시이며 삭제되지 않았다면 null입니다."
+        }
+      }
+    },
+    "FileManager": {
+      "description": "업로드된 파일의 저장 정보입니다.",
+      "fields": {
+        "_id": {
+          "description": "파일 정보의 고유 ID입니다."
+        },
+        "url": {
+          "description": "업로드된 파일의 접근 경로입니다."
+        },
+        "size": {
+          "description": "업로드된 파일 크기입니다."
+        },
+        "isUsed": {
+          "description": "파일이 게시글이나 숙박권에서 사용 중인지 나타냅니다."
+        },
+        "createdAt": {
+          "description": "파일 정보 생성 일시입니다."
+        },
+        "updatedAt": {
+          "description": "파일 정보 최종 수정 일시입니다."
+        },
+        "deletedAt": {
+          "description": "파일 정보 삭제 일시이며 삭제되지 않았다면 null입니다."
+        }
+      }
+    },
+    "PointTransaction": {
+      "description": "사용자의 포인트 충전, 구매 또는 판매 거래 내역입니다.",
+      "fields": {
+        "_id": {
+          "description": "포인트 거래의 고유 ID입니다."
+        },
+        "impUid": {
+          "description": "결제 서비스의 거래 식별자입니다."
+        },
+        "amount": {
+          "description": "해당 거래에서 증감한 포인트 금액입니다."
+        },
+        "balance": {
+          "description": "거래 반영 후 포인트 잔액입니다."
+        },
+        "status": {
+          "description": "포인트 거래 상태입니다."
+        },
+        "statusDetail": {
+          "description": "포인트 거래 상태의 상세 구분입니다."
+        },
+        "travelproduct": {
+          "description": "구매 또는 판매 거래와 연결된 숙박권입니다."
+        },
+        "user": {
+          "description": "포인트 거래의 사용자입니다."
+        },
+        "createdAt": {
+          "description": "포인트 거래 생성 일시입니다."
+        },
+        "updatedAt": {
+          "description": "포인트 거래 최종 수정 일시입니다."
+        },
+        "deletedAt": {
+          "description": "포인트 거래 삭제 일시이며 삭제되지 않았다면 null입니다."
+        }
+      }
+    },
+    "Token": {
+      "description": "인증에 사용하는 토큰 응답입니다.",
+      "fields": {
+        "accessToken": {
+          "description": "Authorization Bearer 헤더에 사용하는 access token입니다."
+        }
+      }
+    },
+    "Travelproduct": {
+      "description": "판매 또는 구매할 수 있는 숙박권 정보입니다.",
+      "fields": {
+        "_id": {
+          "description": "숙박권의 고유 ID입니다."
+        },
+        "name": {
+          "description": "숙박권 이름입니다."
+        },
+        "remarks": {
+          "description": "숙박권의 한 줄 설명입니다."
+        },
+        "contents": {
+          "description": "숙박권의 상세 설명입니다."
+        },
+        "price": {
+          "description": "숙박권 판매 가격입니다."
+        },
+        "tags": {
+          "description": "숙박권 검색과 분류에 사용하는 태그 목록입니다."
+        },
+        "images": {
+          "description": "숙박권 이미지 경로 목록입니다."
+        },
+        "pickedCount": {
+          "description": "숙박권을 찜한 횟수입니다."
+        },
+        "travelproductAddress": {
+          "description": "숙박권의 주소와 좌표 정보입니다."
+        },
+        "buyer": {
+          "description": "숙박권을 구매한 사용자이며 판매 전에는 null일 수 있습니다."
+        },
+        "seller": {
+          "description": "숙박권을 판매하는 사용자입니다."
+        },
+        "soldAt": {
+          "description": "숙박권 판매 완료 일시이며 판매 전에는 null입니다."
+        },
+        "createdAt": {
+          "description": "숙박권 생성 일시입니다."
+        },
+        "updatedAt": {
+          "description": "숙박권 최종 수정 일시입니다."
+        },
+        "deletedAt": {
+          "description": "숙박권 삭제 일시이며 삭제되지 않았다면 null입니다."
+        }
+      }
+    },
+    "TravelproductAddress": {
+      "description": "숙박권에 연결된 주소와 위치 좌표입니다.",
+      "fields": {
+        "_id": {
+          "description": "숙박권 주소의 고유 ID입니다."
+        },
+        "zipcode": {
+          "description": "우편번호입니다."
+        },
+        "address": {
+          "description": "기본 주소입니다."
+        },
+        "addressDetail": {
+          "description": "상세 주소입니다."
+        },
+        "lat": {
+          "description": "위도입니다."
+        },
+        "lng": {
+          "description": "경도입니다."
+        },
+        "createdAt": {
+          "description": "주소 정보 생성 일시입니다."
+        },
+        "updatedAt": {
+          "description": "주소 정보 최종 수정 일시입니다."
+        },
+        "deletedAt": {
+          "description": "주소 정보 삭제 일시이며 삭제되지 않았다면 null입니다."
+        }
+      }
+    },
+    "TravelproductQuestion": {
+      "description": "숙박권에 등록된 사용자 문의입니다.",
+      "fields": {
+        "_id": {
+          "description": "문의의 고유 ID입니다."
+        },
+        "contents": {
+          "description": "문의 내용입니다."
+        },
+        "travelproduct": {
+          "description": "문의가 등록된 숙박권입니다."
+        },
+        "user": {
+          "description": "문의를 작성한 사용자입니다."
+        },
+        "createdAt": {
+          "description": "문의 생성 일시입니다."
+        },
+        "updatedAt": {
+          "description": "문의 최종 수정 일시입니다."
+        },
+        "deletedAt": {
+          "description": "문의 삭제 일시이며 삭제되지 않았다면 null입니다."
+        }
+      }
+    },
+    "TravelproductQuestionAnswer": {
+      "description": "숙박권 문의에 등록된 답변입니다.",
+      "fields": {
+        "_id": {
+          "description": "답변의 고유 ID입니다."
+        },
+        "contents": {
+          "description": "답변 내용입니다."
+        },
+        "travelproductQuestion": {
+          "description": "답변이 등록된 숙박권 문의입니다."
+        },
+        "user": {
+          "description": "답변을 작성한 사용자입니다."
+        },
+        "createdAt": {
+          "description": "답변 생성 일시입니다."
+        },
+        "updatedAt": {
+          "description": "답변 최종 수정 일시입니다."
+        },
+        "deletedAt": {
+          "description": "답변 삭제 일시이며 삭제되지 않았다면 null입니다."
+        }
+      }
+    },
+    "User": {
+      "description": "서비스 사용자 정보입니다.",
+      "fields": {
+        "_id": {
+          "description": "사용자의 고유 ID입니다."
+        },
+        "email": {
+          "description": "사용자의 이메일 주소입니다."
+        },
+        "name": {
+          "description": "사용자 이름입니다."
+        },
+        "picture": {
+          "description": "사용자 프로필 이미지 경로입니다."
+        },
+        "userPoint": {
+          "description": "사용자의 현재 포인트 정보입니다."
+        },
+        "createdAt": {
+          "description": "사용자 생성 일시입니다."
+        },
+        "updatedAt": {
+          "description": "사용자 정보 최종 수정 일시입니다."
+        },
+        "deletedAt": {
+          "description": "사용자 삭제 일시이며 삭제되지 않았다면 null입니다."
+        }
+      }
+    },
+    "UserPoint": {
+      "description": "사용자의 현재 포인트 잔액 정보입니다.",
+      "fields": {
+        "_id": {
+          "description": "사용자 포인트 정보의 고유 ID입니다."
+        },
+        "amount": {
+          "description": "현재 보유 포인트입니다."
+        },
+        "user": {
+          "description": "포인트 정보의 사용자입니다."
+        },
+        "createdAt": {
+          "description": "포인트 정보 생성 일시입니다."
+        },
+        "updatedAt": {
+          "description": "포인트 정보 최종 수정 일시입니다."
+        },
+        "deletedAt": {
+          "description": "포인트 정보 삭제 일시이며 삭제되지 않았다면 null입니다."
+        }
+      }
+    }
+  },
+  "INPUT_OBJECT": {
+    "BoardAddressInput": {
+      "description": "게시글 위치를 입력할 때 사용하는 주소 정보입니다.",
+      "inputFields": {
+        "zipcode": {
+          "description": "우편번호입니다.",
+          "documentation": {
+            "example": "00000"
+          }
+        },
+        "address": {
+          "description": "기본 주소입니다.",
+          "documentation": {
+            "example": "서울특별시"
+          }
+        },
+        "addressDetail": {
+          "description": "상세 주소입니다.",
+          "documentation": {
+            "example": "상세 주소"
+          }
+        }
+      }
+    },
+    "CreateBoardCommentInput": {
+      "description": "게시글 댓글 생성에 사용하는 입력값입니다.",
+      "inputFields": {
+        "writer": {
+          "description": "비로그인 댓글 작성자 이름입니다.",
+          "documentation": {
+            "example": "작성자"
+          }
+        },
+        "password": {
+          "description": "비로그인 댓글의 수정과 삭제에 사용할 비밀번호입니다.",
+          "documentation": {
+            "example": "CHANGE_ME"
+          }
+        },
+        "contents": {
+          "description": "댓글 내용입니다.",
+          "documentation": {
+            "example": "댓글 내용"
+          }
+        },
+        "rating": {
+          "description": "댓글 평점입니다.",
+          "documentation": {
+            "example": 5
+          }
+        }
+      }
+    },
+    "CreateBoardInput": {
+      "description": "게시글 생성에 사용하는 입력값입니다.",
+      "inputFields": {
+        "writer": {
+          "description": "비로그인 게시글 작성자 이름입니다.",
+          "documentation": {
+            "example": "작성자"
+          }
+        },
+        "password": {
+          "description": "비로그인 게시글의 수정과 삭제에 사용할 비밀번호입니다.",
+          "documentation": {
+            "example": "CHANGE_ME"
+          }
+        },
+        "title": {
+          "description": "게시글 제목입니다.",
+          "documentation": {
+            "example": "여행 후기"
+          }
+        },
+        "contents": {
+          "description": "게시글 본문입니다.",
+          "documentation": {
+            "example": "게시글 내용"
+          }
+        },
+        "youtubeUrl": {
+          "description": "게시글에 첨부할 YouTube URL입니다.",
+          "documentation": {
+            "example": "https://www.youtube.com/watch?v=VIDEO_ID"
+          }
+        },
+        "boardAddress": {
+          "description": "게시글에 등록할 위치 정보입니다.",
+          "documentation": {
+            "example": {
+              "zipcode": "00000",
+              "address": "서울특별시",
+              "addressDetail": "상세 주소"
+            }
+          }
+        },
+        "images": {
+          "description": "게시글에 첨부할 업로드 이미지 경로 목록입니다.",
+          "documentation": {
+            "example": [
+              "codecamp-file-storage/image.png"
+            ]
+          }
+        }
+      }
+    },
+    "CreateTravelproductInput": {
+      "description": "숙박권 생성에 사용하는 입력값입니다.",
+      "inputFields": {
+        "name": {
+          "description": "숙박권 이름입니다.",
+          "documentation": {
+            "example": "제주 숙박권"
+          }
+        },
+        "remarks": {
+          "description": "숙박권의 한 줄 설명입니다.",
+          "documentation": {
+            "example": "바다 근처 숙소"
+          }
+        },
+        "contents": {
+          "description": "숙박권 상세 설명입니다.",
+          "documentation": {
+            "example": "숙박권 상세 설명"
+          }
+        },
+        "price": {
+          "description": "숙박권 판매 가격입니다.",
+          "documentation": {
+            "example": 100000
+          }
+        },
+        "tags": {
+          "description": "숙박권 검색과 분류에 사용할 태그 목록입니다.",
+          "documentation": {
+            "example": [
+              "제주",
+              "바다"
+            ]
+          }
+        },
+        "travelproductAddress": {
+          "description": "숙박권의 주소와 좌표 정보입니다.",
+          "documentation": {
+            "example": {
+              "zipcode": "00000",
+              "address": "제주특별자치도",
+              "addressDetail": "상세 주소",
+              "lat": 33.4996,
+              "lng": 126.5312
+            }
+          }
+        },
+        "images": {
+          "description": "숙박권에 첨부할 업로드 이미지 경로 목록입니다.",
+          "documentation": {
+            "example": [
+              "codecamp-file-storage/image.png"
+            ]
+          }
+        }
+      }
+    },
+    "CreateTravelproductQuestionAnswerInput": {
+      "description": "숙박권 문의 답변 생성에 사용하는 입력값입니다.",
+      "inputFields": {
+        "contents": {
+          "description": "답변 내용입니다.",
+          "documentation": {
+            "example": "해당 날짜에 사용할 수 있습니다."
+          }
+        }
+      }
+    },
+    "CreateTravelproductQuestionInput": {
+      "description": "숙박권 문의 생성에 사용하는 입력값입니다.",
+      "inputFields": {
+        "contents": {
+          "description": "문의 내용입니다.",
+          "documentation": {
+            "example": "사용 가능한 날짜가 궁금합니다."
+          }
+        }
+      }
+    },
+    "CreateUserInput": {
+      "description": "회원가입에 사용하는 사용자 입력값입니다.",
+      "inputFields": {
+        "email": {
+          "description": "가입할 이메일 주소입니다.",
+          "documentation": {
+            "example": "user@example.com"
+          }
+        },
+        "password": {
+          "description": "로그인에 사용할 비밀번호입니다.",
+          "documentation": {
+            "example": "CHANGE_ME"
+          }
+        },
+        "name": {
+          "description": "사용자 이름입니다.",
+          "documentation": {
+            "example": "사용자"
+          }
+        }
+      }
+    },
+    "TravelproductAddressInput": {
+      "description": "숙박권 위치를 입력할 때 사용하는 주소와 좌표 정보입니다.",
+      "inputFields": {
+        "zipcode": {
+          "description": "우편번호입니다.",
+          "documentation": {
+            "example": "00000"
+          }
+        },
+        "address": {
+          "description": "기본 주소입니다.",
+          "documentation": {
+            "example": "제주특별자치도"
+          }
+        },
+        "addressDetail": {
+          "description": "상세 주소입니다.",
+          "documentation": {
+            "example": "상세 주소"
+          }
+        },
+        "lat": {
+          "description": "위도입니다.",
+          "documentation": {
+            "example": 33.4996
+          }
+        },
+        "lng": {
+          "description": "경도입니다.",
+          "documentation": {
+            "example": 126.5312
+          }
+        }
+      }
+    },
+    "UpdateBoardCommentInput": {
+      "description": "게시글 댓글 수정에 사용하는 입력값입니다.",
+      "inputFields": {
+        "contents": {
+          "description": "수정할 댓글 내용입니다.",
+          "documentation": {
+            "example": "수정된 댓글"
+          }
+        },
+        "rating": {
+          "description": "수정할 댓글 평점입니다.",
+          "documentation": {
+            "example": 4
+          }
+        }
+      }
+    },
+    "UpdateBoardInput": {
+      "description": "게시글 수정에 사용하는 입력값이며 전달한 필드만 변경합니다.",
+      "inputFields": {
+        "title": {
+          "description": "수정할 게시글 제목입니다.",
+          "documentation": {
+            "example": "수정된 제목"
+          }
+        },
+        "contents": {
+          "description": "수정할 게시글 본문입니다.",
+          "documentation": {
+            "example": "수정된 내용"
+          }
+        },
+        "youtubeUrl": {
+          "description": "수정할 YouTube URL입니다.",
+          "documentation": {
+            "example": "https://www.youtube.com/watch?v=VIDEO_ID"
+          }
+        },
+        "boardAddress": {
+          "description": "수정할 게시글 위치 정보입니다.",
+          "documentation": {
+            "example": {
+              "zipcode": "00000",
+              "address": "서울특별시",
+              "addressDetail": "상세 주소"
+            }
+          }
+        },
+        "images": {
+          "description": "수정할 이미지 경로 목록입니다.",
+          "documentation": {
+            "example": [
+              "codecamp-file-storage/image.png"
+            ]
+          }
+        }
+      }
+    },
+    "UpdateTravelproductInput": {
+      "description": "숙박권 수정에 사용하는 입력값이며 전달한 필드만 변경합니다.",
+      "inputFields": {
+        "name": {
+          "description": "수정할 숙박권 이름입니다.",
+          "documentation": {
+            "example": "수정된 숙박권 이름"
+          }
+        },
+        "remarks": {
+          "description": "수정할 한 줄 설명입니다.",
+          "documentation": {
+            "example": "수정된 한 줄 설명"
+          }
+        },
+        "contents": {
+          "description": "수정할 상세 설명입니다.",
+          "documentation": {
+            "example": "수정된 상세 설명"
+          }
+        },
+        "price": {
+          "description": "수정할 판매 가격입니다.",
+          "documentation": {
+            "example": 120000
+          }
+        },
+        "tags": {
+          "description": "수정할 태그 목록입니다.",
+          "documentation": {
+            "example": [
+              "제주",
+              "바다"
+            ]
+          }
+        },
+        "travelproductAddress": {
+          "description": "수정할 주소와 좌표 정보입니다.",
+          "documentation": {
+            "example": {
+              "zipcode": "00000",
+              "address": "제주특별자치도",
+              "addressDetail": "상세 주소",
+              "lat": 33.4996,
+              "lng": 126.5312
+            }
+          }
+        },
+        "images": {
+          "description": "수정할 이미지 경로 목록입니다.",
+          "documentation": {
+            "example": [
+              "codecamp-file-storage/image.png"
+            ]
+          }
+        }
+      }
+    },
+    "UpdateTravelproductQuestionAnswerInput": {
+      "description": "숙박권 문의 답변 수정에 사용하는 입력값입니다.",
+      "inputFields": {
+        "contents": {
+          "description": "수정할 답변 내용입니다.",
+          "documentation": {
+            "example": "수정된 답변 내용"
+          }
+        }
+      }
+    },
+    "UpdateTravelproductQuestionInput": {
+      "description": "숙박권 문의 수정에 사용하는 입력값입니다.",
+      "inputFields": {
+        "contents": {
+          "description": "수정할 문의 내용입니다.",
+          "documentation": {
+            "example": "수정된 문의 내용"
+          }
+        }
+      }
+    },
+    "UpdateUserInput": {
+      "description": "현재 로그인 사용자 정보 수정에 사용하는 입력값입니다.",
+      "inputFields": {
+        "name": {
+          "description": "수정할 사용자 이름입니다.",
+          "documentation": {
+            "example": "수정된 이름"
+          }
+        },
+        "picture": {
+          "description": "수정할 프로필 이미지 경로입니다.",
+          "documentation": {
+            "example": "https://example.com/profile.png"
+          }
+        }
+      }
+    }
+  },
+  "SCALAR": {
+    "Boolean": {
+      "description": "참 또는 거짓을 나타내는 논리값입니다.",
+      "documentation": {
+        "example": true
+      }
+    },
+    "DateTime": {
+      "description": "UTC 기준 ISO 8601 날짜와 시간 문자열입니다.",
+      "documentation": {
+        "example": "2026-08-26T00:00:00.000Z"
+      }
+    },
+    "Float": {
+      "description": "소수점을 포함할 수 있는 실수입니다.",
+      "documentation": {
+        "example": 4.5
+      }
+    },
+    "ID": {
+      "description": "데이터를 식별하는 고유 ID입니다. JSON 응답에서는 문자열로 표현됩니다.",
+      "documentation": {
+        "example": "RESOURCE_ID"
+      }
+    },
+    "Int": {
+      "description": "소수점이 없는 32비트 정수입니다.",
+      "documentation": {
+        "example": 1
+      }
+    },
+    "String": {
+      "description": "UTF-8 문자열입니다.",
+      "documentation": {
+        "example": "문자열"
+      }
+    },
+    "Upload": {
+      "description": "GraphQL multipart request로 전달하는 업로드 파일입니다.",
+      "documentation": {
+        "example": "image.png"
+      }
+    }
+  }
+}
