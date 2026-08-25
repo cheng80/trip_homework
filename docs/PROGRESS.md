@@ -8,6 +8,7 @@
 
 - Figma 숙박권 구매 메인 프레임: <https://www.figma.com/design/NtRv2iAX2RQp5BBQR5baC4/%EB%A9%94%EC%9D%B8%EC%BA%A0%ED%94%84--%EB%B3%B5%EC%82%AC-?node-id=285-31929&t=YsZN72ODO2GrnEYU-0>
 - 참고 프로젝트 절대 경로: `/Users/cheng80/Desktop/Sesac_Works/Master/triptalk_example`
+- 기술 수준 제약 참고 프로젝트: `/Users/cheng80/Desktop/Sesac_Works/Master/core_master_codes`
 - Figma 화면 범위
   - 로그인 및 회원가입
   - 트립토크
@@ -32,6 +33,7 @@
 - [x] 개발 네트워크의 `allowedDevOrigins` 설정
 - [x] 과제 제출용 단순 화면을 `main`에 커밋·푸시
 - [x] 상세 UI 작업용 `travelproducts-ui` 브랜치 생성
+- [x] `travelproducts-ui` 최신 커밋을 `main`에 병합·푸시
 - [ ] 기본 Create Next App 내용이 남은 `README.md`를 프로젝트 설명으로 교체
 - [ ] 인증 화면 작업을 시작할 때 `app/(auth)` Route Group 생성
 - [ ] 같은 UI가 두 화면 이상에서 사용될 때 `components`로 분리
@@ -61,7 +63,7 @@
 - [x] 숙소 카테고리 아이콘 영역 작성
 - [x] 정적 숙박권 카드 4개 작성
 - [x] 데스크톱·태블릿·모바일 CSS 분기 작성
-- [ ] Figma와 최종 간격·문구·이미지 비율 비교
+- [x] Figma와 최종 간격·문구·이미지 비율 비교
 - [ ] 최근 본 상품 영역 작성
 - [ ] 배너 페이지네이션과 이동 버튼 작성
 - [ ] 날짜 선택 동작 구현
@@ -186,8 +188,8 @@
 - [x] 숙박권 구매 메인의 781px 기준 CSS 작성
 - [x] 숙박권 구매 메인의 0~780px CSS 작성
 - [x] 숙박권 구매 메인 데스크톱 화면 확인
-- [ ] 숙박권 구매 메인 781px 화면 재확인
-- [ ] 숙박권 구매 메인 모바일 화면 재확인
+- [x] 숙박권 구매 메인 781px 화면 재확인
+- [x] 숙박권 구매 메인 모바일 화면 재확인
 - [ ] 트립토크 전체 화면 반응형 작성
 - [ ] 로그인·회원가입 전체 화면 반응형 작성
 - [ ] 마이페이지 전체 화면 반응형 작성
@@ -224,18 +226,21 @@
 
 ## 11. 검증과 배포
 
-- [x] 현재 `travelproducts-ui`에서 `yarn lint` 통과
-- [x] 현재 `travelproducts-ui`에서 `yarn build` 통과
+- [x] 현재 `main`에서 `yarn lint` 통과
+- [x] 현재 `main`에서 `yarn build` 통과
 - [x] 현재 `/travelproducts`의 브라우저 console warning/error 없음
 - [x] 상세 UI 변경 diff 최종 확인
 - [x] `travelproducts-ui` 변경 커밋
 - [x] `travelproducts-ui` 원격 푸시
+- [x] `travelproducts-ui` 최신 커밋을 `main`에 병합
+- [x] `main`과 `origin/main` 동기화 확인
+- [x] 반응형 보완 사항을 `main`에 커밋·푸시
 - [ ] 배포 전 각 라우트의 데스크톱·모바일 화면 확인
 - [ ] 배포 후 실제 Vercel 주소에서 주요 화면 확인
 
 ## 권장 작업 순서
 
-1. `travelproducts-ui`의 숙박권 구매 메인을 Figma와 비교한다.
+1. `main`의 숙박권 구매 메인을 Figma와 비교한다.
 2. 숙박권 상세와 판매 등록을 정적 화면으로 작성한다.
 3. 트립토크 메인·상세·등록 정적 화면을 작성한다.
 4. 로그인·회원가입 정적 화면을 작성한다.
