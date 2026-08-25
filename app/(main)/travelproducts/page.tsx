@@ -76,6 +76,7 @@ export default function TravelProductsPage() {
                   src={`${imagePath}/${product.image}`}
                   alt=""
                   fill
+                  loading="eager"
                   sizes="(max-width: 780px) 100vw, 50vw"
                 />
                 <div className={styles.featuredContent}>
@@ -171,6 +172,7 @@ export default function TravelProductsPage() {
                     src={`${imagePath}/${product.image}`}
                     alt={`${product.location} ${product.title}`}
                     fill
+                    loading={index === 0 ? "eager" : undefined}
                     sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   />
                   <span className={styles.imageCount}>▧ 2</span>

@@ -372,16 +372,22 @@
   }
 
   .filters {
+    position: relative;
     grid-template-columns: 1fr 1fr 64px;
+    padding-top: 40px;
   }
 
   .sellButton {
-    grid-column: 1 / -1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: max-content;
+    padding: 0 20px;
   }
 
   .categories {
     overflow-x: auto;
-    grid-template-columns: repeat(9, 92px);
+    grid-template-columns: repeat(9, minmax(0, 1fr));
   }
 
   .productGrid {
@@ -391,42 +397,59 @@
 
 @media (max-width: 780px) {
   .hero {
-    height: 260px;
+    height: 160px;
   }
 
-  .heroText {
-    left: 20px;
-  }
-
-  .heroText p {
-    font-size: 15px;
+  .heroText,
+  .indicator {
+    display: none;
   }
 
   .content {
     width: calc(100% - 40px);
-    padding: 48px 0 80px;
-    gap: 48px;
+    padding: 32px 0 64px;
+    gap: 36px;
   }
 
   .sectionTitle {
-    margin-bottom: 20px;
-    font-size: 22px;
-    line-height: 30px;
+    margin-bottom: 16px;
+    font-size: 18px;
+    line-height: 26px;
   }
 
   .featuredGrid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .featuredGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .featuredCard {
+    min-width: 78%;
+    scroll-snap-align: start;
   }
 
   .featuredContent {
-    right: 18px;
-    bottom: 18px;
-    left: 18px;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+  }
+
+  .featuredContent strong {
+    font-size: 14px;
+  }
+
+  .featuredContent span {
+    font-size: 13px;
   }
 
   .promotion {
-    height: 220px;
+    height: 96px;
   }
 
   .promotion::after {
@@ -434,24 +457,73 @@
   }
 
   .promotionContent {
-    right: 20px;
-    left: 20px;
+    right: 12px;
+    left: 42%;
   }
 
   .promotionContent strong {
-    font-size: 20px;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .promotionContent span {
+    display: none;
   }
 
   .filters {
-    grid-template-columns: 1fr 64px;
+    grid-template-columns: 1fr;
+    padding-top: 0;
   }
 
   .field:first-of-type,
-  .sellButton {
+  .searchField,
+  .searchButton {
     grid-column: 1 / -1;
   }
 
+  .field,
+  .searchButton {
+    height: 40px;
+  }
+
+  .sellButton {
+    top: -52px;
+    height: 32px;
+    padding: 0 12px;
+    font-size: 12px;
+  }
+
+  .categories {
+    overflow: visible;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px 0;
+  }
+
   .productGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 12px;
+  }
+
+  .productContent {
+    padding-top: 10px;
+  }
+
+  .productContent h3 {
+    min-height: 36px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .productContent p {
+    font-size: 10px;
+  }
+
+  .productMeta {
+    margin-top: 10px;
+    font-size: 10px;
+  }
+
+  .productMeta strong {
+    font-size: 11px;
   }
 }
