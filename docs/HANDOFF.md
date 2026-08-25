@@ -7,10 +7,9 @@
 ## 현재 Git 상태
 
 - 현재 체크아웃 브랜치: `dev`
-- `dev`, `origin/dev`, `main`, `origin/main`의 기준 커밋: `1168487 문서: main 작업 상태와 진행 현황 갱신`
+- `dev`, `origin/dev`, `main`, `origin/main`은 숙박권 정적 화면과 Kakao 주소 검색 작업까지 동기화
 - 후속 작업은 단일 작업 브랜치 `dev`에서 진행
 - 병합이 끝난 `travelproducts-ui`는 로컬과 원격에서 삭제 완료
-- 이번 숙박권 정적 화면 작업은 아직 커밋·푸시하지 않은 상태
 - 기존 미추적 계획 문서 `superpowers/docs/plans/2026-08-25-152049-01-plan-dev-branch-policy.md`는 보존
 
 주요 변경 파일:
@@ -25,6 +24,8 @@
 - `app/(main)/travelproducts/_components/travel-product-form.module.css`
 - `app/(main)/travelproducts/new/page.tsx`
 - `app/(main)/travelproducts/[travelproductId]/edit/page.tsx`
+- `package.json`
+- `package-lock.json`
 - `docs/HANDOFF.md`
 - `docs/PROGRESS.md`
 
@@ -43,9 +44,10 @@
 - 구매 확인과 포인트 부족 팝업
 - `/travelproducts/new` 판매 등록 폼
 - `/travelproducts/[travelproductId]/edit` 판매 수정 폼
+- `react-daum-postcode` 기반 Kakao 우편번호 주소 검색
 - 데스크톱·태블릿·모바일 CSS 분기
 
-GraphQL, Apollo Provider, API 요청, 주소 검색, 실제 구매·등록·수정·문의 저장은 구현하지 않았다.
+GraphQL, Apollo Provider, API 요청, 실제 구매·등록·수정·문의 저장은 구현하지 않았다.
 배너와 팝업, 폼 완료 표시는 브라우저 내부의 정적 상태만 사용한다.
 
 ## 다음 세션 시작 방법
@@ -72,5 +74,6 @@ GraphQL, Apollo Provider, API 요청, 주소 검색, 실제 구매·등록·수�
 - 라우트는 루트 `app`을 유지하며 `src/app`으로 이동하지 않는다.
 - `@/*`는 프로젝트 루트를 가리키는 현재 설정을 유지한다.
 - 실제 API가 준비되기 전에는 더미 데이터와 화면 상태만 작성한다.
+- Kakao 우편번호 서비스는 별도 서비스 키 없이 사용하며 `.env` 설정이 필요하지 않다.
 - 실제 Vercel 배포 결과는 아직 확인하지 않았다.
 - `next.config.ts`의 `allowedDevOrigins`는 `172.16.1.108`만 허용한다. 개발 PC의 네트워크 IP가 바뀌면 갱신이 필요하다.

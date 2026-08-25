@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import KakaoPostcodeEmbed, { type Address } from "react-daum-postcode";
 import styles from "./travel-product-form.module.css";
 
 type TravelProductFormProps = {
@@ -20,7 +21,19 @@ const editValues = {
 
 export default function TravelProductForm({ mode }: TravelProductFormProps) {
   const isEdit = mode === "edit";
+  const [address, setAddress] = useState(isEdit ? editValues.address : "");
   const [status, setStatus] = useState("");
+  const postcodeDialog = useRef<HTMLDialogElement>(null);
+  const postcodeTrigger = useRef<HTMLButtonElement>(null);
+  const detailAddressInput = useRef<HTMLInputElement>(null);
+
+  const handleAddressComplete = (data: Address) => {
+    const selectedAddress = data.userSelectedType === "R" ? data.roadAddress : data.jibunAddress;
+
+    setAddress(selectedAddress || data.address);
+    postcodeDialog.current?.close();
+    requestAnimationFrame(() => detailAddressInput.current?.focus());
+  };
 
   return (
     <main className={styles.page}>
@@ -83,13 +96,20 @@ export default function TravelProductForm({ mode }: TravelProductFormProps) {
                 <input
                   id="address"
                   name="address"
-                  defaultValue={isEdit ? editValues.address : ""}
+                  value={address}
+                  autoComplete="street-address"
                   placeholder="주소 검색 후 입력해 주세요."
+                  readOnly
                   required
                 />
-                <button type="button">주소 검색</button>
+                <button
+                  ref={postcodeTrigger}
+                  type="button"
+                  onClick={() => postcodeDialog.current?.showModal()}
+                >
+                  주소 검색
+                </button>
               </div>
-              <small>주소 검색은 주소 API 연결 후 동작합니다.</small>
             </div>
 
             <div className={styles.field}>
@@ -97,6 +117,8 @@ export default function TravelProductForm({ mode }: TravelProductFormProps) {
               <input
                 id="detail-address"
                 name="detailAddress"
+                ref={detailAddressInput}
+                autoComplete="address-line2"
                 defaultValue={isEdit ? editValues.detailAddress : ""}
                 placeholder="동·호수 또는 찾아오는 방법을 입력해 주세요."
                 required
@@ -167,6 +189,31 @@ export default function TravelProductForm({ mode }: TravelProductFormProps) {
           <p className={styles.status} role="status" aria-live="polite">{status}</p>
         </form>
       </div>
+
+      <dialog
+        className={styles.postcodeDialog}
+        ref={postcodeDialog}
+        aria-labelledby="postcode-title"
+        onClose={() => postcodeTrigger.current?.focus()}
+      >
+        <div className={styles.postcodeHeader}>
+          <h2 id="postcode-title">주소 검색</h2>
+          <button
+            type="button"
+            onClick={() => postcodeDialog.current?.close()}
+            aria-label="주소 검색 닫기"
+          >
+            <Image src="/icon/outline/close.svg" alt="" width={24} height={24} />
+          </button>
+        </div>
+        <KakaoPostcodeEmbed
+          autoClose={false}
+          onComplete={handleAddressComplete}
+          onClose={() => postcodeDialog.current?.close()}
+          style={{ width: "100%", height: "min(62vh, 480px)" }}
+          errorMessage={<p className={styles.postcodeError}>주소 검색을 불러오지 못했습니다.</p>}
+        />
+      </dialog>
     </main>
   );
 }
