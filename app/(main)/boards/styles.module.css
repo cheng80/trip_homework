@@ -32,9 +32,11 @@
 }
 
 .hotCard {
-  display: grid;
+  display: flex;
+  width: 100%;
+  max-width: 299px;
   min-width: 0;
-  grid-template-columns: 108px minmax(0, 1fr);
+  justify-content: space-between;
   gap: 14px;
   border-radius: 10px;
 }
@@ -42,6 +44,7 @@
 .hotImage {
   width: 108px;
   height: 148px;
+  flex: 0 0 auto;
   border-radius: 8px;
   object-fit: cover;
   outline: 1px solid rgb(0 0 0 / 10%);
@@ -50,6 +53,8 @@
 
 .hotContent {
   display: flex;
+  width: 100%;
+  max-width: 177px;
   min-width: 0;
   padding: 4px 0;
   flex-direction: column;
@@ -61,6 +66,7 @@
   margin-bottom: 14px;
   font-size: 15px;
   line-height: 1.5;
+  text-wrap: wrap;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
@@ -389,7 +395,7 @@
   }
 
   .hotCard {
-    grid-template-columns: 96px minmax(0, 1fr);
+    max-width: 287px;
   }
 
   .hotImage {
