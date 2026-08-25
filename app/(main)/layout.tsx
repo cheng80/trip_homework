@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import styles from "./layout.module.css";
 
@@ -8,6 +11,8 @@ type MainLayoutProps = {
 };
 
 export default function MainLayout({ children }: MainLayoutProps) {
+  const pathname = usePathname();
+
   return (
     <>
       <header className={styles.header}>
@@ -17,8 +22,13 @@ export default function MainLayout({ children }: MainLayoutProps) {
           </Link>
 
           <nav className={styles.navigation} aria-label="주 메뉴">
-            <span>트립토크</span>
-            <Link href="/travelproducts" aria-current="page">
+            <Link href="/boards" aria-current={pathname.startsWith("/boards") ? "page" : undefined}>
+              트립토크
+            </Link>
+            <Link
+              href="/travelproducts"
+              aria-current={pathname.startsWith("/travelproducts") ? "page" : undefined}
+            >
               숙박권 구매
             </Link>
             <span>마이 페이지</span>
