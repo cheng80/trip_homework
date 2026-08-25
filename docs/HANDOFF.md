@@ -7,8 +7,8 @@
 ## 현재 Git 상태
 
 - 현재 체크아웃 브랜치: `dev`
-- `dev`에서 공통 컴포넌트와 UI·상태 로직 분리 작업 완료
-- `dev`, `origin/dev`, `main`, `origin/main`은 `96f040e 리팩터링: UI 컴포넌트와 데이터 로직 분리 병합`까지 동기화
+- `dev`에서 로그인·회원가입 정적 화면 작업 완료
+- `dev`, `origin/dev`, `main`, `origin/main`은 로그인·회원가입 정적 화면 병합 커밋까지 동기화
 - 구조 변경 PR [#1](https://github.com/cheng80/trip_homework/pull/1) 병합 완료
 - 후속 작업은 단일 작업 브랜치 `dev`에서 진행
 - 병합이 끝난 `travelproducts-ui`는 로컬과 원격에서 삭제 완료
@@ -20,6 +20,7 @@
 - `components/commons`: 헤더, 뒤로가기, 주소 검색, 이미지 업로드, 섹션 제목
 - `components/boards`: 트립토크 카드·목록·상세·댓글·폼
 - `components/travelproducts`: 배너·카드·검색/카테고리·상세·문의·구매·폼
+- `components/auth`: 로그인·회원가입 공통 화면과 정적 입력 상태
 - `data`: API 연결 전 화면에 주입하는 mock 데이터
 - `hooks`: 검색·정렬·댓글·폼 제출 상태 로직
 - `types`: 트립토크·숙박권 UI 데이터 계약
@@ -36,7 +37,7 @@
 
 ## 현재 화면 범위
 
-`dev`에는 숙박권과 트립토크 정적 화면이 구현되어 있다.
+`dev`에는 숙박권, 트립토크, 로그인·회원가입 정적 화면이 구현되어 있다.
 
 - `/travelproducts` 메인 배너 이동·페이지 표시
 - 추천 숙소 영역
@@ -62,8 +63,12 @@
 - 재사용 가능한 트립토크 카드와 숙박권 카드
 - 메인·상세 라우트의 조립식 도메인 컴포넌트
 - 페이지·컴포넌트 이름에 맞춘 개별 CSS Module
+- `/login` 로그인 이미지·이메일·비밀번호 폼과 오류·입력 완료 상태
+- `/signup` 이름·이메일·비밀번호·비밀번호 확인 폼과 필드 오류·완료 팝업
+- 인증 화면의 400px 폼 영역과 1920px·781px·모바일 반응형 분기
+- 공통 헤더의 로그인 메뉴에서 `/login` 이동
 
-GraphQL, Apollo Provider, API 요청, 실제 구매·등록·수정·문의·게시글·댓글 저장은 구현하지 않았다.
+GraphQL, Apollo Provider, API 요청, 실제 로그인·회원가입·구매·등록·수정·문의·게시글·댓글 저장은 구현하지 않았다.
 배너와 팝업, 폼 완료 표시는 브라우저 내부의 정적 상태만 사용한다.
 
 ## 현재 검증 상태
@@ -85,33 +90,40 @@ GraphQL, Apollo Provider, API 요청, 실제 구매·등록·수정·문의·게
 - 1368px·499px에서 카드와 주요 섹션 렌더링 확인, console warning/error 없음
 - PR #1의 Vercel·Vercel Preview Comments checks 통과
 - `96f040e` 기준 Vercel main 배포 상태 `success` 확인
+- 로그인·회원가입 추가 후 `npm run lint`, `npm run build` 통과
+- 인증 화면 1920px·781px·390px·320px 가로 넘침 없음 확인
+- 로그인 오류 포커스·완료 상태와 회원가입 필드 오류·완료 팝업 확인
+- 헤더의 로그인 메뉴 이동과 인증 화면 console warning/error 없음 확인
 
-## 다음 작업: 로그인·회원가입 정적 화면
+## 다음 작업: 마이페이지 정적 화면
 
-Figma와 예시 프로젝트의 `(auth)` 구조를 참고하되 실제 인증 요청과 토큰 저장은 제외한다.
+Figma와 예시 프로젝트를 참고하되 실제 사용자·거래·포인트 데이터 연결은 제외한다.
 
-1. `app/(auth)/login`, `app/(auth)/signup` 라우트 생성
-2. 로그인 이미지와 이메일·비밀번호 폼 작성
-3. 회원가입 이름·이메일·비밀번호·비밀번호 확인 폼 작성
-4. 입력 전·오류·완료 정적 상태 작성
-5. 로그인 메뉴 연결과 1920px·781px·390px 화면 확인
+1. 마이페이지 라우트와 내부 메뉴 구조 결정
+2. 회원 정보와 보유 포인트 영역 작성
+3. 숙박권 거래내역·북마크 탭 작성
+4. 포인트 사용 내역과 비밀번호 변경 정적 화면 작성
+5. 1920px·781px·390px 화면 확인
 
 ## 다음 세션 시작 방법
 
 1. `git status --short --branch`로 브랜치와 작업 상태를 확인한다.
 2. 기존 `superpowers/` 미추적 파일을 보존한 뒤 `dev`에서 작업한다.
 3. `npm run dev`를 실행한다.
-4. Figma의 로그인·회원가입 1920px·781px·모바일 프레임을 먼저 확인한다.
-5. 예시 프로젝트의 `src/app/(auth)/login`, `src/app/(auth)/signup`을 참고한다.
-6. 루트 `app` 아래에 `app/(auth)`를 추가한다.
+4. Figma의 마이페이지 1920px·781px·모바일 프레임을 먼저 확인한다.
+5. 기존 로그인·회원가입 구현과 `superpowers/` 미추적 문서를 보존한다.
+6. 기존 라우트 조립·도메인 컴포넌트 분리 패턴을 유지한다.
 
 ## 주요 참고 자료
 
 - Figma 숙박권 구매 메인 프레임: <https://www.figma.com/design/NtRv2iAX2RQp5BBQR5baC4/%EB%A9%94%EC%9D%B8%EC%BA%A0%ED%94%84--%EB%B3%B5%EC%82%AC-?node-id=285-31929&t=YsZN72ODO2GrnEYU-0>
+- Figma 로그인·회원가입 섹션: <https://www.figma.com/design/NtRv2iAX2RQp5BBQR5baC4/%EB%A9%94%EC%9D%B8%EC%BA%A0%ED%94%84--%EB%B3%B5%EC%82%AC-?node-id=285-32640>
 - 참고 프로젝트 절대 경로: `/Users/cheng80/Desktop/Sesac_Works/Master/triptalk_example`
 - 기술 수준 제약 참고 프로젝트: `/Users/cheng80/Desktop/Sesac_Works/Master/core_master_codes`
 - 로그인 참고 화면: `/Users/cheng80/Desktop/Sesac_Works/Master/triptalk_example/src/app/(auth)/login/page.tsx`
 - 회원가입 참고 화면: `/Users/cheng80/Desktop/Sesac_Works/Master/triptalk_example/src/app/(auth)/signup/page.tsx`
+- 인증 공통 화면: `components/auth/auth-form.tsx`
+- 인증 공통 CSS: `components/auth/auth-form.module.css`
 - 숙박권 페이지: `app/(main)/travelproducts/page.tsx`
 - 숙박권 CSS: `app/(main)/travelproducts/page.module.css`
 - 숙박권 상세: `app/(main)/travelproducts/[travelproductId]/page.tsx`
