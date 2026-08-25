@@ -7,10 +7,10 @@
 ## 현재 Git 상태
 
 - 현재 체크아웃 브랜치: `dev`
-- `dev`, `origin/dev`, `main`, `origin/main`은 트립토크 정적 화면 작업까지 동기화
+- `dev`, `origin/dev`, `main`, `origin/main`은 `9d8b229 수정: 트립토크 핫 카드 너비 변경 병합`까지 동기화
 - 후속 작업은 단일 작업 브랜치 `dev`에서 진행
 - 병합이 끝난 `travelproducts-ui`는 로컬과 원격에서 삭제 완료
-- 기존 미추적 계획 문서 `superpowers/docs/plans/2026-08-25-152049-01-plan-dev-branch-policy.md`는 보존
+- 기존 미추적 계획 문서가 있는 `superpowers/docs/plans/`는 보존
 
 주요 변경 파일:
 
@@ -54,6 +54,7 @@
 - `react-daum-postcode` 기반 Kakao 우편번호 주소 검색
 - 데스크톱·태블릿·모바일 CSS 분기
 - `/boards` 핫 게시글·검색·정렬·페이지 이동 목록
+- 핫 게시글 카드의 최대 너비와 제목·날짜 영역 고정, 좁은 화면 축소 처리
 - `/boards/[boardId]` 게시글 이미지·위치·반응·댓글 상태
 - `/boards/new`, `/boards/[boardId]/edit` 등록·수정 공통 폼
 - 트립토크 폼의 Kakao 우편번호 주소 검색
@@ -69,6 +70,7 @@ GraphQL, Apollo Provider, API 요청, 실제 구매·등록·수정·문의·게
 - Kakao 우편번호 검색창 로드, 실제 주소 검색·선택, 상세 주소 포커스 이동 확인
 - 390px 모바일 팝업과 Escape 닫기·포커스 복귀 확인
 - 트립토크 1920px·781px·390px 화면과 가로 넘침 없음 확인
+- 핫 카드 1370px·1000px·390px·320px 셀·제목·날짜 너비 확인
 - 검색·페이지 이동·좋아요·댓글 등록·수정·삭제 상태 확인
 - 트립토크 등록 폼의 주소 검색 열기·닫기와 포커스 복귀 확인
 - 확장 프로그램이 없는 브라우저에서 console warning/error 없음
@@ -87,7 +89,7 @@ Figma와 예시 프로젝트의 `(auth)` 구조를 참고하되 실제 인증 �
 
 1. `git status --short --branch`로 브랜치와 작업 상태를 확인한다.
 2. 기존 `superpowers/` 미추적 파일을 보존한 뒤 `dev`에서 작업한다.
-3. `yarn dev`를 실행한다.
+3. `npm run dev`를 실행한다.
 4. Figma의 로그인·회원가입 1920px·781px·모바일 프레임을 먼저 확인한다.
 5. 예시 프로젝트의 `src/app/(auth)/login`, `src/app/(auth)/signup`을 참고한다.
 6. 루트 `app` 아래에 `app/(auth)`를 추가한다.
@@ -97,6 +99,8 @@ Figma와 예시 프로젝트의 `(auth)` 구조를 참고하되 실제 인증 �
 - Figma 숙박권 구매 메인 프레임: <https://www.figma.com/design/NtRv2iAX2RQp5BBQR5baC4/%EB%A9%94%EC%9D%B8%EC%BA%A0%ED%94%84--%EB%B3%B5%EC%82%AC-?node-id=285-31929&t=YsZN72ODO2GrnEYU-0>
 - 참고 프로젝트 절대 경로: `/Users/cheng80/Desktop/Sesac_Works/Master/triptalk_example`
 - 기술 수준 제약 참고 프로젝트: `/Users/cheng80/Desktop/Sesac_Works/Master/core_master_codes`
+- 로그인 참고 화면: `/Users/cheng80/Desktop/Sesac_Works/Master/triptalk_example/src/app/(auth)/login/page.tsx`
+- 회원가입 참고 화면: `/Users/cheng80/Desktop/Sesac_Works/Master/triptalk_example/src/app/(auth)/signup/page.tsx`
 - 숙박권 페이지: `app/(main)/travelproducts/page.tsx`
 - 숙박권 CSS: `app/(main)/travelproducts/styles.module.css`
 - 숙박권 상세: `app/(main)/travelproducts/[travelproductId]/page.tsx`
