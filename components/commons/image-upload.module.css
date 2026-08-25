@@ -1,0 +1,61 @@
+.uploadArea {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.uploadButton,
+.preview {
+  position: relative;
+  overflow: hidden;
+  width: 160px;
+  aspect-ratio: 1;
+  border-radius: 8px;
+}
+
+.uploadButton {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 6px;
+  border: 1px dashed #bbbbbb;
+  color: #555555;
+  background: #fafafa;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.uploadButton small {
+  color: #999999;
+  font-size: 12px;
+}
+
+.preview {
+  background: #eeeeee;
+}
+
+.preview img {
+  object-fit: cover;
+}
+
+.fileInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+
+.uploadButton:focus-within {
+  outline: 3px solid #2979ff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 780px) {
+  .uploadButton,
+  .preview {
+    width: calc((100% - 12px) / 2);
+  }
+}

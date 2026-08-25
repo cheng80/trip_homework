@@ -1,0 +1,102 @@
+.card {
+  display: flex;
+  width: 100%;
+  max-width: 299px;
+  min-width: 0;
+  justify-content: space-between;
+  gap: 14px;
+  border-radius: 10px;
+}
+
+.image {
+  width: 108px;
+  height: 148px;
+  flex: 0 0 auto;
+  border-radius: 8px;
+  object-fit: cover;
+  outline: 1px solid rgb(0 0 0 / 10%);
+  outline-offset: -1px;
+}
+
+.content {
+  display: flex;
+  width: 100%;
+  max-width: 177px;
+  min-width: 0;
+  padding: 4px 0;
+  flex-direction: column;
+}
+
+.content h2 {
+  display: -webkit-box;
+  overflow: hidden;
+  margin-bottom: 14px;
+  color: #111111;
+  font-size: 15px;
+  line-height: 1.5;
+  letter-spacing: -0.04em;
+  text-wrap: wrap;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.writer,
+.meta,
+.meta span {
+  display: flex;
+  align-items: center;
+}
+
+.writer {
+  min-width: 0;
+  gap: 7px;
+  color: #777777;
+  font-size: 12px;
+}
+
+.writer img {
+  border-radius: 50%;
+}
+
+.writer span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  margin-top: auto;
+  justify-content: space-between;
+  gap: 8px;
+  color: #888888;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.meta span {
+  gap: 4px;
+  color: #e24b4b;
+}
+
+.card:focus-visible {
+  outline: 2px solid #111111;
+  outline-offset: 3px;
+}
+
+@media (hover: hover) {
+  .card:hover h2 {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+@media (max-width: 780px) {
+  .card {
+    max-width: 287px;
+  }
+
+  .image {
+    width: 96px;
+    height: 130px;
+  }
+}

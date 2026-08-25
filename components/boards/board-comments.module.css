@@ -1,0 +1,196 @@
+.comments {
+  padding-top: 54px;
+}
+
+.comments > h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  letter-spacing: -0.03em;
+}
+
+.comments > h2 span {
+  color: #2979ff;
+}
+
+.commentForm {
+  padding: 20px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+}
+
+.commentForm > label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.commentForm textarea,
+.commentEdit textarea {
+  width: 100%;
+  min-height: 92px;
+  padding: 12px;
+  resize: vertical;
+  border: 1px solid #e3e3e3;
+  border-radius: 6px;
+  color: #333333;
+  background: #ffffff;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.commentForm textarea::placeholder {
+  color: #888888;
+}
+
+.commentForm > div,
+.commentEdit > div {
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.commentForm > div span {
+  margin-right: auto;
+  color: #888888;
+  font-size: 12px;
+}
+
+.commentForm button,
+.commentEdit button {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 6px;
+  color: #ffffff;
+  background: #111111;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.commentList {
+  margin-top: 16px;
+}
+
+.comment {
+  display: flex;
+  padding: 24px 4px;
+  gap: 14px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.comment > img {
+  flex: 0 0 auto;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.commentBody {
+  min-width: 0;
+  flex: 1;
+}
+
+.commentHeader {
+  display: flex;
+  margin-bottom: 14px;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.commentHeader > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.commentHeader strong {
+  font-size: 14px;
+}
+
+.commentHeader time {
+  color: #888888;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.commentActions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.commentActions button {
+  min-width: 44px;
+  min-height: 36px;
+  border: 0;
+  color: #666666;
+  background: transparent;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.commentBody > p {
+  color: #444444;
+  font-size: 14px;
+  line-height: 1.65;
+  overflow-wrap: break-word;
+}
+
+.commentEdit > div button:first-child {
+  color: #333333;
+  background: #eeeeee;
+}
+
+.commentForm button:focus-visible,
+.commentActions button:focus-visible,
+.commentEdit button:focus-visible {
+  outline: 2px solid #111111;
+  outline-offset: 3px;
+}
+
+.commentForm textarea:focus-visible,
+.commentEdit textarea:focus-visible {
+  border-color: #111111;
+  outline: 0;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 780px) {
+  .commentForm {
+    padding: 16px;
+  }
+
+  .commentForm textarea,
+  .commentEdit textarea {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .comment {
+    gap: 10px;
+  }
+
+  .comment > img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .commentHeader {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+}

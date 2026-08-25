@@ -1,0 +1,26 @@
+.page {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.content {
+  display: grid;
+  width: min(100% - 48px, 1280px);
+  margin: 0 auto;
+  padding: 72px 0 120px;
+  gap: 64px;
+}
+
+@media (max-width: 1024px) {
+  .content {
+    width: min(100% - 40px, 900px);
+  }
+}
+
+@media (max-width: 780px) {
+  .content {
+    width: calc(100% - 40px);
+    padding: 32px 0 64px;
+    gap: 36px;
+  }
+}

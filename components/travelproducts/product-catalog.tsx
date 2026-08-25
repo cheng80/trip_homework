@@ -1,0 +1,56 @@
+import Image from "next/image";
+import Link from "next/link";
+import SectionTitle from "@/components/commons/section-title";
+import type { TravelCategory, TravelProduct } from "@/types/travel-products";
+import TravelProductCard from "./travel-product-card";
+import styles from "./product-catalog.module.css";
+
+type ProductCatalogProps = {
+  categories: TravelCategory[];
+  products: TravelProduct[];
+};
+
+export default function ProductCatalog({ categories, products }: ProductCatalogProps) {
+  return (
+    <section aria-labelledby="exclusive-title">
+      <SectionTitle as="h2" id="exclusive-title">여기에서만 예약할 수 있는 숙소</SectionTitle>
+
+      <div className={styles.tabs}>
+        <span className={styles.activeTab}>여행 가능 숙소</span>
+        <span>예약 마감 숙소</span>
+      </div>
+
+      <form className={styles.filters} action="/travelproducts">
+        <label className={styles.srOnly} htmlFor="dates">여행 날짜</label>
+        <div className={styles.field}>
+          <Image src="/icon/outline/calendar.svg" alt="" width={20} height={20} />
+          <input id="dates" name="dates" placeholder="YYYY. MM. DD - YYYY. MM. DD" />
+        </div>
+
+        <label className={styles.srOnly} htmlFor="keyword">숙소 검색어</label>
+        <div className={`${styles.field} ${styles.searchField}`}>
+          <Image src="/icon/outline/search.svg" alt="" width={20} height={20} />
+          <input id="keyword" name="q" placeholder="지역을 검색해 주세요." />
+        </div>
+
+        <button className={styles.searchButton} type="submit">검색</button>
+        <Link className={styles.sellButton} href="/travelproducts/new">숙박권 판매하기</Link>
+      </form>
+
+      <ul className={styles.categories} aria-label="숙소 유형">
+        {categories.map(([label, icon], index) => (
+          <li className={index === 0 ? styles.activeCategory : ""} key={label}>
+            <Image src={`/icon/outline/${icon}`} alt="" width={24} height={24} />
+            <span>{label}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div className={styles.productGrid}>
+        {products.map((product, index) => (
+          <TravelProductCard product={product} productId={index + 1} key={product.image} />
+        ))}
+      </div>
+    </section>
+  );
+}

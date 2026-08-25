@@ -1,0 +1,109 @@
+.hero {
+  position: relative;
+  height: clamp(260px, 27vw, 516px);
+  overflow: hidden;
+  color: #ffffff;
+}
+
+.hero > img {
+  object-fit: cover;
+}
+
+.hero::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(0 0 0 / 38%), transparent 55%);
+  content: "";
+}
+
+.heroText {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: max(24px, calc((100% - 1280px) / 2));
+  transform: translateY(-50%);
+}
+
+.heroText p {
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.heroText strong {
+  font-size: clamp(30px, 2.5vw, 48px);
+  line-height: 1.25;
+  letter-spacing: -0.04em;
+}
+
+.heroControls {
+  position: absolute;
+  z-index: 1;
+  bottom: 20px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  transform: translateX(-50%);
+}
+
+.heroControls > button {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  place-items: center;
+  background: rgb(255 255 255 / 78%);
+  cursor: pointer;
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+}
+
+.dots button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 48%);
+  cursor: pointer;
+}
+
+.dots .activeDot {
+  width: 24px;
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+.heroControls button:focus-visible {
+  outline: 3px solid #2979ff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 780px) {
+  .hero {
+    height: 160px;
+  }
+
+  .heroText {
+    display: none;
+  }
+
+  .heroControls {
+    right: 16px;
+    bottom: 12px;
+    left: auto;
+    gap: 8px;
+    transform: none;
+  }
+
+  .heroControls > button {
+    width: 28px;
+    height: 28px;
+  }
+}

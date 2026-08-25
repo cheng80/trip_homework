@@ -1,0 +1,115 @@
+.card {
+  display: block;
+  min-width: 0;
+}
+
+.image {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1.15;
+  border-radius: 8px;
+  background: #eeeeee;
+}
+
+.image > img {
+  object-fit: cover;
+  transition: transform 240ms ease;
+}
+
+.imageCount {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  color: #ffffff;
+  background: rgb(0 0 0 / 46%);
+  font-size: 12px;
+}
+
+.content {
+  padding-top: 14px;
+}
+
+.content h3 {
+  display: -webkit-box;
+  overflow: hidden;
+  min-height: 44px;
+  font-size: 15px;
+  line-height: 22px;
+  letter-spacing: -0.02em;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.content p {
+  overflow: hidden;
+  margin-top: 6px;
+  color: #777777;
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  display: flex;
+  margin-top: 14px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.seller {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 7px;
+  color: #999999;
+}
+
+.seller img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.meta strong {
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.card:focus-visible {
+  outline: 3px solid #2979ff;
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .image > img {
+    transform: scale(1.025);
+  }
+}
+
+@media (max-width: 780px) {
+  .content {
+    padding-top: 10px;
+  }
+
+  .content h3 {
+    min-height: 36px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .content p {
+    font-size: 10px;
+  }
+
+  .meta {
+    margin-top: 10px;
+    font-size: 10px;
+  }
+
+  .meta strong {
+    font-size: 11px;
+  }
+}

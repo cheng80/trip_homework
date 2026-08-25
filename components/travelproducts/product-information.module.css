@@ -1,0 +1,75 @@
+.section {
+  width: min(100%, 820px);
+  margin-top: 80px;
+}
+
+.section h2 {
+  margin-bottom: 22px;
+  font-size: 24px;
+  letter-spacing: -0.03em;
+}
+
+.section > p,
+.section li {
+  color: #555555;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.section ul {
+  margin-top: 20px;
+  padding-left: 20px;
+}
+
+.address {
+  display: flex;
+  padding: 20px;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid #eeeeee;
+  border-radius: 8px 8px 0 0;
+}
+
+.address div {
+  display: grid;
+  gap: 6px;
+}
+
+.address p {
+  color: #888888;
+  font-size: 13px;
+}
+
+.map {
+  display: grid;
+  height: 260px;
+  place-items: center;
+  border-radius: 0 0 8px 8px;
+  color: #777777;
+  background:
+    linear-gradient(30deg, transparent 45%, rgb(255 255 255 / 75%) 46% 54%, transparent 55%),
+    linear-gradient(145deg, #d9e9d2, #e6e1c5 48%, #d5e5ef);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.map span {
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
+}
+
+@media (max-width: 780px) {
+  .section {
+    margin-top: 56px;
+  }
+
+  .section h2 {
+    font-size: 20px;
+  }
+
+  .map {
+    height: 200px;
+  }
+}

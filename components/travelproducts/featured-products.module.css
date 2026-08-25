@@ -1,0 +1,89 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1.55;
+  border-radius: 12px;
+  color: #ffffff;
+  background: #eeeeee;
+}
+
+.card > img {
+  object-fit: cover;
+  transition: transform 240ms ease;
+}
+
+.card::after {
+  position: absolute;
+  inset: 40% 0 0;
+  background: linear-gradient(transparent, rgb(0 0 0 / 75%));
+  content: "";
+}
+
+.content {
+  position: absolute;
+  z-index: 1;
+  right: 24px;
+  bottom: 22px;
+  left: 24px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.content strong {
+  max-width: 75%;
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.content span {
+  white-space: nowrap;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover > img {
+    transform: scale(1.025);
+  }
+}
+
+@media (max-width: 780px) {
+  .grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .card {
+    min-width: 78%;
+    scroll-snap-align: start;
+  }
+
+  .content {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+  }
+
+  .content strong {
+    font-size: 14px;
+  }
+
+  .content span {
+    font-size: 13px;
+  }
+}
