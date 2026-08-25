@@ -28,7 +28,7 @@ export default function Header() {
           <span>마이 페이지</span>
         </nav>
 
-        <span className={styles.login}>로그인</span>
+        <Link className={styles.login} href="/login">로그인</Link>
         <Image
           className={styles.mobileMenu}
           src="/icon/outline/menu.svg"
