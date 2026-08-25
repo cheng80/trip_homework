@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "docs:graphql": "node scripts/generate-graphql-docs.mjs",
+    "docs:graphql:check": "node scripts/generate-graphql-docs.mjs --check",
+    "docs:graphql:serve": "python3 -m http.server 4400 --directory public/graphql-docs"
   },
   "dependencies": {
     "next": "16.3.2",
@@ -20,6 +23,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.2",
+    "graphql": "^16.14.2",
+    "spectaql": "^3.0.9",
     "typescript": "^5"
   }
 }
