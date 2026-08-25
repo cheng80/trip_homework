@@ -1,6 +1,6 @@
 # TripTrip 작업 인수인계
 
-작성일: 2026-08-25
+작성일: 2026-08-26
 
 진행 체크리스트는 [PROGRESS.md](./PROGRESS.md)에서 관리한다.
 
@@ -8,7 +8,8 @@
 
 - 현재 체크아웃 브랜치: `dev`
 - `dev`에서 공통 컴포넌트와 UI·상태 로직 분리 작업 완료
-- 이번 구조 변경은 Pull Request를 통해 `main`에 병합
+- `dev`, `origin/dev`, `main`, `origin/main`은 `96f040e 리팩터링: UI 컴포넌트와 데이터 로직 분리 병합`까지 동기화
+- 구조 변경 PR [#1](https://github.com/cheng80/trip_homework/pull/1) 병합 완료
 - 후속 작업은 단일 작업 브랜치 `dev`에서 진행
 - 병합이 끝난 `travelproducts-ui`는 로컬과 원격에서 삭제 완료
 - 기존 미추적 계획 문서가 있는 `superpowers/docs/plans/`는 보존
@@ -82,6 +83,8 @@ GraphQL, Apollo Provider, API 요청, 실제 구매·등록·수정·문의·게
 - props 데이터 주입 구조 전환 후 트립토크 목록·상세·수정 초기값과 댓글·반응 상태 확인
 - 숙박권 메인·상세 조립 화면과 구매 팝업 확인
 - 1368px·499px에서 카드와 주요 섹션 렌더링 확인, console warning/error 없음
+- PR #1의 Vercel·Vercel Preview Comments checks 통과
+- `96f040e` 기준 Vercel main 배포 상태 `success` 확인
 
 ## 다음 작업: 로그인·회원가입 정적 화면
 
@@ -128,5 +131,5 @@ Figma와 예시 프로젝트의 `(auth)` 구조를 참고하되 실제 인증 �
 - `@/*`는 프로젝트 루트를 가리키는 현재 설정을 유지한다.
 - 실제 API가 준비되기 전에는 더미 데이터와 화면 상태만 작성한다.
 - Kakao 우편번호 서비스는 별도 서비스 키 없이 사용하며 `.env` 설정이 필요하지 않다.
-- 실제 Vercel 배포 결과는 아직 확인하지 않았다.
+- Vercel main 배포 성공 상태는 확인했으나 배포된 공개 주소의 주요 화면 수동 확인은 남아 있다.
 - `next.config.ts`의 `allowedDevOrigins`는 `172.16.1.108`만 허용한다. 개발 PC의 네트워크 IP가 바뀌면 갱신이 필요하다.
