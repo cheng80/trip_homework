@@ -1,120 +1,17 @@
-.page {
-  width: min(100% - 48px, 1280px);
-  margin: 0 auto;
-  padding: 64px 0 120px;
-}
-
-.page h1,
-.page h2 {
-  color: #111111;
-  letter-spacing: -0.04em;
-  text-wrap: balance;
-}
-
-.page h1,
-.titleRow h2 {
-  font-size: 28px;
-  line-height: 1.3;
-}
-
-.hotSection {
-  margin-bottom: 72px;
-}
-
-.hotSection > h1 {
-  margin-bottom: 28px;
-}
-
-.hotGrid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 28px;
-}
-
-.hotCard {
-  display: flex;
-  width: 100%;
-  max-width: 299px;
-  min-width: 0;
-  justify-content: space-between;
-  gap: 14px;
-  border-radius: 10px;
-}
-
-.hotImage {
-  width: 108px;
-  height: 148px;
-  flex: 0 0 auto;
-  border-radius: 8px;
-  object-fit: cover;
-  outline: 1px solid rgb(0 0 0 / 10%);
-  outline-offset: -1px;
-}
-
-.hotContent {
-  display: flex;
-  width: 100%;
-  max-width: 177px;
-  min-width: 0;
-  padding: 4px 0;
-  flex-direction: column;
-}
-
-.hotContent h2 {
-  display: -webkit-box;
-  overflow: hidden;
-  margin-bottom: 14px;
-  font-size: 15px;
-  line-height: 1.5;
-  text-wrap: wrap;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.writer,
-.hotMeta,
-.hotMeta span {
-  display: flex;
-  align-items: center;
-}
-
-.writer {
-  min-width: 0;
-  gap: 7px;
-  color: #777777;
-  font-size: 12px;
-}
-
-.writer img {
-  border-radius: 50%;
-}
-
-.writer span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.hotMeta {
-  margin-top: auto;
-  justify-content: space-between;
-  gap: 8px;
-  color: #888888;
-  font-size: 11px;
-  font-variant-numeric: tabular-nums;
-}
-
-.hotMeta span {
-  gap: 4px;
-  color: #e24b4b;
-}
-
 .titleRow {
-  display: flex;
   margin-bottom: 22px;
+  display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+}
+
+.titleRow h2 {
+  color: #111111;
+  font-size: 28px;
+  line-height: 1.3;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
 }
 
 .sortField select {
@@ -330,7 +227,6 @@
   font-weight: 800;
 }
 
-.hotCard:focus-visible,
 .sortField select:focus-visible,
 .searchButton:focus-visible,
 .writeButton:focus-visible,
@@ -351,7 +247,6 @@
 }
 
 @media (hover: hover) {
-  .hotCard:hover h2,
   .postTitle:hover {
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -359,11 +254,6 @@
 }
 
 @media (max-width: 1100px) {
-  .hotGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px 40px;
-  }
-
   .tools {
     align-items: stretch;
     flex-direction: column;
@@ -375,32 +265,8 @@
 }
 
 @media (max-width: 780px) {
-  .page {
-    width: calc(100% - 40px);
-    padding: 40px 0 80px;
-  }
-
-  .page h1,
   .titleRow h2 {
     font-size: 24px;
-  }
-
-  .hotSection {
-    margin-bottom: 56px;
-  }
-
-  .hotGrid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .hotCard {
-    max-width: 287px;
-  }
-
-  .hotImage {
-    width: 96px;
-    height: 130px;
   }
 
   .searchForm {

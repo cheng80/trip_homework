@@ -1,0 +1,150 @@
+.section {
+  width: min(100%, 820px);
+  margin-top: 80px;
+}
+
+.section h2 {
+  margin-bottom: 22px;
+  font-size: 24px;
+  letter-spacing: -0.03em;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.heading span {
+  margin-bottom: 22px;
+  color: #2979ff;
+  font-weight: 800;
+}
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.form label {
+  grid-column: 1 / -1;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.form textarea {
+  min-height: 112px;
+  padding: 14px;
+  resize: vertical;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  font: inherit;
+  line-height: 1.5;
+}
+
+.form button,
+.editReply button {
+  padding: 0 24px;
+  border: 0;
+  border-radius: 6px;
+  color: #ffffff;
+  background: #111111;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.inquiry {
+  padding: 28px 0;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.meta {
+  display: flex;
+  margin-bottom: 12px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.meta time {
+  color: #999999;
+  font-size: 12px;
+}
+
+.inquiry > p,
+.reply p {
+  color: #444444;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.reply {
+  display: flex;
+  margin-top: 20px;
+  padding: 18px;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 8px;
+  background: #f7f7f7;
+}
+
+.reply div {
+  display: grid;
+  gap: 8px;
+}
+
+.reply strong,
+.editReply label {
+  font-size: 13px;
+}
+
+.editReply {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  margin-top: 20px;
+  gap: 8px;
+}
+
+.editReply label {
+  grid-column: 1 / -1;
+  font-weight: 700;
+}
+
+.editReply input {
+  min-width: 0;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  font: inherit;
+}
+
+.form :focus-visible,
+.editReply :focus-visible {
+  outline: 3px solid #2979ff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 780px) {
+  .section {
+    margin-top: 56px;
+  }
+
+  .section h2 {
+    font-size: 20px;
+  }
+
+  .form,
+  .editReply {
+    grid-template-columns: 1fr;
+  }
+
+  .form button,
+  .editReply button {
+    height: 44px;
+  }
+}

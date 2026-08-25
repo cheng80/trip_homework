@@ -1,0 +1,25 @@
+.page {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.content {
+  width: min(100% - 48px, 1280px);
+  margin: 0 auto;
+  padding: 40px 0 120px;
+}
+
+.back {
+  margin-bottom: 28px;
+}
+
+@media (max-width: 780px) {
+  .content {
+    width: calc(100% - 40px);
+    padding: 24px 0 72px;
+  }
+
+  .back {
+    margin-bottom: 18px;
+  }
+}

@@ -1,0 +1,153 @@
+.page {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.content {
+  width: min(100% - 48px, 820px);
+  margin: 0 auto;
+  padding: 40px 0 120px;
+}
+
+.back {
+  margin-bottom: 32px;
+}
+
+.content h1 {
+  font-size: 32px;
+  letter-spacing: -0.04em;
+}
+
+.intro {
+  margin-top: 12px;
+  color: #777777;
+  font-size: 14px;
+}
+
+.form {
+  display: grid;
+  margin-top: 48px;
+  gap: 48px;
+}
+
+.form fieldset {
+  display: grid;
+  padding: 0;
+  gap: 28px;
+  border: 0;
+}
+
+.form legend {
+  width: 100%;
+  margin-bottom: 28px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid #111111;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.field {
+  display: grid;
+  gap: 10px;
+}
+
+.field label {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  color: #222222;
+  background: #ffffff;
+  font: inherit;
+}
+
+.field input {
+  height: 48px;
+  padding: 0 14px;
+}
+
+.field textarea {
+  min-height: 220px;
+  padding: 14px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #aaaaaa;
+}
+
+.field small {
+  color: #999999;
+  font-size: 12px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.actions a,
+.actions button {
+  display: inline-flex;
+  height: 52px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  background: #ffffff;
+  font: inherit;
+  font-weight: 800;
+}
+
+.actions button {
+  border-color: #2979ff;
+  color: #ffffff;
+  background: #2979ff;
+  cursor: pointer;
+}
+
+.status {
+  min-height: 20px;
+  color: #2979ff;
+  font-size: 14px;
+  text-align: center;
+}
+
+.form :focus-visible,
+.actions a:focus-visible {
+  outline: 3px solid #2979ff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 780px) {
+  .content {
+    width: calc(100% - 40px);
+    padding: 24px 0 72px;
+  }
+
+  .back {
+    margin-bottom: 24px;
+  }
+
+  .content h1 {
+    font-size: 26px;
+  }
+
+  .form {
+    margin-top: 36px;
+    gap: 40px;
+  }
+
+  .form legend {
+    font-size: 18px;
+  }
+
+}

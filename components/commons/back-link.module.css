@@ -1,0 +1,14 @@
+.backLink {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 6px;
+  color: #555555;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.backLink:focus-visible {
+  outline: 3px solid #2979ff;
+  outline-offset: 3px;
+}
