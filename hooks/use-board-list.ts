@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type FormEvent } from "react";
+import { selectBoardPosts, type BoardSort } from "@/domain/board-list";
 import type { BoardPost } from "@/types/boards";
 
 const pageSize = 10;
@@ -11,25 +12,17 @@ export function useBoardList(posts: BoardPost[]) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [dateRange, setDateRange] = useState({ start: "", end: "" });
-  const [sort, setSort] = useState("latest");
+  const [sort, setSort] = useState<BoardSort>("latest");
   const [page, setPage] = useState(1);
 
-  const filteredPosts = useMemo(() => {
-    const result = posts.filter((post) => {
-      const matchesKeyword = post.title.toLowerCase().includes(search.toLowerCase());
-      const matchesStart = !dateRange.start || post.date >= dateRange.start;
-      const matchesEnd = !dateRange.end || post.date <= dateRange.end;
-      return matchesKeyword && matchesStart && matchesEnd;
-    });
-
-    return [...result].sort((a, b) =>
-      sort === "likes" ? b.likes - a.likes : b.date.localeCompare(a.date),
-    );
-  }, [dateRange, posts, search, sort]);
-
-  const pageCount = Math.max(1, Math.ceil(filteredPosts.length / pageSize));
-  const currentPage = Math.min(page, pageCount);
-  const visiblePosts = filteredPosts.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const selected = useMemo(() => selectBoardPosts(posts, {
+    search,
+    startDate: dateRange.start,
+    endDate: dateRange.end,
+    sort,
+    page,
+    pageSize,
+  }), [dateRange, page, posts, search, sort]);
 
   const handleSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,7 +32,7 @@ export function useBoardList(posts: BoardPost[]) {
   };
 
   const changeSort = (value: string) => {
-    setSort(value);
+    setSort(value === "likes" ? "likes" : "latest");
     setPage(1);
   };
 
@@ -52,10 +45,10 @@ export function useBoardList(posts: BoardPost[]) {
     setEndDate,
     sort,
     changeSort,
-    page: currentPage,
+    page: selected.page,
     setPage,
-    pageCount,
-    visiblePosts,
+    pageCount: selected.pageCount,
+    visiblePosts: selected.posts,
     handleSearch,
   };
 }

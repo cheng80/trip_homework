@@ -12,7 +12,7 @@ export type TripTalkPost = BoardPost & {
 };
 
 export type BoardComment = {
-  id: number;
+  id: string;
   writer: string;
   date: string;
   contents: string;
@@ -43,4 +43,7 @@ export type BoardFormValues = {
   contents: string;
   address: string;
   detailAddress: string;
+  zipcode?: string;
+  youtubeUrl?: string;
+  images?: string[];
 };

@@ -51,14 +51,14 @@ export const boardDetail: BoardDetailData = {
   dislikes: 3,
   comments: [
     {
-      id: 1,
+      id: "1",
       writer: "초록빛 하루",
       date: "2026.08.25",
       contents: "사진만 봐도 바람이 느껴지는 것 같아요. 숙소 정보도 궁금해요!",
       profile: "/images/프로필 이미지/05.png",
     },
     {
-      id: 2,
+      id: "2",
       writer: "구름 산책",
       date: "2026.08.25",
       contents: "저도 다음 여행지로 꼭 가보고 싶어요. 좋은 장소 공유해 주셔서 감사합니다.",

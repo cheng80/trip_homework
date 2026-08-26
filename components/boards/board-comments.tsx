@@ -8,15 +8,15 @@ import styles from "./board-comments.module.css";
 type BoardCommentsProps = {
   comments: BoardComment[];
   comment: string;
-  editingId: number | null;
+  editingId: string | null;
   editingContents: string;
   onCommentChange: (value: string) => void;
   onEditingContentsChange: (value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onStartEditing: (comment: BoardComment) => void;
   onCancelEditing: () => void;
-  onSave: (id: number) => void;
-  onDelete: (id: number) => void;
+  onSave: (id: string) => void;
+  onDelete: (id: string) => void;
 };
 
 export default function BoardComments({

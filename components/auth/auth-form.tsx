@@ -3,16 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState, type FormEvent } from "react";
+import {
+  validateAuthInput,
+  type AuthErrors,
+  type AuthField,
+} from "@/domain/auth-validation";
 import styles from "./auth-form.module.css";
 
 type AuthFormProps = {
   mode: "login" | "signup";
 };
-
-type AuthField = "email" | "name" | "password" | "passwordCheck";
-type AuthErrors = Partial<Record<AuthField, string>>;
-
-const LOGIN_ERROR = "아이디 또는 비밀번호를 확인해 주세요.";
 
 function getInput(form: HTMLFormElement, name: AuthField) {
   return form.elements.namedItem(name) as HTMLInputElement;
@@ -41,34 +41,12 @@ export default function AuthForm({ mode }: AuthFormProps) {
     event.preventDefault();
 
     const form = event.currentTarget;
-    const email = getInput(form, "email");
-    const password = getInput(form, "password");
-    const nextErrors: AuthErrors = {};
-
-    if (!email.value) {
-      nextErrors.email = isLogin ? LOGIN_ERROR : "이메일을 입력해 주세요.";
-    } else if (!email.validity.valid) {
-      nextErrors.email = isLogin ? LOGIN_ERROR : "이메일 형식으로 입력해 주세요.";
-    }
-
-    if (!isLogin) {
-      const name = getInput(form, "name");
-      if (!name.value.trim()) nextErrors.name = "이름을 입력해 주세요.";
-    }
-
-    if (!password.value) {
-      nextErrors.password = isLogin ? LOGIN_ERROR : "비밀번호를 입력해 주세요.";
-    }
-
-    if (!isLogin) {
-      const passwordCheck = getInput(form, "passwordCheck");
-
-      if (!passwordCheck.value) {
-        nextErrors.passwordCheck = "비밀번호를 한번 더 입력해 주세요.";
-      } else if (password.value !== passwordCheck.value) {
-        nextErrors.passwordCheck = "비밀번호가 서로 달라요.";
-      }
-    }
+    const nextErrors = validateAuthInput(mode, {
+      email: getInput(form, "email").value,
+      name: isLogin ? undefined : getInput(form, "name").value,
+      password: getInput(form, "password").value,
+      passwordCheck: isLogin ? undefined : getInput(form, "passwordCheck").value,
+    });
 
     setErrors(nextErrors);
     setStatus("");

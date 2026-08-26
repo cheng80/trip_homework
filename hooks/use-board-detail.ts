@@ -7,7 +7,7 @@ export function useBoardDetail(board: BoardDetailData, viewer: BoardViewer) {
   const [reaction, setReaction] = useState<"like" | "dislike" | null>(null);
   const [comments, setComments] = useState<BoardComment[]>(board.comments);
   const [comment, setComment] = useState("");
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [editingContents, setEditingContents] = useState("");
 
   const submitComment = (event: FormEvent<HTMLFormElement>) => {
@@ -18,7 +18,7 @@ export function useBoardDetail(board: BoardDetailData, viewer: BoardViewer) {
     setComments((current) => [
       ...current,
       {
-        id: Date.now(),
+        id: String(Date.now()),
         writer: viewer.writer,
         date: viewer.commentDate,
         contents,
@@ -33,14 +33,14 @@ export function useBoardDetail(board: BoardDetailData, viewer: BoardViewer) {
     setEditingContents(item.contents);
   };
 
-  const saveComment = (id: number) => {
+  const saveComment = (id: string) => {
     const contents = editingContents.trim();
     if (!contents) return;
     setComments((current) => current.map((item) => item.id === id ? { ...item, contents } : item));
     setEditingId(null);
   };
 
-  const deleteComment = (id: number) => {
+  const deleteComment = (id: string) => {
     if (window.confirm("댓글을 삭제할까요?")) {
       setComments((current) => current.filter((item) => item.id !== id));
     }
