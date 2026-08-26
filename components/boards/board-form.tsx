@@ -75,11 +75,11 @@ export default function BoardForm({ mode, boardId = "1", initialValues }: BoardF
             <ImageUpload
               previews={isEdit ? [
                 {
-                  src: "/images/트립토크,숙박권 판매 등록 이미지/160x160.png",
+                  src: "/images/트립토크%2C숙박권 판매 등록 이미지/160x160.png",
                   alt: "첨부된 여행 사진 1",
                 },
                 {
-                  src: "/images/트립토크,숙박권 판매 등록 이미지/100x100.png",
+                  src: "/images/트립토크%2C숙박권 판매 등록 이미지/100x100.png",
                   alt: "첨부된 여행 사진 2",
                 },
               ] : []}

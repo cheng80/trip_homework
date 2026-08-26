@@ -96,11 +96,11 @@ export default function TravelProductForm({ mode, initialValues }: TravelProduct
             <ImageUpload
               previews={isEdit ? [
                 {
-                  src: "/images/트립토크,숙박권 판매 등록 이미지/160x160.png",
+                  src: "/images/트립토크%2C숙박권 판매 등록 이미지/160x160.png",
                   alt: "등록된 숙소 사진 1",
                 },
                 {
-                  src: "/images/트립토크,숙박권 판매 등록 이미지/100x100.png",
+                  src: "/images/트립토크%2C숙박권 판매 등록 이미지/100x100.png",
                   alt: "등록된 숙소 사진 2",
                 },
               ] : []}
