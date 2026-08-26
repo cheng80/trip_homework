@@ -15,7 +15,7 @@ export default function FeaturedProducts({ products }: FeaturedProductsProps) {
       </SectionTitle>
       <div className={styles.grid}>
         {products.slice(0, 2).map((product) => (
-          <article className={styles.card} key={product.image}>
+          <article className={styles.card} key={product.id}>
             <Image
               src={product.image}
               alt=""

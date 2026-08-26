@@ -33,6 +33,7 @@
 
 .navigation {
   display: flex;
+  height: 100%;
   margin-left: 72px;
   align-items: center;
   gap: 40px;
@@ -41,13 +42,36 @@
   font-weight: 600;
 }
 
+.navigation a {
+  position: relative;
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
 .navigation a[aria-current="page"] {
   color: #111111;
+  font-weight: 800;
+}
+
+.navigation a[aria-current="page"]::after {
+  position: absolute;
+  right: 0;
+  bottom: 18px;
+  left: 0;
+  height: 2px;
+  background: #111111;
+  content: "";
 }
 
 .login {
+  display: flex;
+  width: 104px;
+  height: 42px;
   margin-left: auto;
-  padding: 10px 22px;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
   border-radius: 999px;
   color: #ffffff;
   background: #111111;
@@ -55,8 +79,131 @@
   font-weight: 700;
 }
 
-.mobileMenu {
+.login span {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.profile {
+  position: relative;
+  margin-left: auto;
+}
+
+.profile > summary,
+.mobileNavigation > summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  cursor: pointer;
+}
+
+.profile > summary {
+  min-width: 56px;
+  min-height: 44px;
+  gap: 5px;
+}
+
+.profile > summary::-webkit-details-marker,
+.mobileNavigation > summary::-webkit-details-marker {
   display: none;
+}
+
+.profileImage,
+.profileInfo > img,
+.mobileProfile > img {
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 10%);
+}
+
+.profileArrow {
+  transition: transform 140ms ease-out;
+}
+
+.profile[open] .profileArrow {
+  transform: rotate(180deg);
+}
+
+.profileMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 244px;
+  padding: 8px 18px;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 10%);
+}
+
+.profileInfo,
+.profileRow {
+  display: flex;
+  width: 100%;
+  min-height: 54px;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #eeeeee;
+  color: #333333;
+  font-size: 14px;
+}
+
+.profileInfo {
+  min-height: 68px;
+}
+
+.profileInfo span,
+.mobileProfile span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profileInfo small,
+.mobileProfile small {
+  overflow: hidden;
+  color: #888888;
+  font-size: 11px;
+  font-weight: 400;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.profileRow:last-child {
+  border-bottom: 0;
+}
+
+.profileRow img {
+  flex: 0 0 auto;
+}
+
+.mobileNavigation {
+  display: none;
+}
+
+.login:focus-visible,
+.logo:focus-visible,
+.navigation a:focus-visible,
+.profile summary:focus-visible,
+.profileMenu a:focus-visible,
+.mobileNavigation summary:focus-visible,
+.mobilePanel a:focus-visible {
+  outline: 3px solid #246fe5;
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .navigation a:hover,
+  .profileRow:hover,
+  .mobilePanel a:hover {
+    color: #111111;
+  }
+
+  .login:hover {
+    background: #333333;
+  }
 }
 
 @media (max-width: 780px) {
@@ -69,12 +216,68 @@
   }
 
   .navigation,
-  .login {
+  .login,
+  .profile {
     display: none;
   }
 
-  .mobileMenu {
+  .mobileNavigation {
     display: block;
     margin-left: auto;
+  }
+
+  .mobileNavigation > summary {
+    width: 44px;
+    height: 44px;
+  }
+
+  .mobilePanel {
+    position: absolute;
+    top: 63px;
+    right: 0;
+    left: 0;
+    padding: 10px 20px 18px;
+    border-top: 1px solid #eeeeee;
+    background: #ffffff;
+    box-shadow: 0 12px 24px rgb(0 0 0 / 10%);
+  }
+
+  .mobilePanel nav {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobilePanel nav a,
+  .mobileAuth > a {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    color: #666666;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .mobilePanel nav a[aria-current="page"] {
+    color: #111111;
+  }
+
+  .mobileAuth {
+    display: flex;
+    min-height: 58px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border-top: 1px solid #eeeeee;
+  }
+
+  .mobileProfile {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mobileProfile strong {
+    font-size: 13px;
   }
 }

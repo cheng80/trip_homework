@@ -48,7 +48,7 @@ export default function ProductCatalog({ categories, products }: ProductCatalogP
 
       <div className={styles.productGrid}>
         {products.map((product, index) => (
-          <TravelProductCard product={product} productId={index + 1} key={product.image} />
+          <TravelProductCard product={product} priority={index === 0} key={product.id} />
         ))}
       </div>
     </section>

@@ -5,21 +5,21 @@ import styles from "./travel-product-card.module.css";
 
 type TravelProductCardProps = {
   product: TravelProduct;
-  productId: number;
+  priority?: boolean;
 };
 
-export default function TravelProductCard({ product, productId }: TravelProductCardProps) {
+export default function TravelProductCard({ product, priority }: TravelProductCardProps) {
   return (
-    <Link className={styles.card} href={`/travelproducts/${productId}`}>
+    <Link className={styles.card} href={`/travelproducts/${product.id}`}>
       <div className={styles.image}>
         <Image
           src={product.image}
           alt={`${product.location} ${product.title}`}
           fill
-          loading={productId === 1 ? "eager" : undefined}
+          loading={priority ? "eager" : undefined}
           sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
-        <span className={styles.imageCount}>▧ 2</span>
+        <span className={styles.imageCount}>▧ {product.imageCount}</span>
       </div>
       <div className={styles.content}>
         <h3>{product.location}: {product.title}</h3>
@@ -27,12 +27,12 @@ export default function TravelProductCard({ product, productId }: TravelProductC
         <div className={styles.meta}>
           <span className={styles.seller}>
             <Image
-              src={`/images/프로필 이미지/0${productId}.png`}
+              src={product.seller.profile}
               alt=""
               width={24}
               height={24}
             />
-            트립호스트
+            {product.seller.name}
           </span>
           <strong>{product.price}</strong>
         </div>

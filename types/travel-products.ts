@@ -1,9 +1,12 @@
 export type TravelProduct = {
+  id: string;
   image: string;
+  imageCount: number;
   location: string;
   title: string;
   tags: string;
   price: string;
+  seller: { name: string; profile: string };
 };
 
 export type TravelBanner = {
@@ -21,10 +24,14 @@ export type TravelProductFormValues = {
   address: string;
   detailAddress: string;
   description: string;
+  remarks?: string;
+  tags?: string[];
+  zipcode?: string;
+  images?: string[];
 };
 
 export type TravelInquiry = {
-  id: number;
+  id: string;
   writer: string;
   date: string;
   question: string;

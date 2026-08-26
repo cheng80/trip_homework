@@ -3,10 +3,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import type { MypageMember } from "@/types/mypage";
 import styles from "./header.module.css";
 
-export default function Header() {
+const navigationItems = [
+  ["트립토크", "/boards"],
+  ["숙박권 구매", "/travelproducts"],
+  ["마이 페이지", "/mypage"],
+] as const;
+
+export default function Header({ user }: { user: MypageMember }) {
   const pathname = usePathname();
+  const isLoggedIn = pathname.startsWith("/mypage");
 
   return (
     <header className={styles.header}>
@@ -16,28 +24,94 @@ export default function Header() {
         </Link>
 
         <nav className={styles.navigation} aria-label="주 메뉴">
-          <Link href="/boards" aria-current={pathname.startsWith("/boards") ? "page" : undefined}>
-            트립토크
-          </Link>
-          <Link
-            href="/travelproducts"
-            aria-current={pathname.startsWith("/travelproducts") ? "page" : undefined}
-          >
-            숙박권 구매
-          </Link>
-          <Link href="/mypage" aria-current={pathname.startsWith("/mypage") ? "page" : undefined}>
-            마이 페이지
-          </Link>
+          {navigationItems.map(([label, href]) => (
+            <Link href={href} aria-current={pathname.startsWith(href) ? "page" : undefined} key={href}>
+              {label}
+            </Link>
+          ))}
         </nav>
 
-        <Link className={styles.login} href="/login">로그인</Link>
-        <Image
-          className={styles.mobileMenu}
-          src="/icon/outline/menu.svg"
-          alt=""
-          width={24}
-          height={24}
-        />
+        {isLoggedIn ? (
+          <details className={styles.profile}>
+            <summary aria-label="프로필 메뉴">
+              <Image
+                className={styles.profileImage}
+                src={user.profile}
+                alt=""
+                width={36}
+                height={36}
+              />
+              <Image
+                className={styles.profileArrow}
+                src="/icon/filled/down_arrow.svg"
+                alt=""
+                width={16}
+                height={16}
+              />
+            </summary>
+
+            <div className={styles.profileMenu}>
+              <Link className={styles.profileInfo} href="/mypage">
+                <Image src={user.profile} alt="" width={44} height={44} />
+                <span>
+                  <strong>{user.name}님</strong>
+                  <small>{user.email}</small>
+                </span>
+              </Link>
+              <Link className={styles.profileRow} href="/mypage">
+                <Image src="/icon/outline/point.svg" alt="" width={22} height={22} />
+                <strong>{user.points.toLocaleString()} P</strong>
+              </Link>
+              <Link className={styles.profileRow} href="/mypage">
+                <Image src="/icon/filled/charge.svg" alt="" width={22} height={22} />
+                포인트 충전
+              </Link>
+              <Link className={styles.profileRow} href="/login">
+                <Image src="/icon/outline/logout.svg" alt="" width={22} height={22} />
+                로그아웃
+              </Link>
+            </div>
+          </details>
+        ) : (
+          <Link className={styles.login} href="/login">
+            로그인 <span aria-hidden="true">›</span>
+          </Link>
+        )}
+
+        <details className={styles.mobileNavigation}>
+          <summary aria-label="모바일 메뉴">
+            <Image src="/icon/outline/menu.svg" alt="" width={24} height={24} />
+          </summary>
+          <div className={styles.mobilePanel}>
+            <nav aria-label="모바일 주 메뉴">
+              {navigationItems.map(([label, href]) => (
+                <Link
+                  href={href}
+                  aria-current={pathname.startsWith(href) ? "page" : undefined}
+                  key={href}
+                >
+                  {label}
+                </Link>
+              ))}
+            </nav>
+            <div className={styles.mobileAuth}>
+              {isLoggedIn ? (
+                <>
+                  <Link className={styles.mobileProfile} href="/mypage">
+                    <Image src={user.profile} alt="" width={40} height={40} />
+                    <span>
+                      <strong>{user.name}님</strong>
+                      <small>{user.points.toLocaleString()} P</small>
+                    </span>
+                  </Link>
+                  <Link href="/login">로그아웃</Link>
+                </>
+              ) : (
+                <Link href="/login">로그인</Link>
+              )}
+            </div>
+          </div>
+        </details>
       </div>
     </header>
   );

@@ -3,38 +3,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState, type FormEvent } from "react";
-import type { TravelProduct } from "@/types/travel-products";
+import type { MypageMember, MypagePointHistory, MypageProduct } from "@/types/mypage";
 import { validatePasswordChange, type PasswordError } from "./password-validation";
+import { getChargeAmount, getChargeError } from "./point-charge";
 import styles from "./mypage.module.css";
-
-export type MypageMember = {
-  name: string;
-  email: string;
-  profile: string;
-  points: number;
-};
-
-export type MypageProduct = TravelProduct & {
-  productId: number;
-  date: string;
-  status: string;
-};
-
-export type MypagePointHistory = {
-  id: number;
-  date: string;
-  description: string;
-  amount: number;
-};
 
 type MypageProps = {
   member: MypageMember;
-  products: MypageProduct[];
+  transactions: MypageProduct[];
+  bookmarks: MypageProduct[];
   pointHistory: MypagePointHistory[];
 };
 
 type Section = "overview" | "points" | "password";
 type ProductTab = "transactions" | "bookmarks";
+type ChargeStep = "select" | "confirm" | "complete";
 
 const sections: { id: Section; label: string; icon: string }[] = [
   { id: "overview", label: "마이페이지", icon: "/icon/filled/mypage.svg" },
@@ -49,18 +32,19 @@ const sectionTitles: Record<Section, string> = {
 };
 
 const pointPageSize = 4;
+const chargeOptions = [10000, 30000, 50000, 100000];
 
 function ProductList({ products, bookmarked }: { products: MypageProduct[]; bookmarked?: boolean }) {
   return (
     <ul className={styles.productList}>
       {products.map((product) => (
-        <li className={styles.productItem} key={`${bookmarked ? "bookmark" : "trade"}-${product.productId}`}>
-          <Link className={styles.productImage} href={`/travelproducts/${product.productId}`}>
+        <li className={styles.productItem} key={`${bookmarked ? "bookmark" : "trade"}-${product.id}`}>
+          <Link className={styles.productImage} href={`/travelproducts/${product.id}`}>
             <Image
               src={product.image}
               alt={`${product.location} ${product.title}`}
               fill
-              loading={product.productId === 1 && !bookmarked ? "eager" : undefined}
+              loading={product.id === products[0]?.id && !bookmarked ? "eager" : undefined}
               sizes="(max-width: 780px) 96px, 144px"
             />
           </Link>
@@ -74,7 +58,7 @@ function ProductList({ products, bookmarked }: { products: MypageProduct[]; book
                 <Image src="/icon/filled/bookmark.svg" alt="" width={20} height={20} />
               )}
             </div>
-            <Link href={`/travelproducts/${product.productId}`}>
+            <Link href={`/travelproducts/${product.id}`}>
               <h3>{product.location}: {product.title}</h3>
             </Link>
             <p>{product.tags}</p>
@@ -89,14 +73,19 @@ function ProductList({ products, bookmarked }: { products: MypageProduct[]; book
   );
 }
 
-export default function Mypage({ member, products, pointHistory }: MypageProps) {
+export default function Mypage({ member, transactions, bookmarks, pointHistory }: MypageProps) {
   const [section, setSection] = useState<Section>("overview");
   const [productTab, setProductTab] = useState<ProductTab>("transactions");
   const [pointPage, setPointPage] = useState(1);
   const [passwordError, setPasswordError] = useState<PasswordError>(null);
   const [passwordStatus, setPasswordStatus] = useState("");
+  const [chargeStep, setChargeStep] = useState<ChargeStep>("select");
+  const [chargeValue, setChargeValue] = useState("");
+  const [chargeError, setChargeError] = useState("");
   const newPasswordRef = useRef<HTMLInputElement>(null);
   const passwordCheckRef = useRef<HTMLInputElement>(null);
+  const chargeDialogRef = useRef<HTMLDialogElement>(null);
+  const chargeInputRef = useRef<HTMLInputElement>(null);
 
   const pageCount = Math.ceil(pointHistory.length / pointPageSize);
   const visiblePointHistory = pointHistory.slice(
@@ -137,6 +126,43 @@ export default function Mypage({ member, products, pointHistory }: MypageProps) 
   const clearPasswordState = () => {
     setPasswordError(null);
     setPasswordStatus("");
+  };
+
+  const chargeAmount = getChargeAmount(chargeValue);
+
+  const resetChargeDialog = () => {
+    setChargeStep("select");
+    setChargeValue("");
+    setChargeError("");
+  };
+
+  const openChargeDialog = () => {
+    resetChargeDialog();
+    chargeDialogRef.current?.showModal();
+  };
+
+  const focusChargeTitle = () => {
+    requestAnimationFrame(() => chargeDialogRef.current?.querySelector<HTMLElement>("h2")?.focus());
+  };
+
+  const handleChargeSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const nextError = getChargeError(chargeAmount);
+    if (nextError) {
+      setChargeError(nextError);
+      requestAnimationFrame(() => chargeInputRef.current?.focus());
+      return;
+    }
+
+    setChargeError("");
+    setChargeStep("confirm");
+    focusChargeTitle();
+  };
+
+  const completeCharge = () => {
+    setChargeStep("complete");
+    focusChargeTitle();
   };
 
   return (
@@ -183,7 +209,10 @@ export default function Mypage({ member, products, pointHistory }: MypageProps) 
                     <span>보유 포인트</span>
                     <strong>{member.points.toLocaleString()} P</strong>
                   </div>
-                  <button type="button" onClick={() => changeSection("points")}>내역 보기</button>
+                  <div className={styles.pointActions}>
+                    <button type="button" onClick={openChargeDialog}>충전하기</button>
+                    <button type="button" onClick={() => changeSection("points")}>내역 보기</button>
+                  </div>
                 </article>
               </section>
 
@@ -212,9 +241,9 @@ export default function Mypage({ member, products, pointHistory }: MypageProps) 
                 </div>
 
                 {productTab === "transactions" ? (
-                  <ProductList products={products.slice(0, 2)} />
+                  <ProductList products={transactions} />
                 ) : (
-                  <ProductList products={products.slice(1, 4)} bookmarked />
+                  <ProductList products={bookmarks} bookmarked />
                 )}
               </section>
             </>
@@ -351,6 +380,135 @@ export default function Mypage({ member, products, pointHistory }: MypageProps) 
           )}
         </div>
       </div>
+
+      <dialog
+        className={styles.chargeDialog}
+        ref={chargeDialogRef}
+        aria-labelledby={`charge-${chargeStep}-title`}
+        onClose={resetChargeDialog}
+      >
+        <button
+          className={styles.chargeClose}
+          type="button"
+          aria-label="포인트 충전 팝업 닫기"
+          onClick={() => chargeDialogRef.current?.close()}
+        >
+          <Image src="/icon/outline/close.svg" alt="" width={24} height={24} />
+        </button>
+
+        {chargeStep === "select" && (
+          <form className={styles.chargeContent} onSubmit={handleChargeSubmit}>
+            <div className={styles.chargeHeading}>
+              <span className={styles.chargeIcon} aria-hidden="true">
+                <Image src="/icon/filled/charge.svg" alt="" width={28} height={28} />
+              </span>
+              <h2 id="charge-select-title" tabIndex={-1}>포인트 충전</h2>
+              <p>충전할 금액을 선택하거나 직접 입력해 주세요.</p>
+            </div>
+
+            <fieldset className={styles.chargeOptions}>
+              <legend>충전 금액 선택</legend>
+              {chargeOptions.map((amount) => (
+                <button
+                  type="button"
+                  aria-pressed={chargeAmount === amount}
+                  onClick={() => {
+                    setChargeValue(String(amount));
+                    setChargeError("");
+                  }}
+                  key={amount}
+                >
+                  +{amount.toLocaleString()} P
+                </button>
+              ))}
+            </fieldset>
+
+            <label className={styles.chargeInputLabel} htmlFor="charge-amount">
+              직접 입력
+              <span>
+                <input
+                  id="charge-amount"
+                  name="chargeAmount"
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="off"
+                  value={chargeValue ? Number(chargeValue).toLocaleString() : ""}
+                  placeholder="1,000"
+                  aria-invalid={Boolean(chargeError)}
+                  aria-describedby="charge-error"
+                  onChange={(event) => {
+                    const amount = getChargeAmount(event.currentTarget.value);
+                    setChargeValue(amount ? String(amount) : "");
+                    setChargeError("");
+                  }}
+                  ref={chargeInputRef}
+                />
+                P
+              </span>
+            </label>
+            <p className={styles.chargeMessage} id="charge-error" role="status">{chargeError}</p>
+
+            <button className={styles.chargePrimary} type="submit">충전하기</button>
+          </form>
+        )}
+
+        {chargeStep === "confirm" && (
+          <div className={styles.chargeContent}>
+            <div className={styles.chargeHeading}>
+              <span className={styles.chargeIcon} aria-hidden="true">
+                <Image src="/icon/filled/charge.svg" alt="" width={28} height={28} />
+              </span>
+              <h2 id="charge-confirm-title" tabIndex={-1}>포인트를 충전하시겠어요?</h2>
+              <p>선택한 금액을 확인해 주세요.</p>
+            </div>
+
+            <dl className={styles.chargeSummary}>
+              <div>
+                <dt>충전 금액</dt>
+                <dd>{chargeAmount.toLocaleString()} P</dd>
+              </div>
+              <div>
+                <dt>충전 후 포인트</dt>
+                <dd>{(member.points + chargeAmount).toLocaleString()} P</dd>
+              </div>
+            </dl>
+
+            <div className={styles.chargeButtons}>
+              <button type="button" onClick={() => {
+                setChargeStep("select");
+                requestAnimationFrame(() => chargeInputRef.current?.focus());
+              }}>
+                다시 선택
+              </button>
+              <button type="button" onClick={completeCharge}>충전하기</button>
+            </div>
+          </div>
+        )}
+
+        {chargeStep === "complete" && (
+          <div className={styles.chargeContent}>
+            <div className={styles.chargeHeading}>
+              <span className={`${styles.chargeIcon} ${styles.completeIcon}`} aria-hidden="true">
+                <Image src="/icon/filled/check.svg" alt="" width={28} height={28} />
+              </span>
+              <h2 id="charge-complete-title" tabIndex={-1}>포인트 충전 완료</h2>
+              <p>{chargeAmount.toLocaleString()}P 충전이 완료되었습니다.</p>
+            </div>
+
+            <div className={styles.chargeResult}>
+              <span>보유 포인트</span>
+              <strong>{(member.points + chargeAmount).toLocaleString()} P</strong>
+            </div>
+            <button
+              className={styles.chargePrimary}
+              type="button"
+              onClick={() => chargeDialogRef.current?.close()}
+            >
+              확인
+            </button>
+          </div>
+        )}
+      </dialog>
     </main>
   );
 }

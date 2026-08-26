@@ -6,34 +6,51 @@ import type {
   TravelProductFormValues,
 } from "@/types/travel-products";
 
+const mockSeller = {
+  name: "트립호스트",
+  profile: "/images/프로필 이미지/01.png",
+};
+
 export const travelProducts: TravelProduct[] = [
   {
+    id: "1",
     image: "/images/숙박권 구매화면 이미지/a.png",
+    imageCount: 2,
     location: "포항",
     title: "당장 가고 싶은 숲속 감성 스테이",
     tags: "#플랜테리어 #룸서비스",
     price: "32,900원",
+    seller: mockSeller,
   },
   {
+    id: "2",
     image: "/images/숙박권 구매화면 이미지/b.png",
+    imageCount: 2,
     location: "강릉",
     title: "마을까지 깨끗해지는 하얀 숙소",
     tags: "#바다위숙소 #반신욕&스파",
     price: "32,900원",
+    seller: mockSeller,
   },
   {
+    id: "3",
     image: "/images/숙박권 구매화면 이미지/c.png",
+    imageCount: 2,
     location: "제주",
     title: "조용히 쉬어 가기 좋은 작은 호텔",
     tags: "#호텔 #플랜테리어",
     price: "49,000원",
+    seller: mockSeller,
   },
   {
+    id: "4",
     image: "/images/숙박권 구매화면 이미지/d.png",
+    imageCount: 2,
     location: "서울",
     title: "햇살이 머무는 하루를 위한 아지트",
     tags: "#1인전용 #룸서비스",
     price: "38,500원",
+    seller: mockSeller,
   },
 ];
 
@@ -85,10 +102,7 @@ export const travelProductDetail: TravelProductDetailData = {
   title: travelProducts[0].title,
   tags: "#플랜테리어 #룸서비스 #불멍",
   price: travelProducts[0].price,
-  seller: {
-    name: "트립호스트",
-    profile: "/images/프로필 이미지/01.png",
-  },
+  seller: mockSeller,
   validity: "2026. 09. 01 ~ 2026. 12. 31",
   capacity: "기준 2인 · 최대 4인",
   description:
@@ -102,14 +116,14 @@ export const travelProductDetail: TravelProductDetailData = {
   addressNote: "구매 완료 후 정확한 주소와 입실 안내를 확인할 수 있습니다.",
   inquiries: [
     {
-      id: 1,
+      id: "1",
       writer: "여행하는 고양이",
       date: "2026-08-22",
       question: "주말에도 추가 비용 없이 사용할 수 있나요?",
       reply: "네, 사용 기한 안에는 주말에도 추가 비용 없이 이용할 수 있습니다.",
     },
     {
-      id: 2,
+      id: "2",
       writer: "바다좋아",
       date: "2026-08-21",
       question: "반려동물 동반이 가능한가요?",

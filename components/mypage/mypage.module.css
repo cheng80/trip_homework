@@ -135,10 +135,9 @@
   letter-spacing: -0.03em;
 }
 
-.pointCard button {
+.pointActions button {
   min-width: 82px;
   min-height: 40px;
-  margin-left: auto;
   padding: 0 14px;
   border: 1px solid #dddddd;
   border-radius: 8px;
@@ -148,6 +147,18 @@
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
+}
+
+.pointActions {
+  display: flex;
+  margin-left: auto;
+  gap: 8px;
+}
+
+.pointActions button:first-child {
+  border-color: #246fe5;
+  color: #ffffff;
+  background: #246fe5;
 }
 
 .historyPanel,
@@ -495,22 +506,261 @@
   cursor: pointer;
 }
 
+.chargeDialog {
+  position: relative;
+  width: min(calc(100% - 40px), 480px);
+  max-height: calc(100dvh - 40px);
+  margin: auto;
+  padding: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 0;
+  border-radius: 16px;
+  color: #111111;
+  background: #ffffff;
+  box-shadow: 0 18px 60px rgb(0 0 0 / 18%);
+}
+
+.chargeDialog::backdrop {
+  background: rgb(0 0 0 / 48%);
+}
+
+.chargeClose {
+  position: absolute;
+  z-index: 1;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.chargeContent {
+  padding: 40px 32px 28px;
+}
+
+.chargeHeading {
+  text-align: center;
+}
+
+.chargeIcon {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 16px;
+  place-items: center;
+  border-radius: 50%;
+  background: #f1f5ff;
+}
+
+.completeIcon {
+  background: #edf8f1;
+}
+
+.chargeHeading h2 {
+  font-size: 22px;
+  line-height: 1.35;
+  letter-spacing: -0.03em;
+}
+
+.chargeHeading p {
+  margin-top: 8px;
+  color: #777777;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.chargeOptions {
+  display: grid;
+  margin-top: 28px;
+  border: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.chargeOptions legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.chargeOptions button {
+  min-height: 46px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  color: #555555;
+  background: #ffffff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.chargeOptions button[aria-pressed="true"] {
+  border-color: #246fe5;
+  color: #246fe5;
+  background: #f1f5ff;
+}
+
+.chargeInputLabel {
+  display: block;
+  margin-top: 22px;
+  color: #333333;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.chargeInputLabel > span {
+  display: flex;
+  height: 48px;
+  margin-top: 9px;
+  padding: 0 14px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  color: #555555;
+}
+
+.chargeInputLabel > span:focus-within {
+  border-color: #246fe5;
+}
+
+.chargeInputLabel input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: #111111;
+  background: transparent;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.chargeInputLabel:has(input[aria-invalid="true"]) > span {
+  border-color: #c43838;
+}
+
+.chargeMessage {
+  min-height: 18px;
+  margin-top: 6px;
+  color: #c43838;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.chargePrimary,
+.chargeButtons button {
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.chargePrimary {
+  width: 100%;
+  margin-top: 10px;
+  color: #ffffff;
+  background: #246fe5;
+}
+
+.chargeSummary {
+  margin-top: 28px;
+  padding: 6px 18px;
+  border-radius: 10px;
+  background: #f6f7f9;
+}
+
+.chargeSummary > div {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.chargeSummary > div + div {
+  border-top: 1px solid #e4e4e4;
+}
+
+.chargeSummary dt {
+  color: #777777;
+  font-size: 13px;
+}
+
+.chargeSummary dd {
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.chargeButtons {
+  display: grid;
+  margin-top: 28px;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.chargeButtons button:first-child {
+  border: 1px solid #dddddd;
+  color: #333333;
+  background: #ffffff;
+}
+
+.chargeButtons button:last-child {
+  color: #ffffff;
+  background: #246fe5;
+}
+
+.chargeResult {
+  display: flex;
+  margin-top: 28px;
+  padding: 18px;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 10px;
+  background: #f6f7f9;
+}
+
+.chargeResult span {
+  color: #777777;
+  font-size: 13px;
+}
+
+.chargeResult strong {
+  color: #246fe5;
+  font-size: 18px;
+}
+
 .menu button:focus-visible,
-.pointCard button:focus-visible,
+.pointActions button:focus-visible,
 .productTabs button:focus-visible,
 .productImage:focus-visible,
 .productContent a:focus-visible,
 .pointHeading select:focus-visible,
 .pagination button:focus-visible,
 .passwordForm input:focus-visible,
-.passwordForm button:focus-visible {
+.passwordForm button:focus-visible,
+.chargeDialog :focus-visible {
   outline: 3px solid #246fe5;
   outline-offset: 3px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .menu button:hover,
-  .pointCard button:hover,
+  .pointActions button:hover,
   .productTabs button:hover,
   .pagination button:not(:disabled):hover {
     color: #111111;
@@ -518,6 +768,12 @@
   }
 
   .passwordForm button:hover {
+    background: #145dcc;
+  }
+
+  .pointActions button:first-child:hover,
+  .chargePrimary:hover,
+  .chargeButtons button:last-child:hover {
     background: #145dcc;
   }
 }
@@ -631,10 +887,14 @@
     font-size: 20px;
   }
 
-  .pointCard button {
+  .pointActions button {
     min-width: 74px;
     padding-inline: 10px;
     font-size: 12px;
+  }
+
+  .pointActions {
+    flex-direction: column;
   }
 
   .historyPanel,
@@ -759,6 +1019,10 @@
     min-height: 48px;
     margin-top: 2px;
   }
+
+  .chargeContent {
+    padding: 38px 20px 22px;
+  }
 }
 
 @media (max-width: 380px) {
@@ -767,9 +1031,14 @@
     flex-wrap: wrap;
   }
 
-  .pointCard button {
+  .pointActions {
     width: 100%;
     margin: 14px 0 0;
+    flex-direction: row;
+  }
+
+  .pointActions button {
+    flex: 1;
   }
 
   .productItem {
