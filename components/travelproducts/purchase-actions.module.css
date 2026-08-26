@@ -75,8 +75,11 @@
   gap: 10px;
 }
 
-.dialogButtons button {
+.dialogButtons button,
+.dialogButtons a {
+  display: grid;
   height: 48px;
+  place-items: center;
   border: 1px solid #dddddd;
   border-radius: 6px;
   background: #ffffff;
@@ -85,7 +88,7 @@
   cursor: pointer;
 }
 
-.dialogButtons button:last-child {
+.dialogButtons > :last-child {
   border-color: #111111;
   color: #ffffff;
   background: #111111;

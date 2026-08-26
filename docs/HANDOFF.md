@@ -7,8 +7,7 @@
 ## 현재 Git 상태
 
 - 현재 체크아웃 브랜치: `dev`
-- `60becb9` 마이페이지 정적 화면 커밋을 `dev`, `origin/dev`, `main`, `origin/main`에 반영
-- 현재 `dev`에는 포인트 충전·헤더 보완과 GraphQL API 적용 준비 작업이 미커밋 상태로 진행 중
+- `dev`, `origin/dev`, `main`, `origin/main`에 `paymentId` 없는 포인트 충전 검수 진입 보완까지 반영
 - 구조 변경 PR [#1](https://github.com/cheng80/trip_homework/pull/1) 병합 완료
 - 후속 작업은 단일 작업 브랜치 `dev`에서 진행
 - 병합이 끝난 `travelproducts-ui`는 로컬과 원격에서 삭제 완료
@@ -89,6 +88,7 @@
 - 마이페이지의 네이티브 `dialog` 포인트 충전 팝업
 - 충전 금액 프리셋·직접 입력·최소 금액 검증 상태
 - 충전 확인·완료와 예상 보유 포인트 표시
+- `/mypage?charge=1`, `/mypage?section=points`, `/mypage?section=password` 검수 직접 진입
 
 네이티브 `fetch` GraphQL 클라이언트, 동일 출처 프록시, 기능별 서비스와 Query·Mutation 문서는 준비했다.
 페이지는 아직 mock 데이터를 사용하며 실제 로그인·회원가입·구매·등록·수정·문의·게시글·댓글 Mutation은 연결하지 않았다.
@@ -135,6 +135,8 @@
 - GraphQL Query·Mutation 34개 live introspection 스키마 검증 통과
 - `/api/graphql` 프록시를 통한 `fetchBoards` 읽기 요청 성공 확인
 - API 준비 리팩터링 후 6개 대표 라우트의 1920px·781px·390px 렌더링·이미지·가로 넘침 확인
+- `paymentId` 없이 충전 팝업·포인트 내역·비밀번호 변경 직접 진입 확인
+- 숙박권 상세의 포인트 부족 팝업에서 충전 검수 화면 이동 확인
 
 ## 다음 작업: README 프로젝트 설명 교체
 

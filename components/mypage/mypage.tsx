@@ -2,8 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState, type FormEvent } from "react";
-import type { MypageMember, MypagePointHistory, MypageProduct } from "@/types/mypage";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import type {
+  MypageMember,
+  MypagePointHistory,
+  MypageProduct,
+  MypageSection,
+} from "@/types/mypage";
 import { validatePasswordChange, type PasswordError } from "./password-validation";
 import { getChargeAmount, getChargeError } from "./point-charge";
 import styles from "./mypage.module.css";
@@ -13,19 +18,20 @@ type MypageProps = {
   transactions: MypageProduct[];
   bookmarks: MypageProduct[];
   pointHistory: MypagePointHistory[];
+  initialSection?: MypageSection;
+  openChargeOnMount?: boolean;
 };
 
-type Section = "overview" | "points" | "password";
 type ProductTab = "transactions" | "bookmarks";
 type ChargeStep = "select" | "confirm" | "complete";
 
-const sections: { id: Section; label: string; icon: string }[] = [
+const sections: { id: MypageSection; label: string; icon: string }[] = [
   { id: "overview", label: "마이페이지", icon: "/icon/filled/mypage.svg" },
   { id: "points", label: "포인트 사용 내역", icon: "/icon/outline/point.svg" },
   { id: "password", label: "비밀번호 변경", icon: "/icon/outline/edit.svg" },
 ];
 
-const sectionTitles: Record<Section, string> = {
+const sectionTitles: Record<MypageSection, string> = {
   overview: "마이페이지",
   points: "포인트 사용 내역",
   password: "비밀번호 변경",
@@ -73,8 +79,15 @@ function ProductList({ products, bookmarked }: { products: MypageProduct[]; book
   );
 }
 
-export default function Mypage({ member, transactions, bookmarks, pointHistory }: MypageProps) {
-  const [section, setSection] = useState<Section>("overview");
+export default function Mypage({
+  member,
+  transactions,
+  bookmarks,
+  pointHistory,
+  initialSection = "overview",
+  openChargeOnMount = false,
+}: MypageProps) {
+  const [section, setSection] = useState<MypageSection>(initialSection);
   const [productTab, setProductTab] = useState<ProductTab>("transactions");
   const [pointPage, setPointPage] = useState(1);
   const [passwordError, setPasswordError] = useState<PasswordError>(null);
@@ -87,13 +100,18 @@ export default function Mypage({ member, transactions, bookmarks, pointHistory }
   const chargeDialogRef = useRef<HTMLDialogElement>(null);
   const chargeInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    if (!openChargeOnMount || chargeDialogRef.current?.open) return;
+    chargeDialogRef.current?.showModal();
+  }, [openChargeOnMount]);
+
   const pageCount = Math.ceil(pointHistory.length / pointPageSize);
   const visiblePointHistory = pointHistory.slice(
     (pointPage - 1) * pointPageSize,
     pointPage * pointPageSize,
   );
 
-  const changeSection = (nextSection: Section) => {
+  const changeSection = (nextSection: MypageSection) => {
     setSection(nextSection);
     requestAnimationFrame(() => document.querySelector<HTMLElement>("#mypage-title")?.focus());
   };

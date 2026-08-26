@@ -66,7 +66,7 @@ export default function PurchaseActions({
           </div>
           <div className={styles.dialogButtons}>
             <button type="submit">다음에</button>
-            <button type="submit">포인트 충전하기</button>
+            <Link href="/mypage?charge=1">포인트 충전하기</Link>
           </div>
         </form>
       </dialog>

@@ -58,11 +58,11 @@ export default function Header({ user }: { user: MypageMember }) {
                   <small>{user.email}</small>
                 </span>
               </Link>
-              <Link className={styles.profileRow} href="/mypage">
+              <Link className={styles.profileRow} href="/mypage?section=points">
                 <Image src="/icon/outline/point.svg" alt="" width={22} height={22} />
                 <strong>{user.points.toLocaleString()} P</strong>
               </Link>
-              <Link className={styles.profileRow} href="/mypage">
+              <Link className={styles.profileRow} href="/mypage?charge=1">
                 <Image src="/icon/filled/charge.svg" alt="" width={22} height={22} />
                 포인트 충전
               </Link>

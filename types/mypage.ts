@@ -1,5 +1,7 @@
 import type { TravelProduct } from "./travel-products";
 
+export type MypageSection = "overview" | "points" | "password";
+
 export type MypageMember = {
   id: string;
   name: string;
