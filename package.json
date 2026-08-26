@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test components/mypage/password-validation.test.mjs",
     "docs:graphql": "node scripts/generate-graphql-docs.mjs",
     "docs:graphql:check": "node scripts/generate-graphql-docs.mjs --check",
     "docs:graphql:serve": "python3 -m http.server 4400 --directory public/graphql-docs"

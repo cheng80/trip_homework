@@ -1,0 +1,778 @@
+.page {
+  min-height: calc(100vh - 80px);
+  background: #f7f7f7;
+}
+
+.layout {
+  display: grid;
+  width: min(100% - 48px, 1280px);
+  margin: 0 auto;
+  padding: 64px 0 120px;
+  align-items: start;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 48px;
+}
+
+.sidebar {
+  overflow: hidden;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.sidebarTitle {
+  padding: 22px 24px;
+  border-bottom: 1px solid #eeeeee;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.menu {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menu button {
+  display: flex;
+  min-height: 48px;
+  padding: 0 14px;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  border-radius: 8px;
+  color: #777777;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu button img {
+  opacity: 0.55;
+}
+
+.menu .activeMenu {
+  color: #111111;
+  background: #f1f5ff;
+}
+
+.menu .activeMenu img {
+  opacity: 1;
+}
+
+.content {
+  min-width: 0;
+}
+
+.content > h1 {
+  margin-bottom: 28px;
+  font-size: 30px;
+  line-height: 1.25;
+  letter-spacing: -0.04em;
+}
+
+.summary {
+  display: grid;
+  margin-bottom: 24px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.profileCard,
+.pointCard {
+  display: flex;
+  min-height: 144px;
+  padding: 28px;
+  align-items: center;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.profileCard > img {
+  margin-right: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 10%);
+}
+
+.profileCard span,
+.pointCard span {
+  color: #777777;
+  font-size: 13px;
+}
+
+.profileCard h2 {
+  margin-top: 4px;
+  font-size: 21px;
+}
+
+.profileCard p {
+  margin-top: 7px;
+  color: #777777;
+  font-size: 13px;
+}
+
+.pointIcon {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  margin-right: 18px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  background: #f1f5ff;
+}
+
+.pointCard strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 24px;
+  letter-spacing: -0.03em;
+}
+
+.pointCard button {
+  min-width: 82px;
+  min-height: 40px;
+  margin-left: auto;
+  padding: 0 14px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  color: #333333;
+  background: #ffffff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.historyPanel,
+.pointPanel,
+.passwordPanel {
+  padding: 32px;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.panelHeading,
+.pointHeading {
+  display: flex;
+  margin-bottom: 28px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.panelHeading h2,
+.pointHeading h2,
+.passwordHeading h2 {
+  font-size: 21px;
+  line-height: 1.35;
+  letter-spacing: -0.03em;
+}
+
+.panelHeading p,
+.passwordHeading p {
+  margin-top: 8px;
+  color: #777777;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.productTabs {
+  display: flex;
+  padding: 4px;
+  flex: 0 0 auto;
+  border-radius: 9px;
+  background: #f2f2f2;
+}
+
+.productTabs button {
+  min-width: 76px;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 7px;
+  color: #777777;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.productTabs button[aria-pressed="true"] {
+  color: #111111;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
+}
+
+.productList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  list-style: none;
+}
+
+.productItem {
+  display: grid;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #eeeeee;
+  border-radius: 10px;
+  grid-template-columns: 128px minmax(0, 1fr);
+  gap: 16px;
+}
+
+.productImage {
+  position: relative;
+  display: block;
+  min-height: 128px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #eeeeee;
+}
+
+.productImage img {
+  object-fit: cover;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 10%);
+}
+
+.productContent {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.productTop {
+  display: flex;
+  min-height: 22px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.productStatus {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 22px;
+  padding: 0 8px;
+  align-items: center;
+  border-radius: 999px;
+  color: #246fe5;
+  background: #edf4ff;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.productContent h3 {
+  display: -webkit-box;
+  overflow: hidden;
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: -0.02em;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.productContent > p {
+  overflow: hidden;
+  margin-top: 5px;
+  color: #888888;
+  font-size: 11px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.productMeta {
+  display: flex;
+  margin-top: auto;
+  padding-top: 10px;
+  align-items: end;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.productMeta time {
+  color: #999999;
+  font-size: 11px;
+}
+
+.productMeta strong {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.pointHeading p {
+  margin-top: 8px;
+  color: #777777;
+  font-size: 13px;
+}
+
+.pointHeading p strong {
+  margin-left: 6px;
+  color: #111111;
+}
+
+.pointHeading label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #555555;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.pointHeading select {
+  min-width: 132px;
+  height: 40px;
+  padding: 0 32px 0 12px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  color: #333333;
+  background: #ffffff;
+  font: inherit;
+}
+
+.pointTableHeader,
+.pointList li {
+  display: grid;
+  min-height: 58px;
+  padding: 0 18px;
+  align-items: center;
+  grid-template-columns: 140px minmax(0, 1fr) 100px 150px;
+  gap: 16px;
+}
+
+.pointTableHeader {
+  min-height: 44px;
+  border-top: 1px solid #222222;
+  border-bottom: 1px solid #eeeeee;
+  color: #555555;
+  background: #fafafa;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pointTableHeader span:last-child,
+.pointList li b {
+  text-align: right;
+}
+
+.pointList {
+  list-style: none;
+}
+
+.pointList li {
+  border-bottom: 1px solid #eeeeee;
+  font-size: 13px;
+}
+
+.pointList time,
+.pointList li > span {
+  color: #777777;
+}
+
+.pointList li strong,
+.pointList li b {
+  font-size: 13px;
+}
+
+.pointList .charge {
+  color: #246fe5;
+}
+
+.pointList .use {
+  color: #333333;
+}
+
+.pagination {
+  display: flex;
+  margin-top: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.pagination button {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  color: #777777;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.pagination .currentPage {
+  color: #ffffff;
+  background: #111111;
+  font-weight: 800;
+}
+
+.pagination button:disabled {
+  opacity: 0.28;
+  cursor: default;
+}
+
+.passwordPanel {
+  min-height: 520px;
+}
+
+.passwordHeading {
+  padding-bottom: 24px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.passwordForm {
+  display: grid;
+  width: min(100%, 480px);
+  margin-top: 28px;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 18px 20px;
+}
+
+.passwordForm label {
+  align-self: center;
+  color: #333333;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.passwordForm input {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  color: #333333;
+  background: #ffffff;
+  font: inherit;
+  font-size: 13px;
+}
+
+.passwordForm input::placeholder {
+  color: #999999;
+}
+
+.passwordForm input[aria-invalid="true"] {
+  border-color: #c43838;
+}
+
+.passwordMessage {
+  min-height: 19px;
+  grid-column: 2;
+  color: #c43838;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.successMessage {
+  color: #246fe5;
+}
+
+.passwordForm button {
+  width: 132px;
+  min-height: 44px;
+  grid-column: 2;
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  background: #246fe5;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.menu button:focus-visible,
+.pointCard button:focus-visible,
+.productTabs button:focus-visible,
+.productImage:focus-visible,
+.productContent a:focus-visible,
+.pointHeading select:focus-visible,
+.pagination button:focus-visible,
+.passwordForm input:focus-visible,
+.passwordForm button:focus-visible {
+  outline: 3px solid #246fe5;
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .menu button:hover,
+  .pointCard button:hover,
+  .productTabs button:hover,
+  .pagination button:not(:disabled):hover {
+    color: #111111;
+    background: #f1f5ff;
+  }
+
+  .passwordForm button:hover {
+    background: #145dcc;
+  }
+}
+
+@media (max-width: 1024px) {
+  .layout {
+    width: min(100% - 40px, 900px);
+    grid-template-columns: 184px minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .sidebarTitle {
+    padding-inline: 18px;
+  }
+
+  .menu button {
+    padding-inline: 10px;
+    font-size: 13px;
+  }
+
+  .summary,
+  .productList {
+    grid-template-columns: 1fr;
+  }
+
+  .pointTableHeader,
+  .pointList li {
+    grid-template-columns: 112px minmax(0, 1fr) 60px 120px;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 780px) {
+  .page {
+    min-height: calc(100vh - 64px);
+  }
+
+  .layout {
+    display: block;
+    width: calc(100% - 40px);
+    padding: 24px 0 64px;
+  }
+
+  .sidebar {
+    overflow-x: auto;
+    margin-bottom: 28px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .sidebarTitle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .menu {
+    width: max-content;
+    padding: 0;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .menu button {
+    min-height: 44px;
+    padding: 0 14px;
+    flex: 0 0 auto;
+    border: 1px solid #e1e1e1;
+    background: #ffffff;
+  }
+
+  .content > h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+
+  .summary {
+    gap: 12px;
+  }
+
+  .profileCard,
+  .pointCard {
+    min-height: 124px;
+    padding: 20px;
+  }
+
+  .profileCard > img {
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
+  }
+
+  .profileCard h2 {
+    font-size: 18px;
+  }
+
+  .pointIcon {
+    width: 48px;
+    height: 48px;
+    margin-right: 14px;
+  }
+
+  .pointCard strong {
+    font-size: 20px;
+  }
+
+  .pointCard button {
+    min-width: 74px;
+    padding-inline: 10px;
+    font-size: 12px;
+  }
+
+  .historyPanel,
+  .pointPanel,
+  .passwordPanel {
+    padding: 20px;
+  }
+
+  .panelHeading,
+  .pointHeading {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .panelHeading h2,
+  .pointHeading h2,
+  .passwordHeading h2 {
+    font-size: 18px;
+  }
+
+  .productTabs {
+    align-self: flex-start;
+  }
+
+  .productItem {
+    padding: 12px;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .productImage {
+    min-height: 108px;
+  }
+
+  .productContent h3 {
+    margin-top: 5px;
+    font-size: 12px;
+    line-height: 17px;
+  }
+
+  .productMeta {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .pointHeading label {
+    justify-content: space-between;
+  }
+
+  .pointHeading select {
+    min-width: 124px;
+    font-size: 16px;
+  }
+
+  .pointTableHeader {
+    display: none;
+  }
+
+  .pointList {
+    border-top: 1px solid #222222;
+  }
+
+  .pointList li {
+    min-height: 82px;
+    padding: 14px 4px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px 12px;
+  }
+
+  .pointList time {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 11px;
+  }
+
+  .pointList li strong {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .pointList li > span {
+    grid-column: 2;
+    grid-row: 2;
+    font-size: 11px;
+    text-align: right;
+  }
+
+  .pointList li b {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: right;
+  }
+
+  .passwordPanel {
+    min-height: 0;
+  }
+
+  .passwordForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .passwordForm label:not(:first-child) {
+    margin-top: 6px;
+  }
+
+  .passwordForm input {
+    height: 48px;
+    font-size: 16px;
+  }
+
+  .passwordMessage {
+    min-height: 18px;
+    margin-top: 2px;
+  }
+
+  .passwordForm button {
+    width: 100%;
+    min-height: 48px;
+    margin-top: 2px;
+  }
+}
+
+@media (max-width: 380px) {
+  .pointCard {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .pointCard button {
+    width: 100%;
+    margin: 14px 0 0;
+  }
+
+  .productItem {
+    grid-template-columns: 84px minmax(0, 1fr);
+  }
+}

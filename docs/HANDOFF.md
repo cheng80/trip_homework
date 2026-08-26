@@ -1,6 +1,6 @@
 # TripTrip 작업 인수인계
 
-작성일: 2026-08-26
+작성일: 2026-08-27
 
 진행 체크리스트는 [PROGRESS.md](./PROGRESS.md)에서 관리한다.
 
@@ -44,7 +44,7 @@
 
 ## 현재 화면 범위
 
-`dev`에는 숙박권, 트립토크, 로그인·회원가입 정적 화면이 구현되어 있다.
+`dev`에는 숙박권, 트립토크, 로그인·회원가입, 마이페이지 정적 화면이 구현되어 있다.
 
 - `/travelproducts` 메인 배너 이동·페이지 표시
 - 추천 숙소 영역
@@ -74,6 +74,11 @@
 - `/signup` 이름·이메일·비밀번호·비밀번호 확인 폼과 필드 오류·완료 팝업
 - 인증 화면의 400px 폼 영역과 1920px·781px·모바일 반응형 분기
 - 공통 헤더의 로그인 메뉴에서 `/login` 이동
+- `/mypage` 회원 정보·보유 포인트 요약
+- 숙박권 거래내역·북마크 전환 상태
+- 포인트 충전·사용 내역과 페이지 이동 상태
+- 현재·새 비밀번호 입력 검증과 변경 완료 상태
+- 공통 헤더의 마이페이지 메뉴에서 `/mypage` 이동
 
 앱의 GraphQL 클라이언트, Apollo Provider, API 요청, 실제 로그인·회원가입·구매·등록·수정·문의·게시글·댓글 저장은 구현하지 않았다.
 배너와 팝업, 폼 완료 표시는 브라우저 내부의 정적 상태만 사용한다.
@@ -104,22 +109,25 @@
 - GraphQL live schema와 한글 메타데이터 양방향 검사 통과
 - GraphQL 문서 생성, `npm run lint`, `npm run build` 통과
 - 운영 의존성 audit 취약점 0건 확인
+- 마이페이지 추가 후 `npm test`, `npm run lint`, `npm run build` 통과
+- 마이페이지 1920px·781px·390px 렌더링과 가로 넘침 없음 확인
+- 거래내역·북마크 전환, 포인트 페이지 이동, 비밀번호 불일치·완료 상태 확인
+- 마이페이지 console warning/error 없음 확인
 
-## 다음 작업: 마이페이지 정적 화면
+## 다음 작업: 포인트 충전 정적 화면
 
-Figma와 예시 프로젝트를 참고하되 실제 사용자·거래·포인트 데이터 연결은 제외한다.
+Figma와 기존 마이페이지를 참고하되 실제 결제·포인트 데이터 연결은 제외한다.
 
-1. 마이페이지 라우트와 내부 메뉴 구조 결정
-2. 회원 정보와 보유 포인트 영역 작성
-3. 숙박권 거래내역·북마크 탭 작성
-4. 포인트 사용 내역과 비밀번호 변경 정적 화면 작성
-5. 1920px·781px·390px 화면 확인
+1. 포인트 충전 화면 또는 팝업 라우트 결정
+2. 충전 금액 선택과 직접 입력 상태 작성
+3. 충전 확인과 완료 상태 작성
+4. 1920px·781px·390px 화면 확인
 
 ## 다음 세션 시작 방법
 
 1. `git status --short --branch`로 브랜치와 작업 상태를 확인한다.
 2. `dev`에서 `npm run dev`를 실행한다.
-3. Figma의 마이페이지 1920px·781px·모바일 프레임을 먼저 확인한다.
+3. Figma의 포인트 충전 1920px·781px·모바일 프레임을 먼저 확인한다.
 4. 기존 로그인·회원가입 구현을 보존한다.
 5. 기존 라우트 조립·도메인 컴포넌트 분리 패턴을 유지한다.
 
@@ -133,6 +141,9 @@ Figma와 예시 프로젝트를 참고하되 실제 사용자·거래·포인트
 - 회원가입 참고 화면: `/Users/cheng80/Desktop/Sesac_Works/Master/triptalk_example/src/app/(auth)/signup/page.tsx`
 - 인증 공통 화면: `components/auth/auth-form.tsx`
 - 인증 공통 CSS: `components/auth/auth-form.module.css`
+- 마이페이지 조립 화면: `app/(main)/mypage/page.tsx`
+- 마이페이지 상태와 UI: `components/mypage/mypage.tsx`
+- 마이페이지 CSS: `components/mypage/mypage.module.css`
 - 숙박권 페이지: `app/(main)/travelproducts/page.tsx`
 - 숙박권 CSS: `app/(main)/travelproducts/page.module.css`
 - 숙박권 상세: `app/(main)/travelproducts/[travelproductId]/page.tsx`

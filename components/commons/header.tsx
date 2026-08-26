@@ -25,7 +25,9 @@ export default function Header() {
           >
             숙박권 구매
           </Link>
-          <span>마이 페이지</span>
+          <Link href="/mypage" aria-current={pathname.startsWith("/mypage") ? "page" : undefined}>
+            마이 페이지
+          </Link>
         </nav>
 
         <Link className={styles.login} href="/login">로그인</Link>
