@@ -56,6 +56,12 @@
   cursor: pointer;
 }
 
+.status {
+  grid-column: 1 / -1;
+  color: #c43838;
+  font-size: 13px;
+}
+
 .inquiry {
   padding: 28px 0;
   border-bottom: 1px solid #eeeeee;
@@ -68,6 +74,12 @@
   justify-content: space-between;
   gap: 16px;
   font-size: 14px;
+}
+
+.meta > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .meta time {
@@ -97,6 +109,18 @@
   gap: 8px;
 }
 
+.reply > div {
+  min-width: 0;
+  flex: 1;
+}
+
+.replyHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .reply strong,
 .editReply label {
   font-size: 13px;
@@ -123,8 +147,74 @@
   font: inherit;
 }
 
+.actions {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.actions button,
+.answerButton {
+  min-height: 36px;
+  padding: 0 10px;
+  border: 0;
+  color: #666666;
+  background: transparent;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.actions button:last-child {
+  color: #b42318;
+}
+
+.answerButton {
+  margin-top: 14px;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  color: #333333;
+  font-weight: 700;
+}
+
+.editor {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  margin-top: 12px;
+  gap: 8px;
+}
+
+.editor label {
+  grid-column: 1 / -1;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.editor textarea {
+  min-height: 80px;
+  padding: 12px;
+  resize: vertical;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  font: inherit;
+}
+
+.editor > button {
+  padding: 0 18px;
+  border: 0;
+  border-radius: 6px;
+  color: #ffffff;
+  background: #111111;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .form :focus-visible,
-.editReply :focus-visible {
+.editReply :focus-visible,
+.actions :focus-visible,
+.answerButton:focus-visible,
+.editor :focus-visible {
   outline: 3px solid #2979ff;
   outline-offset: 3px;
 }
@@ -139,12 +229,14 @@
   }
 
   .form,
-  .editReply {
+  .editReply,
+  .editor {
     grid-template-columns: 1fr;
   }
 
   .form button,
-  .editReply button {
+  .editReply button,
+  .editor button {
     height: 44px;
   }
 }

@@ -15,6 +15,7 @@ import {
 import {
   FETCH_BEST_TRAVELPRODUCTS,
   FETCH_TRAVELPRODUCT_DETAIL,
+  FETCH_TRAVELPRODUCT_QUESTION_ANSWERS,
   FETCH_TRAVELPRODUCTS,
 } from "@/graphql/queries";
 import type {
@@ -28,8 +29,10 @@ import type { TravelProductFormValues } from "@/types/travel-products";
 import {
   createTravelproductInputFromForm,
   mapTravelInquiry,
+  mapTravelInquiryAnswer,
   mapTravelProduct,
   mapTravelProductDetail,
+  mapTravelProductForm,
 } from "./mappers";
 
 export type TravelproductListParams = { page?: number; search?: string; isSoldout?: boolean };
@@ -61,6 +64,14 @@ export async function getTravelproductDetail(id: string, options?: GraphQLReques
     fetchTravelproductQuestions: ApiTravelproductQuestion[];
   }>(FETCH_TRAVELPRODUCT_DETAIL, { travelproductId: id, questionPage: 1 }, options);
   return mapTravelProductDetail(data.fetchTravelproduct, data.fetchTravelproductQuestions);
+}
+
+export async function getTravelproductForm(id: string, options?: GraphQLRequestOptions) {
+  const data = await requestGraphQL<{
+    fetchTravelproduct: ApiTravelproduct;
+    fetchTravelproductQuestions: ApiTravelproductQuestion[];
+  }>(FETCH_TRAVELPRODUCT_DETAIL, { travelproductId: id, questionPage: 1 }, options);
+  return mapTravelProductForm(data.fetchTravelproduct);
 }
 
 export async function createTravelproduct(
@@ -128,6 +139,16 @@ export async function createTravelproductQuestion(
   return mapTravelInquiry(data.createTravelproductQuestion);
 }
 
+export async function getTravelproductQuestionAnswers(
+  questionId: string,
+  options?: GraphQLRequestOptions,
+) {
+  const data = await requestGraphQL<{
+    fetchTravelproductQuestionAnswers: ApiTravelproductQuestionAnswer[];
+  }>(FETCH_TRAVELPRODUCT_QUESTION_ANSWERS, { questionId, page: 1 }, options);
+  return data.fetchTravelproductQuestionAnswers.map(mapTravelInquiryAnswer);
+}
+
 export async function updateTravelproductQuestion(
   questionId: string,
   contents: string,
@@ -160,7 +181,7 @@ export async function createTravelproductQuestionAnswer(
     { questionId, contents: contents.trim() },
     options,
   );
-  return data.createTravelproductQuestionAnswer;
+  return mapTravelInquiryAnswer(data.createTravelproductQuestionAnswer);
 }
 
 export async function updateTravelproductQuestionAnswer(
@@ -173,7 +194,7 @@ export async function updateTravelproductQuestionAnswer(
     { answerId, contents: contents.trim() },
     options,
   );
-  return data.updateTravelproductQuestionAnswer;
+  return mapTravelInquiryAnswer(data.updateTravelproductQuestionAnswer);
 }
 
 export async function deleteTravelproductQuestionAnswer(

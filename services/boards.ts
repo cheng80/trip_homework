@@ -16,6 +16,7 @@ import {
   createBoardInputFromForm,
   mapBoardComment,
   mapBoardDetail,
+  mapBoardForm,
   mapBoardPost,
   normalizeImageUrl,
 } from "./mappers";
@@ -58,6 +59,15 @@ export async function getBoardDetail(boardId: string, options?: GraphQLRequestOp
   return mapBoardDetail(data.fetchBoard, data.fetchBoardComments);
 }
 
+export async function getBoardForm(boardId: string, options?: GraphQLRequestOptions) {
+  const data = await requestGraphQL<{ fetchBoard: ApiBoard; fetchBoardComments: ApiBoardComment[] }>(
+    FETCH_BOARD_DETAIL,
+    { boardId, commentPage: 1 },
+    options,
+  );
+  return mapBoardForm(data.fetchBoard);
+}
+
 export async function createBoard(values: BoardFormValues, options?: GraphQLRequestOptions) {
   const data = await requestGraphQL<{ createBoard: ApiBoard }, { input: CreateBoardInput }>(
     CREATE_BOARD,
@@ -72,10 +82,10 @@ export async function updateBoard(
   values: BoardFormValues,
   options?: GraphQLRequestOptions,
 ) {
-  const input: UpdateBoardInput = createBoardInputFromForm(values);
+  const { password, ...input } = createBoardInputFromForm(values);
   const data = await requestGraphQL<{ updateBoard: ApiBoard }>(
     UPDATE_BOARD,
-    { boardId, input },
+    { boardId, input: input as UpdateBoardInput, password },
     options,
   );
   return data.updateBoard;
@@ -100,11 +110,13 @@ export async function changeBoardReaction(
 export async function createBoardComment(
   boardId: string,
   contents: string,
+  writer: string,
+  password: string,
   options?: GraphQLRequestOptions,
 ) {
   const data = await requestGraphQL<{ createBoardComment: ApiBoardComment }>(
     CREATE_BOARD_COMMENT,
-    { boardId, input: { contents: contents.trim(), rating: 0 } },
+    { boardId, input: { writer: writer.trim(), password, contents: contents.trim(), rating: 0 } },
     options,
   );
   return mapBoardComment(data.createBoardComment);
@@ -113,20 +125,25 @@ export async function createBoardComment(
 export async function updateBoardComment(
   boardCommentId: string,
   contents: string,
+  password?: string,
   options?: GraphQLRequestOptions,
 ) {
   const data = await requestGraphQL<{ updateBoardComment: ApiBoardComment }>(
     UPDATE_BOARD_COMMENT,
-    { boardCommentId, input: { contents: contents.trim() } },
+    { boardCommentId, input: { contents: contents.trim() }, password },
     options,
   );
   return mapBoardComment(data.updateBoardComment);
 }
 
-export async function deleteBoardComment(boardCommentId: string, options?: GraphQLRequestOptions) {
+export async function deleteBoardComment(
+  boardCommentId: string,
+  password?: string,
+  options?: GraphQLRequestOptions,
+) {
   const data = await requestGraphQL<{ deleteBoardComment: string }>(
     DELETE_BOARD_COMMENT,
-    { boardCommentId },
+    { boardCommentId, password },
     options,
   );
   return data.deleteBoardComment;

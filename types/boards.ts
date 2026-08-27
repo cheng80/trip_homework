@@ -39,6 +39,8 @@ export type BoardViewer = {
 };
 
 export type BoardFormValues = {
+  writer?: string;
+  password?: string;
   title: string;
   contents: string;
   address: string;

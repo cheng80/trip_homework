@@ -11,19 +11,26 @@ type BoardArticleProps = {
   boardId: string;
   board: BoardDetailData;
   reaction: Reaction;
-  onReactionChange: (reaction: Reaction) => void;
+  likes: number;
+  dislikes: number;
+  pending: boolean;
+  onReactionChange: (reaction: Exclude<Reaction, null>) => void;
+  onDelete: () => void;
 };
 
 export default function BoardArticle({
   boardId,
   board,
   reaction,
+  likes,
+  dislikes,
+  pending,
   onReactionChange,
+  onDelete,
 }: BoardArticleProps) {
   return (
     <article>
       <div className={styles.heading}>
-        <span>여행 이야기 #{boardId}</span>
         <h1>{board.title}</h1>
       </div>
 
@@ -38,6 +45,7 @@ export default function BoardArticle({
             <Image src="/icon/outline/edit.svg" alt="" width={18} height={18} />
             수정
           </Link>
+          <button type="button" onClick={onDelete}>삭제</button>
         </div>
       </div>
 
@@ -79,19 +87,21 @@ export default function BoardArticle({
           className={reaction === "like" ? styles.selectedReaction : undefined}
           type="button"
           aria-pressed={reaction === "like"}
-          onClick={() => onReactionChange(reaction === "like" ? null : "like")}
+          disabled={pending || reaction === "like"}
+          onClick={() => onReactionChange("like")}
         >
           <Image src="/icon/outline/good.svg" alt="" width={22} height={22} />
-          좋아요 {board.likes + (reaction === "like" ? 1 : 0)}
+          좋아요 {likes}
         </button>
         <button
           className={reaction === "dislike" ? styles.selectedReaction : undefined}
           type="button"
           aria-pressed={reaction === "dislike"}
-          onClick={() => onReactionChange(reaction === "dislike" ? null : "dislike")}
+          disabled={pending || reaction === "dislike"}
+          onClick={() => onReactionChange("dislike")}
         >
           <Image src="/icon/outline/bad.svg" alt="" width={22} height={22} />
-          싫어요 {board.dislikes + (reaction === "dislike" ? 1 : 0)}
+          싫어요 {dislikes}
         </button>
       </div>
     </article>

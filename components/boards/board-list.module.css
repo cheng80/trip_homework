@@ -206,9 +206,11 @@
   gap: 8px;
 }
 
-.pagination button {
+.pagination a {
+  display: grid;
   width: 36px;
   height: 36px;
+  place-items: center;
   border: 0;
   border-radius: 7px;
   color: #666666;
@@ -216,8 +218,9 @@
   cursor: pointer;
 }
 
-.pagination button:disabled {
+.pagination a[aria-disabled="true"] {
   opacity: 0.35;
+  pointer-events: none;
   cursor: default;
 }
 
@@ -231,7 +234,7 @@
 .searchButton:focus-visible,
 .writeButton:focus-visible,
 .postTitle:focus-visible,
-.pagination button:focus-visible {
+.pagination a:focus-visible {
   outline: 2px solid #111111;
   outline-offset: 3px;
 }

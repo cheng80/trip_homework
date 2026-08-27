@@ -75,6 +75,12 @@
   letter-spacing: -0.04em;
 }
 
+.dataError {
+  margin-bottom: 20px;
+  color: #c43838;
+  font-size: 14px;
+}
+
 .summary {
   display: grid;
   margin-bottom: 24px;
@@ -510,19 +516,9 @@
   position: relative;
   width: min(calc(100% - 40px), 480px);
   max-height: calc(100dvh - 40px);
-  margin: auto;
-  padding: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  border: 0;
   border-radius: 16px;
-  color: #111111;
-  background: #ffffff;
-  box-shadow: 0 18px 60px rgb(0 0 0 / 18%);
-}
-
-.chargeDialog::backdrop {
-  background: rgb(0 0 0 / 48%);
 }
 
 .chargeClose {

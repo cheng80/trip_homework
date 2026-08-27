@@ -1,31 +1,43 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useBoardList } from "@/hooks/use-board-list";
 import type { BoardPost } from "@/types/boards";
 import styles from "./board-list.module.css";
 
 type BoardListProps = {
   posts: BoardPost[];
+  count: number;
+  page: number;
+  search: string;
+  sort: "latest" | "likes";
+  startDate: string;
+  endDate: string;
 };
 
-export default function BoardList({ posts }: BoardListProps) {
-  const {
-    keyword,
-    setKeyword,
-    startDate,
-    setStartDate,
-    endDate,
-    setEndDate,
-    sort,
-    changeSort,
-    page,
-    setPage,
-    pageCount,
-    visiblePosts,
-    handleSearch,
-  } = useBoardList(posts);
+export default function BoardList({
+  posts,
+  count,
+  page,
+  search,
+  sort,
+  startDate,
+  endDate,
+}: BoardListProps) {
+  const pageCount = Math.max(1, Math.ceil(count / 10));
+  const firstPage = Math.floor((Math.min(page, pageCount) - 1) / 5) * 5 + 1;
+  const pages = Array.from(
+    { length: Math.min(5, pageCount - firstPage + 1) },
+    (_, index) => firstPage + index,
+  );
+  const pageHref = (nextPage: number) => {
+    const params = new URLSearchParams();
+    if (search) params.set("q", search);
+    if (startDate) params.set("startDate", startDate);
+    if (endDate) params.set("endDate", endDate);
+    if (sort !== "latest") params.set("sort", sort);
+    if (nextPage > 1) params.set("page", String(nextPage));
+    const query = params.toString();
+    return query ? `/boards?${query}` : "/boards";
+  };
 
   return (
     <section aria-labelledby="board-title">
@@ -34,8 +46,9 @@ export default function BoardList({ posts }: BoardListProps) {
         <label className={styles.sortField}>
           <span className={styles.srOnly}>게시글 정렬</span>
           <select
-            value={sort}
-            onChange={(event) => changeSort(event.target.value)}
+            name="sort"
+            defaultValue={sort}
+            form="board-filters"
           >
             <option value="latest">최신순</option>
             <option value="likes">좋아요순</option>
@@ -44,15 +57,15 @@ export default function BoardList({ posts }: BoardListProps) {
       </div>
 
       <div className={styles.tools}>
-        <form className={styles.searchForm} onSubmit={handleSearch}>
+        <form className={styles.searchForm} id="board-filters" action="/boards">
           <div className={styles.dateFields}>
             <label>
               <span className={styles.srOnly}>검색 시작일</span>
               <input
                 type="date"
-                value={startDate}
+                name="startDate"
+                defaultValue={startDate}
                 max={endDate || undefined}
-                onChange={(event) => setStartDate(event.target.value)}
               />
             </label>
             <span aria-hidden="true">–</span>
@@ -60,9 +73,9 @@ export default function BoardList({ posts }: BoardListProps) {
               <span className={styles.srOnly}>검색 종료일</span>
               <input
                 type="date"
-                value={endDate}
+                name="endDate"
+                defaultValue={endDate}
                 min={startDate || undefined}
-                onChange={(event) => setEndDate(event.target.value)}
               />
             </label>
           </div>
@@ -71,8 +84,8 @@ export default function BoardList({ posts }: BoardListProps) {
             <Image src="/icon/outline/search.svg" alt="" width={20} height={20} />
             <input
               type="search"
-              value={keyword}
-              onChange={(event) => setKeyword(event.target.value)}
+              name="q"
+              defaultValue={search}
               placeholder="제목을 검색해 주세요."
             />
           </label>
@@ -91,9 +104,9 @@ export default function BoardList({ posts }: BoardListProps) {
           <span className={styles.postWriter}>작성자</span>
           <span className={styles.postDate}>날짜</span>
         </div>
-        {visiblePosts.length > 0 ? visiblePosts.map((post) => (
+        {posts.length > 0 ? posts.map((post, index) => (
           <article className={styles.row} key={post.id}>
-            <span className={styles.number}>{post.id}</span>
+            <span className={styles.number}>{Math.max(1, count - (page - 1) * 10 - index)}</span>
             <Link className={styles.postTitle} href={`/boards/${post.id}`}>{post.title}</Link>
             <span className={styles.postWriter}>{post.writer}</span>
             <time className={styles.postDate} dateTime={post.date}>
@@ -108,33 +121,30 @@ export default function BoardList({ posts }: BoardListProps) {
         )}
 
         <nav className={styles.pagination} aria-label="게시글 페이지">
-          <button
-            type="button"
-            onClick={() => setPage(Math.max(1, page - 1))}
-            disabled={page === 1}
+          <Link
+            href={pageHref(Math.max(1, page - 1))}
+            aria-disabled={page === 1}
             aria-label="이전 페이지"
           >
             ‹
-          </button>
-          {Array.from({ length: pageCount }, (_, index) => index + 1).map((pageNumber) => (
-            <button
+          </Link>
+          {pages.map((pageNumber) => (
+            <Link
               className={page === pageNumber ? styles.currentPage : undefined}
-              type="button"
-              onClick={() => setPage(pageNumber)}
+              href={pageHref(pageNumber)}
               aria-current={page === pageNumber ? "page" : undefined}
               key={pageNumber}
             >
               {pageNumber}
-            </button>
+            </Link>
           ))}
-          <button
-            type="button"
-            onClick={() => setPage(Math.min(pageCount, page + 1))}
-            disabled={page === pageCount}
+          <Link
+            href={pageHref(Math.min(pageCount, page + 1))}
+            aria-disabled={page >= pageCount}
             aria-label="다음 페이지"
           >
             ›
-          </button>
+          </Link>
         </nav>
       </div>
     </section>

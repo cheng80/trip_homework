@@ -1,12 +1,15 @@
 import Image from "next/image";
+import type { MapCoordinates } from "@/domain/naver-maps";
 import type { TravelProductDetailData } from "@/types/travel-products";
+import ProductLocationMap from "./product-location-map";
 import styles from "./product-information.module.css";
 
 type ProductInformationProps = {
   product: TravelProductDetailData;
+  coordinates: MapCoordinates | null;
 };
 
-export default function ProductInformation({ product }: ProductInformationProps) {
+export default function ProductInformation({ product, coordinates }: ProductInformationProps) {
   return (
     <>
       <section className={styles.section} aria-labelledby="description-title">
@@ -26,9 +29,7 @@ export default function ProductInformation({ product }: ProductInformationProps)
             <p>{product.addressNote}</p>
           </div>
         </div>
-        <div className={styles.map} role="img" aria-label={`${product.location} 숙소 위치를 나타내는 지도 자리`}>
-          <span>{product.location} 숙소 위치</span>
-        </div>
+        <ProductLocationMap address={product.location} coordinates={coordinates} />
       </section>
     </>
   );

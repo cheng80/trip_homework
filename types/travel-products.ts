@@ -6,7 +6,8 @@ export type TravelProduct = {
   title: string;
   tags: string;
   price: string;
-  seller: { name: string; profile: string };
+  pickedCount?: number;
+  seller: { id?: string; name: string; profile: string };
 };
 
 export type TravelBanner = {
@@ -32,11 +33,21 @@ export type TravelProductFormValues = {
 
 export type TravelInquiry = {
   id: string;
+  writerId?: string;
   writer: string;
   date: string;
   question: string;
+  answer?: TravelInquiryAnswer;
   reply?: string;
   editableReply?: string;
+};
+
+export type TravelInquiryAnswer = {
+  id: string;
+  writerId?: string;
+  writer: string;
+  contents: string;
+  date: string;
 };
 
 export type TravelProductDetailData = {
@@ -45,7 +56,7 @@ export type TravelProductDetailData = {
   title: string;
   tags: string;
   price: string;
-  seller: { name: string; profile: string };
+  seller: { id?: string; name: string; profile: string };
   validity: string;
   capacity: string;
   description: string;
@@ -53,6 +64,7 @@ export type TravelProductDetailData = {
   address: string;
   addressNote: string;
   inquiries: TravelInquiry[];
+  pickedCount?: number;
   currentPoints: string;
   shortfall: string;
 };

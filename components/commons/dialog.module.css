@@ -1,0 +1,12 @@
+:where(.dialog) {
+  margin: auto;
+  padding: 0;
+  border: 0;
+  color: #111111;
+  background: #ffffff;
+  box-shadow: 0 18px 60px rgb(0 0 0 / 18%);
+}
+
+:where(.dialog)::backdrop {
+  background: rgb(0 0 0 / 48%);
+}

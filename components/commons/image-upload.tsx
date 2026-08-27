@@ -25,7 +25,9 @@ export default function ImageUpload({ previews = [] }: ImageUploadProps) {
       {previews.map((preview, index) => (
         <div className={styles.preview} key={preview.src}>
           <Image
-            src={preview.src}
+            src={preview.src.startsWith("http") || preview.src.startsWith("/")
+              ? preview.src
+              : `https://storage.googleapis.com/${preview.src}`}
             alt={preview.alt}
             fill
             sizes="160px"

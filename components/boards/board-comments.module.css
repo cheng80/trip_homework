@@ -25,6 +25,29 @@
   font-weight: 700;
 }
 
+.commentCredentials {
+  display: grid;
+  margin-bottom: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.commentCredentials label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.commentCredentials input {
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid #e3e3e3;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 400;
+}
+
 .commentForm textarea,
 .commentEdit textarea {
   width: 100%;
@@ -152,7 +175,8 @@
 }
 
 .commentForm textarea:focus-visible,
-.commentEdit textarea:focus-visible {
+.commentEdit textarea:focus-visible,
+.commentCredentials input:focus-visible {
   border-color: #111111;
   outline: 0;
 }
@@ -173,8 +197,13 @@
   }
 
   .commentForm textarea,
-  .commentEdit textarea {
+  .commentEdit textarea,
+  .commentCredentials input {
     font-size: 16px;
+  }
+
+  .commentCredentials {
+    grid-template-columns: 1fr;
   }
 }
 

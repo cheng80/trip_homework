@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getLoggedInUser, logout } from "@/services/account";
 import type { MypageMember } from "@/types/mypage";
 import styles from "./header.module.css";
 
@@ -12,9 +14,24 @@ const navigationItems = [
   ["마이 페이지", "/mypage"],
 ] as const;
 
-export default function Header({ user }: { user: MypageMember }) {
+export default function Header() {
   const pathname = usePathname();
-  const isLoggedIn = pathname.startsWith("/mypage");
+  const router = useRouter();
+  const [user, setUser] = useState<MypageMember | null>(null);
+
+  useEffect(() => {
+    getLoggedInUser().then(setUser).catch(() => setUser(null));
+  }, [pathname]);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } finally {
+      setUser(null);
+      router.replace("/login");
+      router.refresh();
+    }
+  };
 
   return (
     <header className={styles.header}>
@@ -31,7 +48,7 @@ export default function Header({ user }: { user: MypageMember }) {
           ))}
         </nav>
 
-        {isLoggedIn ? (
+        {user ? (
           <details className={styles.profile}>
             <summary aria-label="프로필 메뉴">
               <Image
@@ -66,7 +83,10 @@ export default function Header({ user }: { user: MypageMember }) {
                 <Image src="/icon/filled/charge.svg" alt="" width={22} height={22} />
                 포인트 충전
               </Link>
-              <Link className={styles.profileRow} href="/login">
+              <Link className={styles.profileRow} href="/login" onClick={(event) => {
+                event.preventDefault();
+                void handleLogout();
+              }}>
                 <Image src="/icon/outline/logout.svg" alt="" width={22} height={22} />
                 로그아웃
               </Link>
@@ -95,7 +115,7 @@ export default function Header({ user }: { user: MypageMember }) {
               ))}
             </nav>
             <div className={styles.mobileAuth}>
-              {isLoggedIn ? (
+              {user ? (
                 <>
                   <Link className={styles.mobileProfile} href="/mypage">
                     <Image src={user.profile} alt="" width={40} height={40} />
@@ -104,7 +124,10 @@ export default function Header({ user }: { user: MypageMember }) {
                       <small>{user.points.toLocaleString()} P</small>
                     </span>
                   </Link>
-                  <Link href="/login">로그아웃</Link>
+                  <Link href="/login" onClick={(event) => {
+                    event.preventDefault();
+                    void handleLogout();
+                  }}>로그아웃</Link>
                 </>
               ) : (
                 <Link href="/login">로그인</Link>
