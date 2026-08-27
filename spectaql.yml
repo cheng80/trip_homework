@@ -15,18 +15,18 @@ extensions:
 
 info:
   title: TripTrip GraphQL API
-  description: Codecamp Practice GraphQL API의 Query, Mutation, 입력값과 반환 타입을 한글로 정리한 문서입니다.
+  description: Codecamp 과제용 Practice GraphQL API의 Query, Mutation, 입력값과 반환 타입을 한글로 정리한 문서입니다.
   x-introItems:
     - title: 인증
       description: 인증 작업은 Authorization 헤더에 Bearer access token을 전달합니다. restoreAccessToken은 refresh token 쿠키를 사용합니다.
     - title: 오류 처리
       description: GraphQL 요청은 HTTP 200 응답이어도 errors 배열을 포함할 수 있으므로 data와 errors를 함께 확인합니다.
-    - title: 메타데이터 기준
-      description: 인증 여부는 GraphQL 스키마에 포함되지 않습니다. 필요 추정 또는 확인 필요 표시는 실제 연동 전에 검증해야 합니다.
+    - title: 문서 기준
+      description: 필드와 타입은 live introspection, 한글 설명·인증·주의사항은 GraphQL API Lab의 과제용 practice 안내를 기준으로 합니다. 서버 정책은 변경될 수 있습니다.
 
 servers:
   - url: https://main-practice.codebootcamp.co.kr/graphql
-    description: Codecamp Practice API
+    description: Codecamp 과제용 Practice API
     production: true
     headers:
       - name: Authorization

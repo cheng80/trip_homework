@@ -1,6 +1,6 @@
 # Codecamp Practice GraphQL API
 
-> 스키마 기준일: 2026-08-26<br>
+> 스키마 기준일: 2026-08-27<br>
 > Endpoint: <https://main-practice.codebootcamp.co.kr/graphql>
 
 ## 요약
@@ -22,8 +22,8 @@
 ## 사용 시 주의사항
 
 - GraphQL은 HTTP 상태가 200이어도 응답의 <code>errors</code>에 실패 정보가 들어올 수 있다.
-- 인증 정보는 introspection 스키마에 포함되지 않는다. 아래 인증 표시는 읽기 전용 Query의 실제 응답과 작업 의미를 함께 분석한 결과다.
-- Mutation 인증은 공유 연습 서버의 데이터를 변경하지 않기 위해 직접 실행하지 않았다. <code>추정</code> 표시는 실제 연동 전에 확인해야 한다.
+- 인증 정보는 introspection 스키마에 포함되지 않는다. 아래 인증 표시는 GraphQL API Lab의 과제용 practice 안내를 기준으로 정리했다.
+- Mutation은 공용 연습 서버의 데이터·포인트·계정 상태를 실제로 변경한다. Lab에서 실행이 제한된 삭제·결제·비밀번호 작업은 실제 앱에서도 대상과 입력값을 확인한 뒤 사용해야 한다.
 - 페이지당 항목 수와 검색 규칙은 스키마에 명시되어 있지 않다.
 - 이 서버는 확인 시점에 <code>http://localhost:8000</code> Origin과 credential 요청을 허용했다. 서버 정책은 변경될 수 있다.
 
@@ -82,38 +82,38 @@
 
 | 작업 | 인자 | 반환 | 인증 | 설명 |
 |---|---|---|---|---|
-| <code>createBoard</code> | <code>createBoardInput: CreateBoardInput!</code> | <code>Board!</code> | 불필요 또는 선택 | 게시글 생성 |
-| <code>deleteBoard</code> | <code>boardId: ID!</code> | <code>ID!</code> | 인증 추정 | 게시글 한 건 삭제 |
-| <code>deleteBoards</code> | <code>boardIds: [ID!]!</code> | <code>[ID!]!</code> | 확인 필요 | 게시글 여러 건 삭제 |
-| <code>dislikeBoard</code> | <code>boardId: ID!</code> | <code>Int!</code> | 불필요 추정 | 싫어요 처리 후 개수 반환 |
-| <code>likeBoard</code> | <code>boardId: ID!</code> | <code>Int!</code> | 불필요 추정 | 좋아요 처리 후 개수 반환 |
-| <code>updateBoard</code> | <code>updateBoardInput: UpdateBoardInput!</code>, <code>password: String</code>, <code>boardId: ID!</code> | <code>Board!</code> | 비밀번호 또는 인증 추정 | 게시글 수정 |
-| <code>createBoardComment</code> | <code>createBoardCommentInput: CreateBoardCommentInput!</code>, <code>boardId: ID!</code> | <code>BoardComment!</code> | 불필요 또는 선택 | 댓글 생성 |
-| <code>deleteBoardComment</code> | <code>password: String</code>, <code>boardCommentId: ID!</code> | <code>ID!</code> | 비밀번호 또는 인증 추정 | 댓글 삭제 |
-| <code>updateBoardComment</code> | <code>updateBoardCommentInput: UpdateBoardCommentInput!</code>, <code>password: String</code>, <code>boardCommentId: ID!</code> | <code>BoardComment!</code> | 비밀번호 또는 인증 추정 | 댓글 수정 |
+| <code>createBoard</code> | <code>createBoardInput: CreateBoardInput!</code> | <code>Board!</code> | 불필요 | 게시글 생성 |
+| <code>deleteBoard</code> | <code>boardId: ID!</code> | <code>ID!</code> | 불필요 | 게시글 한 건 삭제 |
+| <code>deleteBoards</code> | <code>boardIds: [ID!]!</code> | <code>[ID!]!</code> | 불필요 | 게시글 여러 건 삭제 |
+| <code>dislikeBoard</code> | <code>boardId: ID!</code> | <code>Int!</code> | 불필요 | 싫어요 처리 후 개수 반환 |
+| <code>likeBoard</code> | <code>boardId: ID!</code> | <code>Int!</code> | 불필요 | 좋아요 처리 후 개수 반환 |
+| <code>updateBoard</code> | <code>updateBoardInput: UpdateBoardInput!</code>, <code>password: String</code>, <code>boardId: ID!</code> | <code>Board!</code> | 불필요 | 게시글 수정 |
+| <code>createBoardComment</code> | <code>createBoardCommentInput: CreateBoardCommentInput!</code>, <code>boardId: ID!</code> | <code>BoardComment!</code> | 불필요 | 댓글 생성 |
+| <code>deleteBoardComment</code> | <code>password: String</code>, <code>boardCommentId: ID!</code> | <code>ID!</code> | 불필요 | 댓글 삭제 |
+| <code>updateBoardComment</code> | <code>updateBoardCommentInput: UpdateBoardCommentInput!</code>, <code>password: String</code>, <code>boardCommentId: ID!</code> | <code>BoardComment!</code> | 불필요 | 댓글 수정 |
 
 ### 파일과 포인트
 
 | 작업 | 인자 | 반환 | 인증 | 설명 |
 |---|---|---|---|---|
 | <code>uploadFile</code> | <code>file: Upload!</code> | <code>FileManager!</code> | 확인 필요 | GraphQL multipart 방식으로 파일 업로드 |
-| <code>createPointTransactionOfBuyingAndSelling</code> | <code>useritemId: ID!</code> | <code>Travelproduct!</code> | 필요 추정 | 숙박권 구매와 판매 포인트 처리 |
-| <code>createPointTransactionOfLoading</code> | <code>paymentId: ID!</code> | <code>PointTransaction!</code> | 필요 추정 | 결제 ID로 포인트 충전 반영 |
+| <code>createPointTransactionOfBuyingAndSelling</code> | <code>useritemId: ID!</code> | <code>Travelproduct!</code> | 필요 | 숙박권 구매와 판매 포인트 처리 |
+| <code>createPointTransactionOfLoading</code> | <code>paymentId: ID!</code> | <code>PointTransaction!</code> | 필요 | 결제 ID로 포인트 충전 반영 |
 
 ### 숙박권
 
 | 작업 | 인자 | 반환 | 인증 | 설명 |
 |---|---|---|---|---|
-| <code>createTravelproduct</code> | <code>createTravelproductInput: CreateTravelproductInput!</code> | <code>Travelproduct!</code> | 필요 추정 | 숙박권 생성 |
-| <code>deleteTravelproduct</code> | <code>travelproductId: ID!</code> | <code>ID!</code> | 필요 추정 | 숙박권 삭제 |
-| <code>updateTravelproduct</code> | <code>updateTravelproductInput: UpdateTravelproductInput!</code>, <code>travelproductId: ID!</code> | <code>Travelproduct!</code> | 필요 추정 | 숙박권 수정 |
-| <code>toggleTravelproductPick</code> | <code>travelproductId: ID!</code> | <code>Int!</code> | 필요 추정 | 찜 상태 전환 후 개수 반환 |
-| <code>createTravelproductQuestion</code> | <code>createTravelproductQuestionInput: CreateTravelproductQuestionInput!</code>, <code>travelproductId: ID!</code> | <code>TravelproductQuestion!</code> | 필요 추정 | 숙박권 문의 생성 |
-| <code>deleteTravelproductQuestion</code> | <code>travelproductQuestionId: ID!</code> | <code>ID!</code> | 필요 추정 | 숙박권 문의 삭제 |
-| <code>updateTravelproductQuestion</code> | <code>updateTravelproductQuestionInput: UpdateTravelproductQuestionInput!</code>, <code>travelproductQuestionId: ID!</code> | <code>TravelproductQuestion!</code> | 필요 추정 | 숙박권 문의 수정 |
-| <code>createTravelproductQuestionAnswer</code> | <code>createTravelproductQuestionAnswerInput: CreateTravelproductQuestionAnswerInput!</code>, <code>travelproductQuestionId: ID!</code> | <code>TravelproductQuestionAnswer!</code> | 필요 추정 | 숙박권 문의 답변 생성 |
-| <code>deleteTravelproductQuestionAnswer</code> | <code>travelproductQuestionAnswerId: ID!</code> | <code>String!</code> | 필요 추정 | 숙박권 문의 답변 삭제 |
-| <code>updateTravelproductQuestionAnswer</code> | <code>updateTravelproductQuestionAnswerInput: UpdateTravelproductQuestionAnswerInput!</code>, <code>travelproductQuestionAnswerId: ID!</code> | <code>TravelproductQuestionAnswer!</code> | 필요 추정 | 숙박권 문의 답변 수정 |
+| <code>createTravelproduct</code> | <code>createTravelproductInput: CreateTravelproductInput!</code> | <code>Travelproduct!</code> | 필요 | 숙박권 생성 |
+| <code>deleteTravelproduct</code> | <code>travelproductId: ID!</code> | <code>ID!</code> | 필요 | 숙박권 삭제 |
+| <code>updateTravelproduct</code> | <code>updateTravelproductInput: UpdateTravelproductInput!</code>, <code>travelproductId: ID!</code> | <code>Travelproduct!</code> | 필요 | 숙박권 수정 |
+| <code>toggleTravelproductPick</code> | <code>travelproductId: ID!</code> | <code>Int!</code> | 필요 | 찜 상태 전환 후 개수 반환 |
+| <code>createTravelproductQuestion</code> | <code>createTravelproductQuestionInput: CreateTravelproductQuestionInput!</code>, <code>travelproductId: ID!</code> | <code>TravelproductQuestion!</code> | 필요 | 숙박권 문의 생성 |
+| <code>deleteTravelproductQuestion</code> | <code>travelproductQuestionId: ID!</code> | <code>ID!</code> | 필요 | 숙박권 문의 삭제 |
+| <code>updateTravelproductQuestion</code> | <code>updateTravelproductQuestionInput: UpdateTravelproductQuestionInput!</code>, <code>travelproductQuestionId: ID!</code> | <code>TravelproductQuestion!</code> | 필요 | 숙박권 문의 수정 |
+| <code>createTravelproductQuestionAnswer</code> | <code>createTravelproductQuestionAnswerInput: CreateTravelproductQuestionAnswerInput!</code>, <code>travelproductQuestionId: ID!</code> | <code>TravelproductQuestionAnswer!</code> | 필요 | 숙박권 문의 답변 생성 |
+| <code>deleteTravelproductQuestionAnswer</code> | <code>travelproductQuestionAnswerId: ID!</code> | <code>String!</code> | 필요 | 숙박권 문의 답변 삭제 |
+| <code>updateTravelproductQuestionAnswer</code> | <code>updateTravelproductQuestionAnswerInput: UpdateTravelproductQuestionAnswerInput!</code>, <code>travelproductQuestionAnswerId: ID!</code> | <code>TravelproductQuestionAnswer!</code> | 필요 | 숙박권 문의 답변 수정 |
 
 ### 인증과 사용자
 
@@ -123,9 +123,9 @@
 | <code>createUser</code> | <code>createUserInput: CreateUserInput!</code> | <code>User!</code> | 불필요 | 회원가입 |
 | <code>loginUser</code> | <code>password: String!</code>, <code>email: String!</code> | <code>Token!</code> | 불필요 | 로그인 후 access token 반환 |
 | <code>loginUserExample</code> | <code>password: String!</code>, <code>email: String!</code> | <code>Token!</code> | 불필요 | 로그인 예제용 작업 |
-| <code>logoutUser</code> | 없음 | <code>Boolean!</code> | 필요 추정 | 로그아웃 |
-| <code>resetUserPassword</code> | <code>password: String!</code> | <code>Boolean!</code> | 필요 추정 | 로그인 사용자의 비밀번호 변경 |
-| <code>updateUser</code> | <code>updateUserInput: UpdateUserInput!</code> | <code>User!</code> | 필요 추정 | 로그인 사용자 정보 수정 |
+| <code>logoutUser</code> | 없음 | <code>Boolean!</code> | 필요 | 로그아웃 |
+| <code>resetUserPassword</code> | <code>password: String!</code> | <code>Boolean!</code> | 필요 | 로그인 사용자의 비밀번호 변경 |
+| <code>updateUser</code> | <code>updateUserInput: UpdateUserInput!</code> | <code>User!</code> | 필요 | 로그인 사용자 정보 수정 |
 
 ## Input 타입
 
@@ -208,4 +208,5 @@ GraphQL 문서의 기준은 live introspection schema와 [metadata.ko.json](./gr
 ## 참고
 
 - [GraphQL Introspection](https://graphql.org/learn/introspection/)
+- [GraphQL API Lab](https://graphql-api-lab.vercel.app/)
 - [SpectaQL](https://github.com/anvilco/spectaql)

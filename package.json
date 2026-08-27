@@ -28,5 +28,10 @@
     "graphql": "^16.14.2",
     "spectaql": "^3.0.9",
     "typescript": "^5"
+  },
+  "overrides": {
+    "spectaql": {
+      "grunt-sass": "4.1.0"
+    }
   }
 }

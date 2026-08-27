@@ -18,13 +18,13 @@
 - 왼쪽 메뉴에서 Query, Mutation 또는 타입을 선택한다.
 - <code>인증 필터</code>에서 전체, 인증 필요, 인증 불필요 또는 확인 필요 작업을 골라 본다.
 - 각 작업에서 설명, 인자, 반환 타입, 요청 변수와 응답 예시를 확인한다.
-- <code>확인 필요</code>는 스키마만으로 인증 정책을 확정할 수 없는 작업이다.
+- <code>확인 필요</code>는 GraphQL API Lab에도 인증 여부가 명시되지 않은 작업이다.
 
 이 문서는 API 구조를 확인하는 정적 문서이며 API를 직접 실행하지 않는다.
 
 ## 메타데이터 수정
 
-[metadata.ko.json](./metadata.ko.json)을 수정한 뒤 누락 여부를 검사하고 문서를 다시 생성한다.
+[metadata.ko.json](./metadata.ko.json)을 수정한 뒤 누락 여부를 검사하고 문서를 다시 생성한다. 필드와 타입은 live introspection, 한글 설명·인증·주의사항은 [GraphQL API Lab](https://graphql-api-lab.vercel.app/)의 과제용 practice 안내를 기준으로 한다.
 
     npm run docs:graphql:check
     npm run docs:graphql
