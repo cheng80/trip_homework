@@ -1,0 +1,485 @@
+.page {
+  min-height: calc(100dvh - 80px);
+  padding: 52px 0 80px;
+  color: #222222;
+  background: #f5f7fa;
+}
+
+.hero,
+.warning,
+.layout {
+  width: min(calc(100% - 48px), 1370px);
+  margin-inline: auto;
+}
+
+.hero {
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  margin-bottom: 8px;
+  color: #246fe5;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.15;
+  letter-spacing: -0.045em;
+}
+
+.hero > p:last-child {
+  margin-top: 12px;
+  color: #666666;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.warning {
+  margin-bottom: 24px;
+  padding: 18px 20px;
+  border: 1px solid #e8c66a;
+  border-radius: 12px;
+  background: #fff8df;
+}
+
+.warning strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #6b4d00;
+}
+
+.warning p {
+  color: #765f21;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.warning code,
+.operationCard code {
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: rgb(0 0 0 / 6%);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.layout {
+  display: grid;
+  align-items: start;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 24px;
+}
+
+.sidebar {
+  position: sticky;
+  top: 100px;
+  max-height: calc(100dvh - 120px);
+  padding: 18px;
+  overflow-y: auto;
+  border: 1px solid #e0e4ea;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgb(20 32 50 / 6%);
+}
+
+.operationGroup + .operationGroup {
+  margin-top: 22px;
+}
+
+.operationGroup h2 {
+  margin-bottom: 8px;
+  color: #888888;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.operationGroup > div {
+  display: grid;
+  gap: 4px;
+}
+
+.operationGroup button {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 0;
+  border-radius: 8px;
+  color: #444444;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.operationGroup button span {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.operationGroup button small,
+.operationHeading span {
+  flex: 0 0 auto;
+  padding: 4px 6px;
+  border-radius: 999px;
+  color: #37659e;
+  background: #edf5ff;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.operationGroup [data-risk="write"],
+.operationHeading [data-risk="write"] {
+  color: #725400;
+  background: #fff6ce;
+}
+
+.operationGroup [data-risk="destructive"],
+.operationHeading [data-risk="destructive"],
+.operationGroup [data-risk="irreversible"],
+.operationHeading [data-risk="irreversible"] {
+  color: #9f2f2f;
+  background: #fff0f0;
+}
+
+.operationGroup .selectedOperation {
+  color: #111111;
+  background: #eef2f7;
+}
+
+.workspace {
+  display: grid;
+  min-width: 0;
+  gap: 20px;
+}
+
+.operationCard,
+.savedIds,
+.outputGrid article {
+  border: 1px solid #e0e4ea;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgb(20 32 50 / 6%);
+}
+
+.operationCard {
+  padding: 28px;
+}
+
+.operationHeading {
+  display: flex;
+  margin-bottom: 20px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.operationHeading > div {
+  min-width: 0;
+}
+
+.operationHeading span {
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.operationHeading h2,
+.savedIds h2,
+.outputGrid h2 {
+  font-size: 20px;
+  letter-spacing: -0.025em;
+}
+
+.operationHeading p,
+.savedIds p {
+  margin-top: 7px;
+  color: #6d737d;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.operationHeading button {
+  min-height: 40px;
+  padding: 0 13px;
+  flex: 0 0 auto;
+  border: 1px solid #d9dde3;
+  border-radius: 8px;
+  color: #444444;
+  background: #ffffff;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.prerequisite,
+.operationWarning {
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.prerequisite {
+  background: #f2f5f8;
+}
+
+.prerequisite strong {
+  margin-right: 7px;
+}
+
+.operationWarning {
+  color: #8f2d2d;
+  background: #fff0f0;
+}
+
+.operationCard form {
+  display: grid;
+  gap: 10px;
+}
+
+.operationCard form > label,
+.idGrid label {
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.operationCard textarea {
+  width: 100%;
+  min-height: 290px;
+  padding: 16px;
+  resize: vertical;
+  border: 1px solid #ccd2da;
+  border-radius: 9px;
+  color: #233044;
+  background: #fbfcfe;
+  font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  tab-size: 2;
+}
+
+.operationCard form > p {
+  color: #777e88;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.runButton {
+  min-height: 48px;
+  margin-top: 5px;
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  background: #1f66d1;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.runButton:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.queryDetails {
+  margin-top: 18px;
+  border-top: 1px solid #edf0f4;
+}
+
+.queryDetails summary {
+  min-height: 44px;
+  padding-top: 14px;
+  color: #555d68;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.queryDetails pre,
+.outputGrid pre {
+  margin: 0;
+  overflow: auto;
+  color: #d9e2f1;
+  background: #172033;
+  font: 12px/1.65 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.queryDetails pre {
+  max-height: 320px;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.savedIds {
+  padding: 22px;
+}
+
+.idGrid {
+  display: grid;
+  margin-top: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.idGrid label {
+  display: grid;
+  gap: 7px;
+}
+
+.idGrid input {
+  width: 100%;
+  height: 42px;
+  padding: 0 11px;
+  border: 1px solid #d7dce3;
+  border-radius: 7px;
+  color: #333333;
+  background: #ffffff;
+  font: 12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.status {
+  min-height: 48px;
+  padding: 14px 16px;
+  border-radius: 9px;
+  color: #555d68;
+  background: #e9edf2;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.status[data-outcome="success"] {
+  color: #176439;
+  background: #e5f7ec;
+}
+
+.status[data-outcome="error"] {
+  color: #972e2e;
+  background: #ffebeb;
+}
+
+.outputGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.outputGrid article {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.outputGrid h2 {
+  padding: 18px 20px;
+  border-bottom: 1px solid #e6e9ee;
+}
+
+.outputGrid pre {
+  min-height: 260px;
+  max-height: 460px;
+  padding: 18px 20px;
+}
+
+.operationGroup button:focus-visible,
+.operationHeading button:focus-visible,
+.operationCard textarea:focus-visible,
+.runButton:focus-visible,
+.queryDetails summary:focus-visible,
+.idGrid input:focus-visible {
+  outline: 3px solid #246fe5;
+  outline-offset: 3px;
+}
+
+.operationGroup button:active,
+.operationHeading button:active,
+.runButton:active {
+  scale: 0.96;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .operationGroup button:hover,
+  .operationHeading button:hover {
+    background: #eef2f7;
+  }
+
+  .runButton:hover {
+    background: #1959bb;
+  }
+}
+
+@media (max-width: 980px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    display: grid;
+    max-height: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .operationGroup + .operationGroup {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 36px 0 56px;
+  }
+
+  .hero,
+  .warning,
+  .layout {
+    width: min(calc(100% - 32px), 1370px);
+  }
+
+  .sidebar,
+  .idGrid,
+  .outputGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    max-height: 420px;
+  }
+
+  .operationCard {
+    padding: 20px;
+  }
+
+  .operationHeading {
+    flex-direction: column;
+  }
+
+  .operationHeading button {
+    width: 100%;
+  }
+
+  .operationCard textarea,
+  .idGrid input {
+    font-size: 16px;
+  }
+}
+
+@media (forced-colors: active) {
+  .operationGroup .selectedOperation,
+  .status {
+    border: 1px solid CanvasText;
+  }
+}

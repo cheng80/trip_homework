@@ -2,7 +2,7 @@
 
 import BackLink from "@/components/commons/back-link";
 import { useBoardDetail } from "@/hooks/use-board-detail";
-import type { BoardDetailData, BoardViewer } from "@/types/boards";
+import type { BoardDetailData } from "@/types/boards";
 import BoardArticle from "./board-article";
 import BoardComments from "./board-comments";
 import styles from "./board-detail.module.css";
@@ -10,11 +10,10 @@ import styles from "./board-detail.module.css";
 type BoardDetailProps = {
   boardId: string;
   board: BoardDetailData;
-  viewer: BoardViewer;
 };
 
-export default function BoardDetail({ boardId, board, viewer }: BoardDetailProps) {
-  const state = useBoardDetail(board, viewer);
+export default function BoardDetail({ boardId, board }: BoardDetailProps) {
+  const state = useBoardDetail(boardId, board);
 
   return (
     <main className={styles.page}>
@@ -23,7 +22,11 @@ export default function BoardDetail({ boardId, board, viewer }: BoardDetailProps
         boardId={boardId}
         board={board}
         reaction={state.reaction}
-        onReactionChange={state.setReaction}
+        likes={state.likes}
+        dislikes={state.dislikes}
+        pending={state.reactionPending}
+        onReactionChange={state.changeReaction}
+        onDelete={() => void state.deletePost()}
       />
       <BoardComments
         comments={state.comments}
@@ -37,6 +40,7 @@ export default function BoardDetail({ boardId, board, viewer }: BoardDetailProps
         onCancelEditing={() => state.setEditingId(null)}
         onSave={state.saveComment}
         onDelete={state.deleteComment}
+        status={state.status}
       />
     </main>
   );

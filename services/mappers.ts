@@ -4,6 +4,7 @@ import type {
   ApiPointTransaction,
   ApiTravelproduct,
   ApiTravelproductQuestion,
+  ApiTravelproductQuestionAnswer,
   ApiUser,
   CreateBoardInput,
   CreateTravelproductInput,
@@ -12,6 +13,7 @@ import type { BoardComment, BoardDetailData, BoardFormValues, BoardPost } from "
 import type { MypageMember, MypagePointHistory, MypageProduct } from "../types/mypage";
 import type {
   TravelInquiry,
+  TravelInquiryAnswer,
   TravelProduct,
   TravelProductDetailData,
   TravelProductFormValues,
@@ -79,6 +81,18 @@ export function mapBoardDetail(board: ApiBoard, comments: ApiBoardComment[]): Bo
   };
 }
 
+export function mapBoardForm(board: ApiBoard): BoardFormValues {
+  return {
+    title: board.title,
+    contents: board.contents,
+    address: board.boardAddress?.address ?? "",
+    detailAddress: board.boardAddress?.addressDetail ?? "",
+    zipcode: board.boardAddress?.zipcode ?? undefined,
+    youtubeUrl: board.youtubeUrl ?? undefined,
+    images: board.images?.filter(Boolean) ?? [],
+  };
+}
+
 export function mapTravelProduct(product: ApiTravelproduct): TravelProduct {
   return {
     id: product._id,
@@ -88,7 +102,9 @@ export function mapTravelProduct(product: ApiTravelproduct): TravelProduct {
     title: product.name,
     tags: (product.tags ?? []).map((tag) => tag.startsWith("#") ? tag : `#${tag}`).join(" "),
     price: `${product.price.toLocaleString("ko-KR")}원`,
+    pickedCount: product.pickedCount,
     seller: {
+      id: product.seller?._id,
       name: product.seller?.name || "판매자",
       profile: normalizeImageUrl(product.seller?.picture, defaultProfile),
     },
@@ -98,9 +114,20 @@ export function mapTravelProduct(product: ApiTravelproduct): TravelProduct {
 export function mapTravelInquiry(question: ApiTravelproductQuestion): TravelInquiry {
   return {
     id: question._id,
+    writerId: question.user?._id,
     writer: question.user?.name || "익명",
     date: dateOnly(question.createdAt),
     question: question.contents,
+  };
+}
+
+export function mapTravelInquiryAnswer(answer: ApiTravelproductQuestionAnswer): TravelInquiryAnswer {
+  return {
+    id: answer._id,
+    writerId: answer.user?._id,
+    writer: answer.user?.name || "판매자",
+    contents: answer.contents,
+    date: dateOnly(answer.createdAt),
   };
 }
 
@@ -127,8 +154,23 @@ export function mapTravelProductDetail(
     address: [product.travelproductAddress?.address, product.travelproductAddress?.addressDetail].filter(Boolean).join(" ") || "주소 정보 없음",
     addressNote: "구매 전 판매자에게 상세 위치를 확인해 주세요.",
     inquiries: questions.map(mapTravelInquiry),
+    pickedCount: product.pickedCount,
     currentPoints: "0P",
     shortfall: "0P",
+  };
+}
+
+export function mapTravelProductForm(product: ApiTravelproduct): TravelProductFormValues {
+  return {
+    name: product.name,
+    price: String(product.price),
+    address: product.travelproductAddress?.address ?? "",
+    detailAddress: product.travelproductAddress?.addressDetail ?? "",
+    description: product.contents,
+    remarks: product.remarks,
+    tags: product.tags ?? [],
+    zipcode: product.travelproductAddress?.zipcode ?? undefined,
+    images: product.images?.filter(Boolean) ?? [],
   };
 }
 
@@ -160,6 +202,8 @@ export function mapPointTransaction(transaction: ApiPointTransaction): MypagePoi
 
 export function createBoardInputFromForm(values: BoardFormValues): CreateBoardInput {
   return {
+    writer: values.writer?.trim() || undefined,
+    password: values.password || undefined,
     title: values.title.trim(),
     contents: values.contents.trim(),
     youtubeUrl: values.youtubeUrl?.trim() || undefined,

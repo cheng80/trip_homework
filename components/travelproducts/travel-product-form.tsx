@@ -10,17 +10,19 @@ import styles from "./travel-product-form.module.css";
 
 type TravelProductFormProps = {
   mode: "create" | "edit";
+  productId?: string;
   initialValues?: TravelProductFormValues;
 };
 
-export default function TravelProductForm({ mode, initialValues }: TravelProductFormProps) {
+export default function TravelProductForm({ mode, productId, initialValues }: TravelProductFormProps) {
   const isEdit = mode === "edit";
-  const { status, handleSubmit } = useTravelProductForm(mode);
+  const { status, pending, handleSubmit } = useTravelProductForm(mode, productId, initialValues);
+  const detailHref = productId ? `/travelproducts/${productId}` : "/travelproducts";
 
   return (
     <main className={styles.page}>
       <div className={styles.content}>
-        <BackLink className={styles.back} href={isEdit ? "/travelproducts/1" : "/travelproducts"}>
+        <BackLink className={styles.back} href={isEdit ? detailHref : "/travelproducts"}>
           {isEdit ? "숙박권 상세" : "숙박권 목록"}
         </BackLink>
 
@@ -71,6 +73,7 @@ export default function TravelProductForm({ mode, initialValues }: TravelProduct
             <AddressFields
               initialAddress={initialValues?.address}
               initialDetailAddress={initialValues?.detailAddress}
+              initialZipcode={initialValues?.zipcode}
               detailPlaceholder="동·호수 또는 찾아오는 방법을 입력해 주세요."
             />
           </fieldset>
@@ -94,22 +97,18 @@ export default function TravelProductForm({ mode, initialValues }: TravelProduct
           <fieldset>
             <legend>사진 첨부</legend>
             <ImageUpload
-              previews={isEdit ? [
-                {
-                  src: "/images/트립토크%2C숙박권 판매 등록 이미지/160x160.png",
-                  alt: "등록된 숙소 사진 1",
-                },
-                {
-                  src: "/images/트립토크%2C숙박권 판매 등록 이미지/100x100.png",
-                  alt: "등록된 숙소 사진 2",
-                },
-              ] : []}
+              previews={(initialValues?.images ?? []).map((src, index) => ({
+                src,
+                alt: `등록된 숙소 사진 ${index + 1}`,
+              }))}
             />
           </fieldset>
 
           <div className={styles.actions}>
-            <Link href={isEdit ? "/travelproducts/1" : "/travelproducts"}>취소</Link>
-            <button type="submit">{isEdit ? "수정하기" : "판매 등록하기"}</button>
+            <Link href={isEdit ? detailHref : "/travelproducts"}>취소</Link>
+            <button type="submit" disabled={pending}>
+              {pending ? "저장 중..." : isEdit ? "수정하기" : "판매 등록하기"}
+            </button>
           </div>
           <p className={styles.status} role="status" aria-live="polite">{status}</p>
         </form>

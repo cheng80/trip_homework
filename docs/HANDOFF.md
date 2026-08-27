@@ -45,6 +45,22 @@
 - `services`가 GraphQL 원본 응답을 UI 모델로 변환하므로 컴포넌트는 API 필드명을 직접 사용하지 않음
 - API 연결 시 `page.tsx`의 mock import를 `services` 조회 함수로, 관련 hook의 로컬 처리를 service Mutation 호출로 교체
 
+## NAVER Maps 연동
+
+- 숙박권 상세의 주소는 서버 전용 `services/naver-maps.ts`에서 좌표로 변환한다.
+- 신규 VPC Maps Geocoding 엔드포인트는 `https://maps.apigw.ntruss.com/map-geocode/v2/geocode`이다.
+- 구형 `https://naveropenapi.apigw.ntruss.com` 엔드포인트는 신규 VPC Application 키에서 `401 / 210 Permission Denied`가 발생하므로 사용하지 않는다.
+- 브라우저 지도 SDK는 `https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=...`를 사용한다.
+- `.env.local`에 다음 두 환경변수가 필요하다. 실제 값은 문서와 Git에 기록하지 않는다.
+  - `NEXT_PUBLIC_NAVER_MAPS_KEY_ID`: 브라우저에 전달되는 Client ID
+  - `NAVER_MAPS_SECRET_KEY`: 서버 Geocoding 요청에만 사용하는 Client Secret
+- NAVER Cloud의 `Application Services > Maps`에서 `Dynamic Map`, `Static Map`, `Geocoding`을 선택한다. 현재 화면 구현은 Dynamic Map과 Geocoding을 사용하며 Static Map은 활성화만 되어 있다.
+- Dynamic Map의 Web 서비스 URL에는 포트·경로 없이 `http://localhost`와 실제 배포 도메인을 각각 등록한다.
+- Vercel 배포에는 로컬 파일과 별도로 같은 환경변수 두 개를 등록해야 한다.
+- Geocoding은 전체 주소부터 마지막 단어를 하나씩 줄여 행정구역까지 재조회한다. 더미 주소처럼 정확 주소가 0건이어도 검색 가능한 행정구역 좌표로 지도를 표시한다.
+- Geocoding 결과는 30일 동안 캐시하고, 모든 조회가 실패하거나 키가 없으면 주소와 NAVER 지도 새 창 링크만 표시한다.
+- 상세 지도는 이동·확대 입력을 막은 미리보기이며, 지도 전체가 `target="_blank"`인 NAVER 지도 검색 링크다.
+
 ## 현재 화면 범위
 
 `dev`에는 숙박권, 트립토크, 로그인·회원가입, 마이페이지 정적 화면이 구현되어 있다.
@@ -56,7 +72,7 @@
 - 숙소 카테고리
 - 숙박권 카드 목록
 - 최근 본 숙박권과 상세·판매 화면 이동
-- `/travelproducts/[travelproductId]` 상품 이미지·판매자·상세 정보·위치·문의 상태
+- `/travelproducts/[travelproductId]` 상품 이미지·판매자·상세 정보·NAVER 지도 위치·문의 상태
 - 구매 확인과 포인트 부족 팝업
 - `/travelproducts/new` 판매 등록 폼
 - `/travelproducts/[travelproductId]/edit` 판매 수정 폼
@@ -89,10 +105,12 @@
 - 충전 금액 프리셋·직접 입력·최소 금액 검증 상태
 - 충전 확인·완료와 예상 보유 포인트 표시
 - `/mypage?charge=1`, `/mypage?section=points`, `/mypage?section=password` 검수 직접 진입
+- 트립트립 `(main)`과 분리된 `(dev)` Route Group의 `/dev/api-test`에서 GraphQL 예시 확인과 수동 실행
 
-네이티브 `fetch` GraphQL 클라이언트, 동일 출처 프록시, 기능별 서비스와 Query·Mutation 문서는 준비했다.
-페이지는 아직 mock 데이터를 사용하며 실제 로그인·회원가입·구매·등록·수정·문의·게시글·댓글 Mutation은 연결하지 않았다.
-배너와 팝업, 폼 완료 표시는 브라우저 내부의 정적 상태만 사용한다.
+게시글·숙박권 목록과 상세는 네이티브 `fetch` GraphQL service를 사용한다.
+회원가입·로그인·로그아웃·현재 사용자·마이페이지·비밀번호 변경과 게시글·댓글·숙박권·문의·구매 Mutation을 동일 출처 프록시에 연결했다.
+access token은 응답 본문에서 제거해 HttpOnly 쿠키에 저장하고, refresh token 쿠키로 인증 실패 요청을 한 번 갱신·재시도한다.
+배너·카테고리와 인증 전 마이페이지 초기 화면에는 기존 정적 데이터를 유지한다.
 
 ## 현재 검증 상태
 
@@ -137,22 +155,32 @@
 - API 준비 리팩터링 후 6개 대표 라우트의 1920px·781px·390px 렌더링·이미지·가로 넘침 확인
 - `paymentId` 없이 충전 팝업·포인트 내역·비밀번호 변경 직접 진입 확인
 - 숙박권 상세의 포인트 부족 팝업에서 충전 검수 화면 이동 확인
+- 공통 `dialog` 외형 분리 후 `npm test`, `npm run lint`, `npm run build` 통과
+- 공개 게시글·숙박권 목록과 대표 상세 라우트 실제 API 응답 200 확인
+- GraphQL 인증 세션 쿠키·응답 redaction·로그아웃 정리 순수 로직 테스트 통과
+- 로그인·토큰 갱신 upstream 요청의 `Origin` 전달과 mock 로그인 성공 응답 확인
+- `/api/graphql`의 잘못된 JSON 요청 400 응답 확인
+- `/dev/api-test`의 `fetchBoards` 조회 성공, 요청·응답 JSON과 위험도 표시 확인
+- API 테스트 페이지의 placeholder ID 사전 차단과 Mutation 확인 취소 시 요청 미전송 확인
+- API 테스트 페이지 1440px·390px 렌더링, 가로 넘침·console warning/error 없음 확인
+- 신규 VPC Geocoding 엔드포인트로 서울시청 주소 조회 HTTP 200, 좌표 `126.9783882`, `37.5666103` 확인
+- 테스트 숙박권 `6a900480d4299d0029cd4add` 상세에서 NAVER Dynamic Map·마커 표시와 지도 전체 클릭 시 NAVER 지도 검색 새 탭 이동 확인
 
 ## 다음 작업: README 프로젝트 설명 교체
 
 사용자에게 프로젝트 설명 시안을 먼저 확인받은 뒤 `README.md`를 교체한다.
 
-1. 프로젝트 소개와 현재 정적 구현 범위를 작성
+1. 프로젝트 소개와 현재 UI·GraphQL 연결 범위를 작성
 2. 주요 화면·기술 스택·실행·검증 명령 정리
-3. GraphQL 준비 범위와 아직 연결하지 않은 인증·결제 Mutation을 명시
+3. GraphQL 연결 범위와 아직 연결하지 않은 결제·충전 기능을 명시
 
 ## 다음 세션 시작 방법
 
 1. `git status --short --branch`로 브랜치와 작업 상태를 확인한다.
 2. 승인된 시안대로 `README.md`만 교체한다.
 3. 문서의 실행·검증 명령이 `package.json`과 일치하는지 확인한다.
-4. 공개 조회(`fetchBoards`, `fetchTravelproducts`)부터 서비스 함수로 교체한다.
-5. 토큰 저장 정책을 결정한 뒤 인증·마이페이지·Mutation을 연결한다.
+4. 별도 이메일 사전 중복 확인과 숙박권 날짜·지역·카테고리 상태의 다음 범위를 결정한다.
+5. 실제 결제·포인트 충전은 수업 범위를 확인한 뒤 연결한다.
 
 ## 주요 참고 자료
 
@@ -187,8 +215,9 @@
 
 - 라우트는 루트 `app`을 유지하며 `src/app`으로 이동하지 않는다.
 - `@/*`는 프로젝트 루트를 가리키는 현재 설정을 유지한다.
-- 실제 API 전환 전까지 페이지는 mock 데이터를 유지하고, UI 컴포넌트에서 GraphQL 원본 타입을 직접 사용하지 않는다.
-- access token 저장 방식은 아직 결정하지 않았으며 인증 Mutation 연결 전 별도로 확정한다.
+- UI 컴포넌트는 GraphQL 원본 타입을 직접 사용하지 않고 service가 변환한 UI 모델만 받는다.
+- access token은 브라우저 JavaScript 저장소에 두지 않고 동일 출처 프록시의 HttpOnly 쿠키로만 관리한다.
+- `/dev/api-test`는 `next dev`에서만 열리며 Mutation은 자동 실행·자동 정리하지 않는다.
 - Kakao 우편번호 서비스는 별도 서비스 키 없이 사용하며 `.env` 설정이 필요하지 않다.
 - Vercel main 배포 성공 상태는 확인했으나 배포된 공개 주소의 주요 화면 수동 확인은 남아 있다.
 - `next.config.ts`의 `allowedDevOrigins`는 `172.16.1.108`만 허용한다. 개발 PC의 네트워크 IP가 바뀌면 갱신이 필요하다.

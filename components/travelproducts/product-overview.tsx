@@ -62,7 +62,8 @@ export default function ProductOverview({ productId, product }: ProductOverviewP
           productId={productId}
           price={product.price}
           currentPoints={product.currentPoints}
-          shortfall={product.shortfall}
+          sellerId={product.seller.id}
+          initialPickedCount={product.pickedCount ?? 0}
         />
       </div>
     </section>

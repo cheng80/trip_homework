@@ -5,7 +5,6 @@ import {
   LOGIN_USER,
   LOGOUT_USER,
   RESET_USER_PASSWORD,
-  RESTORE_ACCESS_TOKEN,
 } from "@/graphql/mutations";
 import { FETCH_MYPAGE, FETCH_USER_LOGGED_IN } from "@/graphql/queries";
 import type { ApiPointTransaction, ApiTravelproduct, ApiUser } from "@/graphql/types";
@@ -20,26 +19,17 @@ export async function signup(input: SignupInput, options?: GraphQLRequestOptions
 }
 
 export async function login(email: string, password: string, options?: GraphQLRequestOptions) {
-  const data = await requestGraphQL<{ loginUser: { accessToken: string } }>(
+  await requestGraphQL<{ loginUser: { accessToken: string } }>(
     LOGIN_USER,
     { email: email.trim(), password },
     options,
   );
-  return data.loginUser.accessToken;
+  return true;
 }
 
 export async function logout(options?: GraphQLRequestOptions) {
   const data = await requestGraphQL<{ logoutUser: boolean }>(LOGOUT_USER, undefined, options);
   return data.logoutUser;
-}
-
-export async function restoreAccessToken(options?: GraphQLRequestOptions) {
-  const data = await requestGraphQL<{ restoreAccessToken: { accessToken: string } }>(
-    RESTORE_ACCESS_TOKEN,
-    undefined,
-    options,
-  );
-  return data.restoreAccessToken.accessToken;
 }
 
 export async function resetPassword(password: string, options?: GraphQLRequestOptions) {

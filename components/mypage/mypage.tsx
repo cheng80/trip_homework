@@ -2,15 +2,26 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import Dialog from "@/components/commons/dialog";
+import { getMypage, resetPassword } from "@/services/account";
 import type {
+  MypageData,
   MypageMember,
   MypagePointHistory,
   MypageProduct,
   MypageSection,
 } from "@/types/mypage";
 import { validatePasswordChange, type PasswordError } from "./password-validation";
-import { getChargeAmount, getChargeError } from "./point-charge";
+import {
+  applyPointCharge,
+  applyStoredPointCharges,
+  getChargeAmount,
+  getChargeError,
+  getPointChargeStorageKey,
+  parseStoredPointCharges,
+} from "./point-charge";
 import styles from "./mypage.module.css";
 
 type MypageProps = {
@@ -87,11 +98,16 @@ export default function Mypage({
   initialSection = "overview",
   openChargeOnMount = false,
 }: MypageProps) {
+  const router = useRouter();
+  const [data, setData] = useState<MypageData>({ member, transactions, bookmarks, pointHistory });
+  const [dataError, setDataError] = useState("");
   const [section, setSection] = useState<MypageSection>(initialSection);
   const [productTab, setProductTab] = useState<ProductTab>("transactions");
   const [pointPage, setPointPage] = useState(1);
   const [passwordError, setPasswordError] = useState<PasswordError>(null);
   const [passwordStatus, setPasswordStatus] = useState("");
+  const [passwordRequestError, setPasswordRequestError] = useState("");
+  const [passwordPending, setPasswordPending] = useState(false);
   const [chargeStep, setChargeStep] = useState<ChargeStep>("select");
   const [chargeValue, setChargeValue] = useState("");
   const [chargeError, setChargeError] = useState("");
@@ -99,14 +115,42 @@ export default function Mypage({
   const passwordCheckRef = useRef<HTMLInputElement>(null);
   const chargeDialogRef = useRef<HTMLDialogElement>(null);
   const chargeInputRef = useRef<HTMLInputElement>(null);
+  const {
+    member: currentMember,
+    transactions: currentTransactions,
+    bookmarks: currentBookmarks,
+    pointHistory: currentPointHistory,
+  } = data;
+
+  useEffect(() => {
+    getMypage().then((nextData) => {
+      let storedCharges = parseStoredPointCharges(null);
+      try {
+        storedCharges = parseStoredPointCharges(
+          localStorage.getItem(getPointChargeStorageKey(nextData.member.id)),
+        );
+      } catch {
+        // 브라우저 저장소가 차단된 경우 서버 포인트만 표시한다.
+      }
+      setData(applyStoredPointCharges(nextData, storedCharges));
+      setDataError("");
+    }).catch((error: unknown) => {
+      const message = error instanceof Error ? error.message : "마이페이지 정보를 불러오지 못했습니다.";
+      if (/unauth|로그인|인증|access.?token|jwt/i.test(message)) {
+        router.replace("/login");
+        return;
+      }
+      setDataError(message.split("\n")[0]);
+    });
+  }, [router]);
 
   useEffect(() => {
     if (!openChargeOnMount || chargeDialogRef.current?.open) return;
     chargeDialogRef.current?.showModal();
   }, [openChargeOnMount]);
 
-  const pageCount = Math.ceil(pointHistory.length / pointPageSize);
-  const visiblePointHistory = pointHistory.slice(
+  const pageCount = Math.max(1, Math.ceil(currentPointHistory.length / pointPageSize));
+  const visiblePointHistory = currentPointHistory.slice(
     (pointPage - 1) * pointPageSize,
     pointPage * pointPageSize,
   );
@@ -116,7 +160,7 @@ export default function Mypage({
     requestAnimationFrame(() => document.querySelector<HTMLElement>("#mypage-title")?.focus());
   };
 
-  const handlePasswordSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handlePasswordSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
@@ -130,20 +174,33 @@ export default function Mypage({
     if (nextError) {
       setPasswordError(nextError);
       setPasswordStatus("");
+      setPasswordRequestError("");
       requestAnimationFrame(() => {
         (nextError.field === "newPassword" ? newPasswordRef : passwordCheckRef).current?.focus();
       });
       return;
     }
 
+    setPasswordPending(true);
     setPasswordError(null);
-    setPasswordStatus("비밀번호 변경 입력이 완료되었습니다.");
-    form.reset();
+    setPasswordRequestError("");
+    try {
+      await resetPassword(String(formData.get("newPassword") ?? ""));
+      setPasswordStatus("비밀번호가 변경되었습니다.");
+      form.reset();
+      window.alert("비밀번호가 변경되었습니다.");
+    } catch (error) {
+      setPasswordStatus("");
+      setPasswordRequestError(error instanceof Error ? error.message.split("\n")[0] : "비밀번호를 변경하지 못했습니다.");
+    } finally {
+      setPasswordPending(false);
+    }
   };
 
   const clearPasswordState = () => {
     setPasswordError(null);
     setPasswordStatus("");
+    setPasswordRequestError("");
   };
 
   const chargeAmount = getChargeAmount(chargeValue);
@@ -179,6 +236,27 @@ export default function Mypage({
   };
 
   const completeCharge = () => {
+    const date = new Intl.DateTimeFormat("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date()).replace(/\.$/, "");
+
+    const charge = { id: `local-charge-${Date.now()}`, date, amount: chargeAmount };
+    const storageKey = getPointChargeStorageKey(currentMember.id);
+
+    try {
+      const storedCharges = parseStoredPointCharges(localStorage.getItem(storageKey));
+      localStorage.setItem(storageKey, JSON.stringify([...storedCharges, charge]));
+    } catch {
+      setChargeError("더미 포인트를 저장하지 못했습니다. 브라우저 저장소를 확인해 주세요.");
+      setChargeStep("select");
+      focusChargeTitle();
+      return;
+    }
+
+    setData((current) => applyPointCharge(current, charge.amount, charge.id, charge.date));
+    setPointPage(1);
     setChargeStep("complete");
     focusChargeTitle();
   };
@@ -206,16 +284,17 @@ export default function Mypage({
 
         <div className={styles.content}>
           <h1 id="mypage-title" tabIndex={-1}>{sectionTitles[section]}</h1>
+          {dataError && <p className={styles.dataError} role="alert">{dataError}</p>}
 
           {section === "overview" && (
             <>
               <section className={styles.summary} aria-label="회원 정보와 보유 포인트">
                 <article className={styles.profileCard}>
-                  <Image src={member.profile} alt="" width={72} height={72} />
+                  <Image src={currentMember.profile} alt="" width={72} height={72} />
                   <div>
                     <span>안녕하세요</span>
-                    <h2>{member.name}님</h2>
-                    <p>{member.email}</p>
+                    <h2>{currentMember.name}님</h2>
+                    <p>{currentMember.email}</p>
                   </div>
                 </article>
 
@@ -225,7 +304,7 @@ export default function Mypage({
                   </span>
                   <div>
                     <span>보유 포인트</span>
-                    <strong>{member.points.toLocaleString()} P</strong>
+                    <strong>{currentMember.points.toLocaleString()} P</strong>
                   </div>
                   <div className={styles.pointActions}>
                     <button type="button" onClick={openChargeDialog}>충전하기</button>
@@ -259,9 +338,9 @@ export default function Mypage({
                 </div>
 
                 {productTab === "transactions" ? (
-                  <ProductList products={transactions} />
+                  <ProductList products={currentTransactions} />
                 ) : (
-                  <ProductList products={bookmarks} bookmarked />
+                  <ProductList products={currentBookmarks} bookmarked />
                 )}
               </section>
             </>
@@ -272,7 +351,7 @@ export default function Mypage({
               <div className={styles.pointHeading}>
                 <div>
                   <h2 id="point-list-title">충전·사용 내역</h2>
-                  <p>보유 포인트 <strong>{member.points.toLocaleString()} P</strong></p>
+                  <p>보유 포인트 <strong>{currentMember.points.toLocaleString()} P</strong></p>
                 </div>
                 <label>
                   조회 기간
@@ -390,16 +469,18 @@ export default function Mypage({
                   id="password-error"
                   role="status"
                 >
-                  {passwordError?.message ?? passwordStatus}
+                  {passwordError?.message ?? passwordRequestError ?? passwordStatus}
                 </p>
-                <button type="submit">비밀번호 변경</button>
+                <button type="submit" disabled={passwordPending}>
+                  {passwordPending ? "변경 중..." : "비밀번호 변경"}
+                </button>
               </form>
             </section>
           )}
         </div>
       </div>
 
-      <dialog
+      <Dialog
         className={styles.chargeDialog}
         ref={chargeDialogRef}
         aria-labelledby={`charge-${chargeStep}-title`}
@@ -487,7 +568,7 @@ export default function Mypage({
               </div>
               <div>
                 <dt>충전 후 포인트</dt>
-                <dd>{(member.points + chargeAmount).toLocaleString()} P</dd>
+                <dd>{(currentMember.points + chargeAmount).toLocaleString()} P</dd>
               </div>
             </dl>
 
@@ -515,7 +596,7 @@ export default function Mypage({
 
             <div className={styles.chargeResult}>
               <span>보유 포인트</span>
-              <strong>{(member.points + chargeAmount).toLocaleString()} P</strong>
+              <strong>{currentMember.points.toLocaleString()} P</strong>
             </div>
             <button
               className={styles.chargePrimary}
@@ -526,7 +607,7 @@ export default function Mypage({
             </button>
           </div>
         )}
-      </dialog>
+      </Dialog>
     </main>
   );
 }

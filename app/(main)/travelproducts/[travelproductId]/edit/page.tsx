@@ -1,6 +1,13 @@
 import TravelProductForm from "@/components/travelproducts/travel-product-form";
-import { travelProductFormValues } from "@/data/travel-products";
+import { getTravelproductForm } from "@/services/travel-products";
 
-export default function EditTravelProductPage() {
-  return <TravelProductForm mode="edit" initialValues={travelProductFormValues} />;
+type EditTravelProductPageProps = {
+  params: Promise<{ travelproductId: string }>;
+};
+
+export default async function EditTravelProductPage({ params }: EditTravelProductPageProps) {
+  const { travelproductId } = await params;
+  const initialValues = await getTravelproductForm(travelproductId);
+
+  return <TravelProductForm mode="edit" productId={travelproductId} initialValues={initialValues} />;
 }

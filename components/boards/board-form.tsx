@@ -16,7 +16,7 @@ type BoardFormProps = {
 
 export default function BoardForm({ mode, boardId = "1", initialValues }: BoardFormProps) {
   const isEdit = mode === "edit";
-  const { status, handleSubmit } = useBoardForm(mode);
+  const { status, pending, handleSubmit } = useBoardForm(mode, boardId, initialValues?.images);
 
   return (
     <main className={styles.page}>
@@ -34,6 +34,32 @@ export default function BoardForm({ mode, boardId = "1", initialValues }: BoardF
         >
           <fieldset>
             <legend>게시글 정보</legend>
+            {!isEdit && (
+              <div className={styles.field}>
+                <label htmlFor="writer">작성자 *</label>
+                <input
+                  id="writer"
+                  name="writer"
+                  maxLength={20}
+                  placeholder="작성자 이름을 입력해 주세요."
+                  required
+                />
+              </div>
+            )}
+
+            <div className={styles.field}>
+              <label htmlFor="board-password">게시글 비밀번호 *</label>
+              <input
+                id="board-password"
+                name="password"
+                type="password"
+                minLength={4}
+                autoComplete={isEdit ? "current-password" : "new-password"}
+                placeholder="4자 이상 입력해 주세요."
+                required
+              />
+              <small>{isEdit ? "등록할 때 입력한 비밀번호를 입력해 주세요." : "게시글 수정·삭제에 사용됩니다."}</small>
+            </div>
             <div className={styles.field}>
               <label htmlFor="title">제목 *</label>
               <input
@@ -66,6 +92,7 @@ export default function BoardForm({ mode, boardId = "1", initialValues }: BoardF
             <AddressFields
               initialAddress={initialValues?.address}
               initialDetailAddress={initialValues?.detailAddress}
+              initialZipcode={initialValues?.zipcode}
               detailPlaceholder="장소 이름이나 자세한 위치를 입력해 주세요."
             />
           </fieldset>
@@ -73,22 +100,18 @@ export default function BoardForm({ mode, boardId = "1", initialValues }: BoardF
           <fieldset>
             <legend>사진 첨부</legend>
             <ImageUpload
-              previews={isEdit ? [
-                {
-                  src: "/images/트립토크%2C숙박권 판매 등록 이미지/160x160.png",
-                  alt: "첨부된 여행 사진 1",
-                },
-                {
-                  src: "/images/트립토크%2C숙박권 판매 등록 이미지/100x100.png",
-                  alt: "첨부된 여행 사진 2",
-                },
-              ] : []}
+              previews={(initialValues?.images ?? []).map((src, index) => ({
+                src,
+                alt: `첨부된 여행 사진 ${index + 1}`,
+              }))}
             />
           </fieldset>
 
           <div className={styles.actions}>
             <Link href={isEdit ? `/boards/${boardId}` : "/boards"}>취소</Link>
-            <button type="submit">{isEdit ? "수정하기" : "등록하기"}</button>
+            <button type="submit" disabled={pending}>
+              {pending ? "저장 중..." : isEdit ? "수정하기" : "등록하기"}
+            </button>
           </div>
           <p className={styles.status} role="status" aria-live="polite">{status}</p>
         </form>

@@ -3,20 +3,24 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 import KakaoPostcodeEmbed, { type Address } from "react-daum-postcode";
+import Dialog from "./dialog";
 import styles from "./address-fields.module.css";
 
 type AddressFieldsProps = {
   initialAddress?: string;
   initialDetailAddress?: string;
+  initialZipcode?: string;
   detailPlaceholder: string;
 };
 
 export default function AddressFields({
   initialAddress = "",
   initialDetailAddress = "",
+  initialZipcode = "",
   detailPlaceholder,
 }: AddressFieldsProps) {
   const [address, setAddress] = useState(initialAddress);
+  const [zipcode, setZipcode] = useState(initialZipcode);
   const postcodeDialog = useRef<HTMLDialogElement>(null);
   const postcodeTrigger = useRef<HTMLButtonElement>(null);
   const detailAddressInput = useRef<HTMLInputElement>(null);
@@ -25,6 +29,7 @@ export default function AddressFields({
     const selectedAddress = data.userSelectedType === "R" ? data.roadAddress : data.jibunAddress;
 
     setAddress(selectedAddress || data.address);
+    setZipcode(data.zonecode);
     postcodeDialog.current?.close();
     requestAnimationFrame(() => detailAddressInput.current?.focus());
   };
@@ -43,6 +48,7 @@ export default function AddressFields({
             readOnly
             required
           />
+          <input name="zipcode" type="hidden" value={zipcode} />
           <button
             ref={postcodeTrigger}
             type="button"
@@ -66,7 +72,7 @@ export default function AddressFields({
         />
       </div>
 
-      <dialog
+      <Dialog
         className={styles.postcodeDialog}
         ref={postcodeDialog}
         aria-labelledby="postcode-title"
@@ -89,7 +95,7 @@ export default function AddressFields({
           style={{ width: "100%", height: "min(62vh, 480px)" }}
           errorMessage={<p className={styles.postcodeError}>주소 검색을 불러오지 못했습니다.</p>}
         />
-      </dialog>
+      </Dialog>
     </>
   );
 }

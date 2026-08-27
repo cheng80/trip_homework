@@ -2,12 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useRef, useState, type FormEvent } from "react";
+import Dialog from "@/components/commons/dialog";
 import {
   validateAuthInput,
   type AuthErrors,
   type AuthField,
 } from "@/domain/auth-validation";
+import { login, signup } from "@/services/account";
 import styles from "./auth-form.module.css";
 
 type AuthFormProps = {
@@ -20,12 +23,14 @@ function getInput(form: HTMLFormElement, name: AuthField) {
 
 export default function AuthForm({ mode }: AuthFormProps) {
   const isLogin = mode === "login";
+  const router = useRouter();
   const successDialog = useRef<HTMLDialogElement>(null);
   const [errors, setErrors] = useState<AuthErrors>({});
-  const [status, setStatus] = useState("");
+  const [requestError, setRequestError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const updateField = (field: AuthField, isValid: boolean) => {
-    setStatus("");
+    setRequestError("");
     if (!isValid) return;
 
     setErrors((current) => {
@@ -37,7 +42,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
     });
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
@@ -49,7 +54,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
     });
 
     setErrors(nextErrors);
-    setStatus("");
+    setRequestError("");
 
     const firstError = (Object.keys(nextErrors) as AuthField[])[0];
     if (firstError) {
@@ -58,12 +63,25 @@ export default function AuthForm({ mode }: AuthFormProps) {
       return;
     }
 
-    if (isLogin) {
-      setStatus("로그인 입력이 완료되었습니다.");
-      return;
+    setIsSubmitting(true);
+    try {
+      if (isLogin) {
+        await login(getInput(form, "email").value, getInput(form, "password").value);
+        router.replace("/travelproducts");
+        router.refresh();
+      } else {
+        await signup({
+          email: getInput(form, "email").value.trim(),
+          name: getInput(form, "name").value.trim(),
+          password: getInput(form, "password").value,
+        });
+        successDialog.current?.showModal();
+      }
+    } catch (error) {
+      setRequestError(error instanceof Error ? error.message.split("\n")[0] : "요청에 실패했습니다.");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    successDialog.current?.showModal();
   };
 
   const loginError = errors.email ?? errors.password;
@@ -176,18 +194,18 @@ export default function AuthForm({ mode }: AuthFormProps) {
               </div>
             )}
 
-            {isLogin && (
+            {(isLogin || requestError) && (
               <p
-                className={`${styles.loginMessage} ${loginError ? styles.errorMessage : styles.successMessage}`}
+                className={`${styles.loginMessage} ${loginError || requestError ? styles.errorMessage : styles.successMessage}`}
                 id="login-error"
                 aria-live="polite"
               >
-                {loginError ?? status}
+                {loginError ?? requestError}
               </p>
             )}
 
-            <button className={styles.submitButton} type="submit">
-              {isLogin ? "로그인" : "회원가입"}
+            <button className={styles.submitButton} type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "처리 중..." : isLogin ? "로그인" : "회원가입"}
             </button>
           </form>
 
@@ -206,13 +224,13 @@ export default function AuthForm({ mode }: AuthFormProps) {
       </div>
 
       {!isLogin && (
-        <dialog className={styles.successDialog} ref={successDialog} aria-labelledby="signup-success-title">
+        <Dialog className={styles.successDialog} ref={successDialog} aria-labelledby="signup-success-title">
           <h2 id="signup-success-title">회원가입을 축하 드려요.</h2>
           <span className={styles.dialogLogo} aria-hidden="true">
             <Image src="/logo/logo.svg" alt="" width={164} height={112} />
           </span>
           <Link href="/login">로그인 하기</Link>
-        </dialog>
+        </Dialog>
       )}
     </main>
   );

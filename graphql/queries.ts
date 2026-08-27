@@ -69,6 +69,15 @@ export const FETCH_TRAVELPRODUCT_DETAIL = `
   }
 `;
 
+export const FETCH_TRAVELPRODUCT_QUESTION_ANSWERS = `
+  query FetchTravelproductQuestionAnswers($questionId: ID!, $page: Int) {
+    fetchTravelproductQuestionAnswers(travelproductQuestionId: $questionId, page: $page) {
+      _id contents createdAt
+      user { _id email name picture }
+    }
+  }
+`;
+
 export const FETCH_USER_LOGGED_IN = `
   query FetchUserLoggedIn {
     fetchUserLoggedIn {

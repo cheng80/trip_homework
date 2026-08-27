@@ -8,9 +8,10 @@ import styles from "./product-catalog.module.css";
 type ProductCatalogProps = {
   categories: TravelCategory[];
   products: TravelProduct[];
+  search?: string;
 };
 
-export default function ProductCatalog({ categories, products }: ProductCatalogProps) {
+export default function ProductCatalog({ categories, products, search = "" }: ProductCatalogProps) {
   return (
     <section aria-labelledby="exclusive-title">
       <SectionTitle as="h2" id="exclusive-title">여기에서만 예약할 수 있는 숙소</SectionTitle>
@@ -30,7 +31,7 @@ export default function ProductCatalog({ categories, products }: ProductCatalogP
         <label className={styles.srOnly} htmlFor="keyword">숙소 검색어</label>
         <div className={`${styles.field} ${styles.searchField}`}>
           <Image src="/icon/outline/search.svg" alt="" width={20} height={20} />
-          <input id="keyword" name="q" placeholder="지역을 검색해 주세요." />
+          <input id="keyword" name="q" defaultValue={search} placeholder="지역을 검색해 주세요." />
         </div>
 
         <button className={styles.searchButton} type="submit">검색</button>

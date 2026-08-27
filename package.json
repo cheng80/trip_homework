@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test components/mypage/*.test.mjs domain/*.test.mjs graphql/*.test.mjs services/*.test.mjs",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test app/api/graphql/*.test.mjs components/mypage/*.test.mjs domain/*.test.mjs graphql/*.test.mjs services/*.test.mjs",
     "api:graphql:check": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/check-graphql-operations.mjs",
     "docs:graphql": "node scripts/generate-graphql-docs.mjs",
     "docs:graphql:check": "node scripts/generate-graphql-docs.mjs --check",

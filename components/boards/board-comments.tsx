@@ -17,6 +17,7 @@ type BoardCommentsProps = {
   onCancelEditing: () => void;
   onSave: (id: string) => void;
   onDelete: (id: string) => void;
+  status: string;
 };
 
 export default function BoardComments({
@@ -31,11 +32,23 @@ export default function BoardComments({
   onCancelEditing,
   onSave,
   onDelete,
+  status,
 }: BoardCommentsProps) {
   return (
     <section className={styles.comments} aria-labelledby="comment-title">
       <h2 id="comment-title">댓글 <span>{comments.length}</span></h2>
+      {status && <p role="status" aria-live="polite">{status}</p>}
       <form className={styles.commentForm} onSubmit={onSubmit}>
+        <div className={styles.commentCredentials}>
+          <label>
+            작성자
+            <input name="writer" maxLength={20} placeholder="작성자 이름" required />
+          </label>
+          <label>
+            댓글 비밀번호
+            <input name="password" type="password" minLength={4} autoComplete="new-password" placeholder="4자 이상" required />
+          </label>
+        </div>
         <label htmlFor="comment">댓글 작성</label>
         <textarea
           id="comment"
