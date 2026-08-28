@@ -2,6 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import {
+  hasRichTextContent,
+  productContentMaxLength,
+  richTextLength,
+  richTextPlainText,
+} from "@/domain/rich-text";
 import { uploadImageFiles } from "@/services/files";
 import { createTravelproduct, updateTravelproduct } from "@/services/travel-products";
 import type { TravelProductFormValues } from "@/types/travel-products";
@@ -17,8 +23,26 @@ export function useTravelProductForm(
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const data = new FormData(form);
     const files = data.getAll("images").filter((value): value is File => value instanceof File && value.size > 0);
+    const description = String(data.get("description") ?? "");
+    const focusDescription = () => {
+      const editor = form.querySelector<HTMLElement>('[data-rich-text-field="description"] .ql-editor');
+      editor?.setAttribute("aria-invalid", "true");
+      editor?.focus();
+    };
+
+    if (!hasRichTextContent(description)) {
+      setStatus("상세 설명을 입력해 주세요.");
+      focusDescription();
+      return;
+    }
+    if (richTextLength(description) > productContentMaxLength) {
+      setStatus(`상세 설명은 최대 ${productContentMaxLength.toLocaleString()}자까지 입력할 수 있습니다.`);
+      focusDescription();
+      return;
+    }
 
     setPending(true);
     setStatus("");
@@ -31,8 +55,8 @@ export function useTravelProductForm(
         price: String(data.get("price") ?? ""),
         address: String(data.get("address") ?? ""),
         detailAddress: String(data.get("detailAddress") ?? ""),
-        description: String(data.get("description") ?? ""),
-        remarks: initialValues?.remarks,
+        description,
+        remarks: initialValues?.remarks || richTextPlainText(description).slice(0, 100),
         tags: initialValues?.tags,
         zipcode: String(data.get("zipcode") ?? "") || undefined,
         images,

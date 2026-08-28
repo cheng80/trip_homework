@@ -1,4 +1,5 @@
 import { RESTORE_ACCESS_TOKEN } from "../../../graphql/mutations";
+import { sanitizeRichTextRequest } from "@/domain/sanitize-rich-text";
 import {
   accessTokenCookie,
   accessTokenCookieName,
@@ -20,14 +21,15 @@ export async function POST(request: Request) {
     return Response.json({ errors: [{ message: "지원하지 않는 Content-Type입니다." }] }, { status: 415 });
   }
 
-  const body = await request.arrayBuffer();
+  let body: BodyInit = await request.arrayBuffer();
   const cookie = request.headers.get("cookie") || "";
   const origin = getProxyOrigin(request.url, request.headers.get("origin"));
   const accessToken = cookie.match(new RegExp(`(?:^|;\\s*)${accessTokenCookieName}=([^;]+)`))?.[1];
   let requestJson: unknown;
   if (contentType.startsWith("application/json")) {
     try {
-      requestJson = JSON.parse(new TextDecoder().decode(body)) as unknown;
+      requestJson = sanitizeRichTextRequest(JSON.parse(new TextDecoder().decode(body)) as unknown);
+      body = new TextEncoder().encode(JSON.stringify(requestJson));
     } catch {
       return Response.json({ errors: [{ message: "올바른 JSON 요청이 아닙니다." }] }, { status: 400 });
     }

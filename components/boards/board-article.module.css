@@ -66,14 +66,6 @@
   padding: 56px 0 40px;
 }
 
-.contents > p {
-  max-width: 70ch;
-  color: #333333;
-  font-size: 16px;
-  line-height: 1.8;
-  overflow-wrap: break-word;
-}
-
 .images {
   display: grid;
   margin: 42px 0;

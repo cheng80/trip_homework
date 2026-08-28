@@ -2,6 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import {
+  boardContentMaxLength,
+  hasRichTextContent,
+  richTextLength,
+} from "@/domain/rich-text";
 import { createBoard, updateBoard } from "@/services/boards";
 import { uploadImageFiles } from "@/services/files";
 import type { BoardFormValues } from "@/types/boards";
@@ -20,6 +25,23 @@ export function useBoardForm(
     const form = event.currentTarget;
     const data = new FormData(form);
     const files = data.getAll("images").filter((value): value is File => value instanceof File && value.size > 0);
+    const contents = String(data.get("contents") ?? "");
+    const focusContents = () => {
+      const editor = form.querySelector<HTMLElement>('[data-rich-text-field="contents"] .ql-editor');
+      editor?.setAttribute("aria-invalid", "true");
+      editor?.focus();
+    };
+
+    if (!hasRichTextContent(contents)) {
+      setStatus("내용을 입력해 주세요.");
+      focusContents();
+      return;
+    }
+    if (richTextLength(contents) > boardContentMaxLength) {
+      setStatus(`내용은 최대 ${boardContentMaxLength.toLocaleString()}자까지 입력할 수 있습니다.`);
+      focusContents();
+      return;
+    }
 
     setPending(true);
     setStatus("");
@@ -31,7 +53,7 @@ export function useBoardForm(
         writer: String(data.get("writer") ?? "") || undefined,
         password: String(data.get("password") ?? "") || undefined,
         title: String(data.get("title") ?? ""),
-        contents: String(data.get("contents") ?? ""),
+        contents,
         address: String(data.get("address") ?? ""),
         detailAddress: String(data.get("detailAddress") ?? ""),
         zipcode: String(data.get("zipcode") ?? "") || undefined,

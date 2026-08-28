@@ -4,6 +4,8 @@ import Link from "next/link";
 import AddressFields from "@/components/commons/address-fields";
 import BackLink from "@/components/commons/back-link";
 import ImageUpload from "@/components/commons/image-upload";
+import RichTextEditor from "@/components/commons/rich-text-editor";
+import { productContentMaxLength } from "@/domain/rich-text";
 import { useTravelProductForm } from "@/hooks/use-travel-product-form";
 import type { TravelProductFormValues } from "@/types/travel-products";
 import styles from "./travel-product-form.module.css";
@@ -80,18 +82,15 @@ export default function TravelProductForm({ mode, productId, initialValues }: Tr
 
           <fieldset>
             <legend>상품 설명</legend>
-            <div className={styles.field}>
-              <label htmlFor="description">상세 설명 *</label>
-              <textarea
-                id="description"
-                name="description"
-                defaultValue={initialValues?.description ?? ""}
-                maxLength={1000}
-                placeholder="사용 기한과 이용 조건 등 구매자에게 필요한 정보를 작성해 주세요."
-                required
-              />
-              <small>최대 1,000자</small>
-            </div>
+            <RichTextEditor
+              id="description"
+              name="description"
+              label="상세 설명"
+              initialValue={initialValues?.description}
+              maxLength={productContentMaxLength}
+              placeholder="사용 기한과 이용 조건 등 구매자에게 필요한 정보를 작성해 주세요."
+              statusId="travelproduct-form-status"
+            />
           </fieldset>
 
           <fieldset>
@@ -110,7 +109,7 @@ export default function TravelProductForm({ mode, productId, initialValues }: Tr
               {pending ? "저장 중..." : isEdit ? "수정하기" : "판매 등록하기"}
             </button>
           </div>
-          <p className={styles.status} role="status" aria-live="polite">{status}</p>
+          <p className={styles.status} id="travelproduct-form-status" role="status" aria-live="polite">{status}</p>
         </form>
       </div>
 

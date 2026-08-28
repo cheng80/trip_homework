@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { isAuthenticationErrorMessage } from "@/app/api/graphql/auth-session";
 import Dialog from "@/components/commons/dialog";
 import { getLoggedInUser } from "@/services/account";
 import {
@@ -36,13 +37,15 @@ export default function PurchaseActions({
   const [pending, setPending] = useState(false);
   const [complete, setComplete] = useState(false);
   const [status, setStatus] = useState("");
-  const [currentUserId, setCurrentUserId] = useState("");
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [pickedCount, setPickedCount] = useState(initialPickedCount);
   const [picked, setPicked] = useState(false);
 
   useEffect(() => {
-    getLoggedInUser().then((user) => setCurrentUserId(user.id)).catch(() => undefined);
+    getLoggedInUser().then((user) => setCurrentUserId(user.id)).catch(() => setCurrentUserId(""));
   }, []);
+
+  const isOwner = Boolean(currentUserId && currentUserId === sellerId);
 
   const togglePick = async () => {
     setStatus("");
@@ -52,7 +55,7 @@ export default function PurchaseActions({
       setPickedCount(nextCount);
     } catch (error) {
       const message = error instanceof Error ? error.message.split("\n")[0] : "찜 상태를 변경하지 못했습니다.";
-      if (/unauth|로그인|인증|access.?token|jwt/i.test(message)) router.push("/login");
+      if (isAuthenticationErrorMessage(message)) router.push("/login");
       else setStatus(message);
     }
   };
@@ -78,7 +81,7 @@ export default function PurchaseActions({
       confirmDialog.current?.showModal();
     } catch (error) {
       const message = error instanceof Error ? error.message.split("\n")[0] : "로그인 정보를 확인하지 못했습니다.";
-      if (/unauth|로그인|인증|access.?token|jwt/i.test(message)) router.push("/login");
+      if (isAuthenticationErrorMessage(message)) router.push("/login");
       else {
         setStatus(message);
         confirmDialog.current?.showModal();
@@ -109,17 +112,19 @@ export default function PurchaseActions({
 
   return (
     <>
-      <button
-        className={styles.buyButton}
-        type="button"
-        onClick={() => void openConfirmDialog()}
-      >
-        구매하기
-      </button>
+      {currentUserId !== null && !isOwner && (
+        <button
+          className={styles.buyButton}
+          type="button"
+          onClick={() => void openConfirmDialog()}
+        >
+          구매하기
+        </button>
+      )}
       <button className={styles.pickButton} type="button" aria-pressed={picked} onClick={() => void togglePick()}>
         {picked ? "찜 취소" : "찜하기"} {pickedCount}
       </button>
-      {currentUserId === sellerId && (
+      {isOwner && (
         <div className={styles.ownerActions}>
           <Link href={`/travelproducts/${productId}/edit`}>판매글 수정</Link>
           <button type="button" onClick={() => void deleteProduct()}>판매글 삭제</button>

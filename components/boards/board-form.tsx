@@ -4,6 +4,8 @@ import Link from "next/link";
 import AddressFields from "@/components/commons/address-fields";
 import BackLink from "@/components/commons/back-link";
 import ImageUpload from "@/components/commons/image-upload";
+import RichTextEditor from "@/components/commons/rich-text-editor";
+import { boardContentMaxLength } from "@/domain/rich-text";
 import { useBoardForm } from "@/hooks/use-board-form";
 import type { BoardFormValues } from "@/types/boards";
 import styles from "./board-form.module.css";
@@ -73,18 +75,15 @@ export default function BoardForm({ mode, boardId = "1", initialValues }: BoardF
               <small>최대 100자</small>
             </div>
 
-            <div className={styles.field}>
-              <label htmlFor="contents">내용 *</label>
-              <textarea
-                id="contents"
-                name="contents"
-                defaultValue={initialValues?.contents ?? ""}
-                maxLength={2000}
-                placeholder="여행에서 경험한 이야기를 들려주세요."
-                required
-              />
-              <small>최대 2,000자</small>
-            </div>
+            <RichTextEditor
+              id="contents"
+              name="contents"
+              label="내용"
+              initialValue={initialValues?.contents}
+              maxLength={boardContentMaxLength}
+              placeholder="여행에서 경험한 이야기를 들려주세요."
+              statusId="board-form-status"
+            />
           </fieldset>
 
           <fieldset>
@@ -113,7 +112,7 @@ export default function BoardForm({ mode, boardId = "1", initialValues }: BoardF
               {pending ? "저장 중..." : isEdit ? "수정하기" : "등록하기"}
             </button>
           </div>
-          <p className={styles.status} role="status" aria-live="polite">{status}</p>
+          <p className={styles.status} id="board-form-status" role="status" aria-live="polite">{status}</p>
         </form>
       </div>
 

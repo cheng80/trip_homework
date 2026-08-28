@@ -1,3 +1,5 @@
+import { ApolloClient, HttpLink, InMemoryCache, gql } from "@apollo/client/core";
+
 const defaultEndpoint = "https://main-practice.codebootcamp.co.kr/graphql";
 
 type GraphQLErrorItem = { message: string; path?: Array<string | number> };
@@ -11,16 +13,62 @@ export type GraphQLRequestOptions = {
 };
 
 export class GraphQLRequestError extends Error {
-  constructor(message: string, readonly errors: GraphQLErrorItem[] = []) {
+  readonly errors: GraphQLErrorItem[];
+
+  constructor(message: string, errors: GraphQLErrorItem[] = []) {
     super(message);
     this.name = "GraphQLRequestError";
+    this.errors = errors;
   }
 }
+
+const browserClients = new Map<string, ApolloClient>();
 
 function endpoint(options: GraphQLRequestOptions) {
   if (options.endpoint) return options.endpoint;
   if (typeof window !== "undefined") return process.env.NEXT_PUBLIC_GRAPHQL_API_URL || "/api/graphql";
   return process.env.GRAPHQL_API_URL || defaultEndpoint;
+}
+
+function createApolloClient(uri: string) {
+  return new ApolloClient({
+    cache: new InMemoryCache(),
+    link: new HttpLink({ uri, credentials: "include" }),
+    defaultOptions: {
+      query: { fetchPolicy: "no-cache" },
+      watchQuery: { fetchPolicy: "no-cache" },
+    },
+    queryDeduplication: false,
+    ssrMode: typeof window === "undefined",
+  });
+}
+
+function getApolloClient(options: GraphQLRequestOptions) {
+  const uri = endpoint(options);
+  if (typeof window === "undefined") return createApolloClient(uri);
+
+  const existing = browserClients.get(uri);
+  if (existing) return existing;
+  const client = createApolloClient(uri);
+  browserClients.set(uri, client);
+  return client;
+}
+
+function toGraphQLRequestError(error: unknown) {
+  if (error instanceof GraphQLRequestError) return error;
+
+  const source = error && typeof error === "object" ? error as {
+    errors?: Array<{ message?: unknown; path?: readonly (string | number)[] }>;
+    message?: unknown;
+  } : undefined;
+  const errors = Array.isArray(source?.errors)
+    ? source.errors.flatMap((item) => typeof item.message === "string"
+      ? [{ message: item.message, path: item.path ? [...item.path] : undefined }]
+      : [])
+    : [];
+  const message = errors.map((item) => item.message).join("\n")
+    || (typeof source?.message === "string" ? source.message : "GraphQL 요청에 실패했습니다.");
+  return new GraphQLRequestError(message, errors);
 }
 
 async function readGraphQLResponse<T>(response: Response): Promise<T> {
@@ -49,17 +97,26 @@ export async function requestGraphQL<T, V = unknown>(
 ) {
   const headers: Record<string, string> = { "content-type": "application/json" };
   if (options.accessToken) headers.authorization = `Bearer ${options.accessToken}`;
-
-  const response = await fetch(endpoint(options), {
-    method: "POST",
+  const document = gql(query);
+  const operation = document.definitions.find((definition) => definition.kind === "OperationDefinition");
+  const context = {
+    fetchOptions: { cache: options.cache ?? "no-store", signal: options.signal },
     headers,
-    body: JSON.stringify({ query, variables: variables ?? {} }),
-    cache: options.cache ?? "no-store",
-    credentials: "include",
-    signal: options.signal,
-  });
+  };
 
-  return readGraphQLResponse<T>(response);
+  try {
+    const client = getApolloClient(options);
+    const result = operation?.operation === "mutation"
+      ? await client.mutate<T>({ mutation: document, variables: variables ?? {}, context })
+      : await client.query<T>({ query: document, variables: variables ?? {}, context });
+
+    if (result.data === undefined || result.data === null) {
+      throw new GraphQLRequestError("GraphQL 응답에 data가 없습니다.");
+    }
+    return result.data as T;
+  } catch (error) {
+    throw toGraphQLRequestError(error);
+  }
 }
 
 export async function uploadGraphQLFile<T>(

@@ -61,7 +61,6 @@ export function mapBoardComment(comment: ApiBoardComment): BoardComment {
 }
 
 export function mapBoardDetail(board: ApiBoard, comments: ApiBoardComment[]): BoardDetailData {
-  const paragraphs = board.contents.split(/\n\s*\n/).filter(Boolean);
   const images = [0, 1].map((index) => ({
     src: normalizeImageUrl(board.images?.[index], defaultBoardImages[index]),
     alt: `${board.title} 여행 사진 ${index + 1}`,
@@ -72,7 +71,7 @@ export function mapBoardDetail(board: ApiBoard, comments: ApiBoardComment[]): Bo
     writer: writerName(board.writer, board.user),
     date: dateOnly(board.createdAt),
     profile: normalizeImageUrl(board.user?.picture, defaultProfile),
-    paragraphs: [paragraphs[0] ?? "", paragraphs.slice(1).join("\n\n")],
+    contents: board.contents,
     images,
     location: [board.boardAddress?.address, board.boardAddress?.addressDetail].filter(Boolean).join(" ") || "위치 정보 없음",
     likes: board.likeCount,

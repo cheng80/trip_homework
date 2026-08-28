@@ -1,0 +1,97 @@
+.field {
+  display: grid;
+  gap: 10px;
+}
+
+.field > label {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.editor {
+  overflow: hidden;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.editor :global(.ql-toolbar.ql-snow) {
+  display: flex;
+  min-height: 48px;
+  padding: 8px 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  border-color: #dddddd;
+  border-radius: 6px 6px 0 0;
+  background: #f8f8f8;
+}
+
+.editor :global(.ql-toolbar .ql-formats) {
+  margin-right: 8px;
+}
+
+.editor :global(.ql-container.ql-snow) {
+  min-height: 220px;
+  border-color: #dddddd;
+  border-radius: 0 0 6px 6px;
+  font-family: inherit;
+  font-size: 15px;
+}
+
+.editor :global(.ql-editor) {
+  min-height: 220px;
+  padding: 16px;
+  line-height: 1.7;
+}
+
+.editor :global(.ql-editor:focus-visible) {
+  outline: 3px solid #2979ff;
+  outline-offset: -3px;
+}
+
+.field[data-invalid] .editor {
+  box-shadow: 0 0 0 2px #c43838;
+}
+
+.description {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: #999999;
+  font-size: 12px;
+}
+
+.description small {
+  font: inherit;
+}
+
+.field[data-invalid] .description span {
+  color: #c43838;
+  font-weight: 700;
+}
+
+.loading {
+  display: grid;
+  min-height: 270px;
+  place-items: center;
+  border: 1px solid #dddddd;
+  border-radius: 6px;
+  color: #777777;
+  font-size: 14px;
+}
+
+@media (max-width: 780px) {
+  .editor :global(.ql-toolbar.ql-snow) {
+    padding: 8px 6px;
+  }
+
+  .editor :global(.ql-toolbar .ql-formats) {
+    margin-right: 4px;
+  }
+
+  .description {
+    align-items: flex-end;
+    flex-direction: column;
+    gap: 4px;
+  }
+}

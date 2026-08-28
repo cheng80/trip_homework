@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { isAuthenticationErrorMessage } from "@/app/api/graphql/auth-session";
 import Dialog from "@/components/commons/dialog";
 import { getMypage, resetPassword } from "@/services/account";
 import type {
@@ -22,6 +23,10 @@ import {
   getPointChargeStorageKey,
   parseStoredPointCharges,
 } from "./point-charge";
+import {
+  filterPointHistoryByPeriod,
+  type PointHistoryPeriod,
+} from "./point-history";
 import styles from "./mypage.module.css";
 
 type MypageProps = {
@@ -52,6 +57,20 @@ const pointPageSize = 4;
 const chargeOptions = [10000, 30000, 50000, 100000];
 
 function ProductList({ products, bookmarked }: { products: MypageProduct[]; bookmarked?: boolean }) {
+  if (products.length === 0) {
+    return (
+      <div className={styles.emptyState}>
+        <strong>{bookmarked ? "찜한 숙박권이 없습니다." : "거래한 숙박권이 없습니다."}</strong>
+        <p>
+          {bookmarked
+            ? "관심 있는 숙박권을 찜하면 여기에 표시됩니다."
+            : "숙박권을 구매하거나 판매하면 여기에 표시됩니다."}
+        </p>
+        <Link href="/travelproducts">숙박권 둘러보기</Link>
+      </div>
+    );
+  }
+
   return (
     <ul className={styles.productList}>
       {products.map((product) => (
@@ -104,6 +123,7 @@ export default function Mypage({
   const [section, setSection] = useState<MypageSection>(initialSection);
   const [productTab, setProductTab] = useState<ProductTab>("transactions");
   const [pointPage, setPointPage] = useState(1);
+  const [pointPeriod, setPointPeriod] = useState<PointHistoryPeriod>(3);
   const [passwordError, setPasswordError] = useState<PasswordError>(null);
   const [passwordStatus, setPasswordStatus] = useState("");
   const [passwordRequestError, setPasswordRequestError] = useState("");
@@ -136,7 +156,7 @@ export default function Mypage({
       setDataError("");
     }).catch((error: unknown) => {
       const message = error instanceof Error ? error.message : "마이페이지 정보를 불러오지 못했습니다.";
-      if (/unauth|로그인|인증|access.?token|jwt/i.test(message)) {
+      if (isAuthenticationErrorMessage(message)) {
         router.replace("/login");
         return;
       }
@@ -149,8 +169,9 @@ export default function Mypage({
     chargeDialogRef.current?.showModal();
   }, [openChargeOnMount]);
 
-  const pageCount = Math.max(1, Math.ceil(currentPointHistory.length / pointPageSize));
-  const visiblePointHistory = currentPointHistory.slice(
+  const filteredPointHistory = filterPointHistoryByPeriod(currentPointHistory, pointPeriod);
+  const pageCount = Math.max(1, Math.ceil(filteredPointHistory.length / pointPageSize));
+  const visiblePointHistory = filteredPointHistory.slice(
     (pointPage - 1) * pointPageSize,
     pointPage * pointPageSize,
   );
@@ -355,10 +376,16 @@ export default function Mypage({
                 </div>
                 <label>
                   조회 기간
-                  <select defaultValue="3months">
-                    <option value="1month">최근 1개월</option>
-                    <option value="3months">최근 3개월</option>
-                    <option value="6months">최근 6개월</option>
+                  <select
+                    value={pointPeriod}
+                    onChange={(event) => {
+                      setPointPeriod(Number(event.currentTarget.value) as PointHistoryPeriod);
+                      setPointPage(1);
+                    }}
+                  >
+                    <option value={1}>최근 1개월</option>
+                    <option value={3}>최근 3개월</option>
+                    <option value={6}>최근 6개월</option>
                   </select>
                 </label>
               </div>
@@ -369,48 +396,58 @@ export default function Mypage({
                 <span>구분</span>
                 <span>포인트</span>
               </div>
-              <ul className={styles.pointList}>
-                {visiblePointHistory.map((item) => (
-                  <li key={item.id}>
-                    <time dateTime={item.date.replaceAll(". ", "-").replace(".", "")}>{item.date}</time>
-                    <strong>{item.description}</strong>
-                    <span>{item.amount > 0 ? "충전" : "사용"}</span>
-                    <b className={item.amount > 0 ? styles.charge : styles.use}>
-                      {item.amount > 0 ? "+" : "-"}{Math.abs(item.amount).toLocaleString()} P
-                    </b>
-                  </li>
-                ))}
-              </ul>
+              {visiblePointHistory.length > 0 ? (
+                <>
+                  <ul className={styles.pointList}>
+                    {visiblePointHistory.map((item) => (
+                      <li key={item.id}>
+                        <time dateTime={item.date.replaceAll(". ", "-").replace(".", "")}>{item.date}</time>
+                        <strong>{item.description}</strong>
+                        <span>{item.amount > 0 ? "충전" : "사용"}</span>
+                        <b className={item.amount > 0 ? styles.charge : styles.use}>
+                          {item.amount > 0 ? "+" : "-"}{Math.abs(item.amount).toLocaleString()} P
+                        </b>
+                      </li>
+                    ))}
+                  </ul>
 
-              <nav className={styles.pagination} aria-label="포인트 내역 페이지">
-                <button
-                  type="button"
-                  aria-label="이전 페이지"
-                  disabled={pointPage === 1}
-                  onClick={() => setPointPage((current) => current - 1)}
-                >
-                  <Image src="/icon/outline/left_arrow.svg" alt="" width={18} height={18} />
-                </button>
-                {Array.from({ length: pageCount }, (_, index) => index + 1).map((page) => (
-                  <button
-                    className={pointPage === page ? styles.currentPage : undefined}
-                    type="button"
-                    aria-current={pointPage === page ? "page" : undefined}
-                    onClick={() => setPointPage(page)}
-                    key={page}
-                  >
-                    {page}
-                  </button>
-                ))}
-                <button
-                  type="button"
-                  aria-label="다음 페이지"
-                  disabled={pointPage === pageCount}
-                  onClick={() => setPointPage((current) => current + 1)}
-                >
-                  <Image src="/icon/outline/right_arrow.svg" alt="" width={18} height={18} />
-                </button>
-              </nav>
+                  <nav className={styles.pagination} aria-label="포인트 내역 페이지">
+                    <button
+                      type="button"
+                      aria-label="이전 페이지"
+                      disabled={pointPage === 1}
+                      onClick={() => setPointPage((current) => current - 1)}
+                    >
+                      <Image src="/icon/outline/left_arrow.svg" alt="" width={18} height={18} />
+                    </button>
+                    {Array.from({ length: pageCount }, (_, index) => index + 1).map((page) => (
+                      <button
+                        className={pointPage === page ? styles.currentPage : undefined}
+                        type="button"
+                        aria-current={pointPage === page ? "page" : undefined}
+                        onClick={() => setPointPage(page)}
+                        key={page}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                    <button
+                      type="button"
+                      aria-label="다음 페이지"
+                      disabled={pointPage === pageCount}
+                      onClick={() => setPointPage((current) => current + 1)}
+                    >
+                      <Image src="/icon/outline/right_arrow.svg" alt="" width={18} height={18} />
+                    </button>
+                  </nav>
+                </>
+              ) : (
+                <div className={styles.emptyState}>
+                  <strong>선택한 기간의 포인트 내역이 없습니다.</strong>
+                  <p>조회 기간을 늘리거나 포인트를 충전해 보세요.</p>
+                  <button type="button" onClick={openChargeDialog}>포인트 충전하기</button>
+                </div>
+              )}
             </section>
           )}
 

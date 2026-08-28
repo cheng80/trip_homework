@@ -6,7 +6,9 @@ import {
   containsOperation,
   getAccessToken,
   getProxyOrigin,
+  hasAuthSession,
   hasAuthenticationError,
+  isAuthenticationErrorMessage,
   isLogoutSuccess,
   normalizeUpstreamCookie,
   redactAccessToken,
@@ -33,7 +35,11 @@ test("로그아웃과 인증 오류만 토큰 수명주기 대상으로 판별�
   assert.equal(isLogoutSuccess({ data: { logoutUser: true } }), true);
   assert.match(clearRefreshTokenCookie(), /^refreshToken=;.*Max-Age=0$/);
   assert.equal(hasAuthenticationError({ errors: [{ message: "로그인을 먼저 해주세요." }] }), true);
+  assert.equal(isAuthenticationErrorMessage("Cannot read property '_id' of null"), true);
   assert.equal(hasAuthenticationError({ errors: [{ message: "상품을 찾을 수 없습니다." }] }), false);
+  assert.equal(hasAuthSession("access", undefined), true);
+  assert.equal(hasAuthSession(undefined, "refresh"), true);
+  assert.equal(hasAuthSession(undefined, undefined), false);
   assert.equal(containsOperation({ query: "mutation { restoreAccessToken { accessToken } }" }, "restoreAccessToken"), true);
 });
 
