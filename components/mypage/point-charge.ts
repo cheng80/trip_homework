@@ -1,3 +1,8 @@
+/**
+ * 역할: 더미 포인트 충전 금액과 브라우저 저장 데이터를 관리하는 순수 유틸리티입니다.
+ * 처리 흐름: 금액 정규화, 사용자별 저장 키, 충전 내역 직렬화와 합산 로직을 제공합니다.
+ * 주의사항: 결제 API와 연결되지 않은 로컬 보정값이라는 범위를 유지합니다.
+ */
 import type { MypageData } from "@/types/mypage";
 
 export type StoredPointCharge = { id: string; date: string; amount: number };

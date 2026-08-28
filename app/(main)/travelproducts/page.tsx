@@ -1,3 +1,8 @@
+/**
+ * 역할: 숙박권 목록과 추천 상품을 조회하는 서버 컴포넌트입니다.
+ * 처리 흐름: 검색어를 정규화한 뒤 일반 상품과 인기 상품을 병렬로 불러와 각 섹션에 전달합니다.
+ * 주의사항: 판매 완료 상품은 기본 목록 조회에서 제외합니다.
+ */
 import FeaturedProducts from "@/components/travelproducts/featured-products";
 import HeroBanner from "@/components/travelproducts/hero-banner";
 import ProductCatalog from "@/components/travelproducts/product-catalog";

@@ -1,3 +1,8 @@
+/**
+ * 역할: 인기 숙박권을 가로 카드 목록으로 보여주는 추천 섹션입니다.
+ * 처리 흐름: 상품 판매 여부에 맞는 상태 문구를 계산해 공통 상품 카드에 전달합니다.
+ * 주의사항: 정렬과 조회는 서버 페이지에서 완료된 데이터를 사용합니다.
+ */
 import Image from "next/image";
 import SectionTitle from "@/components/commons/section-title";
 import type { TravelProduct } from "@/types/travel-products";

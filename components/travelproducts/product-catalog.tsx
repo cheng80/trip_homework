@@ -1,3 +1,8 @@
+/**
+ * 역할: 카테고리, 검색 폼과 숙박권 카드 그리드를 묶는 목록 본문입니다.
+ * 처리 흐름: 현재 검색어를 입력 초기값으로 유지하고 상품별 상태와 가격을 카드에 전달합니다.
+ * 주의사항: 검색 실행은 GET 폼으로 URL을 갱신해 서버 조회와 동기화합니다.
+ */
 import Image from "next/image";
 import Link from "next/link";
 import SectionTitle from "@/components/commons/section-title";

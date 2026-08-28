@@ -1,3 +1,8 @@
+/**
+ * 역할: 숙박권 등록·수정 폼의 검증과 저장 흐름을 관리하는 클라이언트 훅입니다.
+ * 처리 흐름: 설명 검증, 이미지 업로드, API 입력 변환과 mutation 실행 후 상세 화면으로 이동합니다.
+ * 주의사항: 요약 문구가 없으면 정제된 설명의 일반 문자열 일부를 자동 사용합니다.
+ */
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -21,6 +26,10 @@ export function useTravelProductForm(
   const [status, setStatus] = useState("");
   const [pending, setPending] = useState(false);
 
+  /**
+   * 상품 폼 값을 API 입력 형태로 조립하고 이미지 업로드와 저장 mutation을 순차 실행합니다.
+   * 설명이 비었거나 제한을 넘으면 서버 요청 전에 편집기로 포커스를 돌립니다.
+   */
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -33,6 +42,7 @@ export function useTravelProductForm(
       editor?.focus();
     };
 
+    // HTML 태그만 존재하는 Quill 기본값을 유효한 설명으로 오인하지 않도록 검사합니다.
     if (!hasRichTextContent(description)) {
       setStatus("상세 설명을 입력해 주세요.");
       focusDescription();
@@ -47,6 +57,7 @@ export function useTravelProductForm(
     setPending(true);
     setStatus("");
     try {
+      // 수정 시 새 파일을 고르지 않았다면 API에 저장된 이미지 경로를 유지합니다.
       const images = files.length
         ? await uploadImageFiles(files)
         : initialValues?.images;
@@ -64,6 +75,7 @@ export function useTravelProductForm(
       const product = mode === "edit" && productId
         ? await updateTravelproduct(productId, values)
         : await createTravelproduct(values);
+      // 서비스 매퍼가 정규화한 화면용 ID를 사용해 상세 라우트로 이동합니다.
       router.push(`/travelproducts/${product.id}`);
       router.refresh();
     } catch (error) {

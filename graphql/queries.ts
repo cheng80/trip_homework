@@ -1,3 +1,8 @@
+/**
+ * 역할: 화면 조회에 필요한 GraphQL Query 문서를 정의합니다.
+ * 처리 흐름: 목록·상세·마이페이지별로 필요한 필드만 선택하고 페이지와 검색 변수를 노출합니다.
+ * 주의사항: 응답 필드 변경 시 매퍼와 API 타입도 함께 확인해야 합니다.
+ */
 export const FETCH_BOARDS = `
   query FetchBoards($page: Int, $search: String, $startDate: DateTime, $endDate: DateTime) {
     fetchBoards(page: $page, search: $search, startDate: $startDate, endDate: $endDate) {

@@ -1,3 +1,8 @@
+/**
+ * 역할: 트립토크 목록·상세·작성·반응·댓글 GraphQL 작업을 캡슐화합니다.
+ * 처리 흐름: 화면 입력을 API 입력으로 변환하고 서버 응답은 게시글·댓글 화면 모델로 매핑합니다.
+ * 주의사항: 컴포넌트는 GraphQL 문서와 원본 필드명을 직접 알지 않도록 유지합니다.
+ */
 import { requestGraphQL, type GraphQLRequestOptions } from "@/graphql/client";
 import {
   CREATE_BOARD,

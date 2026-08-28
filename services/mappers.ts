@@ -1,3 +1,8 @@
+/**
+ * 역할: GraphQL API 원본 데이터를 화면에서 사용하는 게시글·상품·회원 모델로 변환합니다.
+ * 처리 흐름: 날짜·가격·이미지 URL·작성자 이름의 누락값을 일관된 기본값으로 정규화합니다.
+ * 주의사항: 서버 스키마와 UI 타입 사이의 차이는 이 파일에서만 흡수하는 것을 원칙으로 합니다.
+ */
 import type {
   ApiBoard,
   ApiBoardComment,
@@ -31,6 +36,10 @@ const defaultProductImages = [
   "/images/숙박권 구매화면 이미지/d.png",
 ] as const;
 
+/**
+ * API가 절대 URL과 저장소 상대 경로를 혼용하므로 브라우저가 표시할 수 있는 한 형식으로 맞춥니다.
+ * 값이 없으면 호출부가 지정한 화면별 기본 이미지를 반환합니다.
+ */
 export function normalizeImageUrl(value: string | null | undefined, fallback: string) {
   if (!value) return fallback;
   if (value.startsWith("http://") || value.startsWith("https://") || value.startsWith("/")) return value;
@@ -40,6 +49,7 @@ export function normalizeImageUrl(value: string | null | undefined, fallback: st
 const dateOnly = (value: string) => value.slice(0, 10);
 const writerName = (writer: string | null | undefined, user?: ApiUser | null) => writer || user?.name || "익명";
 
+// 게시글 목록·댓글·상세·폼은 같은 API 객체를 각 화면에 필요한 크기로 변환합니다.
 export function mapBoardPost(board: ApiBoard): BoardPost {
   return {
     id: board._id,
@@ -92,6 +102,7 @@ export function mapBoardForm(board: ApiBoard): BoardFormValues {
   };
 }
 
+// 숙박권 공통 요약을 먼저 만든 뒤 상세와 마이페이지 매퍼가 이를 재사용합니다.
 export function mapTravelProduct(product: ApiTravelproduct): TravelProduct {
   return {
     id: product._id,
@@ -173,6 +184,7 @@ export function mapTravelProductForm(product: ApiTravelproduct): TravelProductFo
   };
 }
 
+// 회원과 포인트 원본 값을 마이페이지가 바로 합산·표시할 수 있는 숫자 중심 모델로 바꿉니다.
 export function mapMypageMember(user: ApiUser): MypageMember {
   return {
     id: user._id,
@@ -199,6 +211,10 @@ export function mapPointTransaction(transaction: ApiPointTransaction): MypagePoi
   };
 }
 
+/**
+ * 폼의 표시용 문자열을 잘라내고 GraphQL CreateBoardInput 구조로 조립합니다.
+ * 빈 선택값은 undefined로 바꿔 서버 기본 처리와 충돌하지 않게 합니다.
+ */
 export function createBoardInputFromForm(values: BoardFormValues): CreateBoardInput {
   return {
     writer: values.writer?.trim() || undefined,
@@ -215,6 +231,10 @@ export function createBoardInputFromForm(values: BoardFormValues): CreateBoardIn
   };
 }
 
+/**
+ * 가격은 숫자로, 주소는 중첩 입력으로 변환하고 설명 첫 줄을 요약 문구의 대체값으로 사용합니다.
+ * 반환 객체는 생성과 수정 서비스가 공통으로 사용할 수 있는 API 입력 형태입니다.
+ */
 export function createTravelproductInputFromForm(
   values: TravelProductFormValues,
 ): CreateTravelproductInput {

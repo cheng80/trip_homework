@@ -1,3 +1,8 @@
+/**
+ * 역할: 마이페이지 최초 렌더링과 빈 상태에 사용할 정적 예시 데이터를 제공합니다.
+ * 처리 흐름: 회원, 거래, 찜, 포인트 내역을 화면 타입에 맞춰 구성합니다.
+ * 주의사항: API 조회 성공 후에는 실제 데이터가 이 값을 대체합니다.
+ */
 import { travelProducts } from "./travel-products";
 import type { MypageData, MypagePointHistory, MypageProduct } from "@/types/mypage";
 

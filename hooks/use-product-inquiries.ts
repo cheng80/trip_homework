@@ -1,3 +1,8 @@
+/**
+ * 역할: 숙박권 문의와 답변의 권한·편집·mutation 상태를 관리하는 클라이언트 훅입니다.
+ * 처리 흐름: 현재 사용자와 답변 목록을 보강한 뒤 질문자와 판매자 동작을 구분합니다.
+ * 주의사항: 각 저장·삭제 결과를 로컬 문의 배열에 반영해 전체 페이지 재조회 없이 UI를 갱신합니다.
+ */
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
@@ -30,6 +35,7 @@ export function useProductInquiries(
   const [status, setStatus] = useState("");
   const [pending, setPending] = useState(false);
 
+  // 최초 문의에는 답변이 포함되지 않으므로 현재 사용자와 질문별 답변을 병렬로 보강합니다.
   useEffect(() => {
     getLoggedInUser().then((user) => setCurrentUserId(user.id)).catch(() => undefined);
     Promise.all(initialInquiries.map(async (inquiry) => ({
@@ -47,6 +53,7 @@ export function useProductInquiries(
     error instanceof Error ? error.message.split("\n")[0] : fallback
   );
 
+  /** 새 문의를 등록하고 서버가 확정한 작성자 정보를 포함한 항목을 목록 맨 앞에 추가합니다. */
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const question = contents.trim();
@@ -69,6 +76,7 @@ export function useProductInquiries(
     setEditingQuestionContents(inquiry.question);
   };
 
+  /** 질문 수정 결과의 본문과 작성자 정보를 기존 항목에 병합합니다. */
   const saveQuestion = async (questionId: string) => {
     const question = editingQuestionContents.trim();
     if (!question) return;
@@ -84,6 +92,7 @@ export function useProductInquiries(
     }
   };
 
+  /** 질문 삭제 성공 시 연결된 답변을 포함한 문의 항목 전체를 화면에서 제거합니다. */
   const deleteQuestion = async (questionId: string) => {
     if (!window.confirm("문의를 삭제할까요? 삭제한 문의는 복구할 수 없습니다.")) return;
     setStatus("");
@@ -95,6 +104,7 @@ export function useProductInquiries(
     }
   };
 
+  /** 판매자 답변을 생성해 해당 문의의 단일 answer 슬롯에 연결합니다. */
   const saveAnswer = async (questionId: string) => {
     const answer = answerContents.trim();
     if (!answer) return;
@@ -111,6 +121,7 @@ export function useProductInquiries(
     }
   };
 
+  /** 답변 수정 결과만 교체해 질문 정보와 목록 순서는 그대로 유지합니다. */
   const updateAnswer = async (questionId: string, answerId: string) => {
     const answer = editingAnswerContents.trim();
     if (!answer) return;
@@ -126,6 +137,7 @@ export function useProductInquiries(
     }
   };
 
+  /** 답변 삭제 성공 시 문의는 남기고 answer 값만 제거합니다. */
   const deleteAnswer = async (questionId: string, answerId: string) => {
     if (!window.confirm("답변을 삭제할까요? 삭제한 답변은 복구할 수 없습니다.")) return;
     setStatus("");

@@ -1,3 +1,8 @@
+/**
+ * 역할: 숙박권 상세 상단의 이미지, 판매자, 가격과 구매 동작을 구성합니다.
+ * 처리 흐름: 상품 요약 데이터를 표시하고 찜·구매·수정·삭제 동작은 PurchaseActions에 위임합니다.
+ * 주의사항: 판매 완료 여부에 따라 사용 가능한 행동이 달라질 수 있습니다.
+ */
 import Image from "next/image";
 import type { TravelProductDetailData } from "@/types/travel-products";
 import PurchaseActions from "./purchase-actions";

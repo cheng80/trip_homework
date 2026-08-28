@@ -1,6 +1,6 @@
 # TripTrip 전체 진행 체크리스트
 
-최종 갱신일: 2026-08-27
+최종 갱신일: 2026-08-28
 
 현재 Git 상태와 다음 세션 시작 방법은 [HANDOFF.md](./HANDOFF.md)를 참고한다.
 
@@ -37,7 +37,7 @@
 - [x] `travelproducts-ui` 최신 커밋을 `main`에 병합·푸시
 - [x] 후속 작업용 `dev` 브랜치 생성 및 원격 연결
 - [x] 병합 완료된 `travelproducts-ui` 로컬·원격 브랜치 정리
-- [ ] 기본 Create Next App 내용이 남은 `README.md`를 프로젝트 설명으로 교체
+- [x] 기본 Create Next App `README.md`를 프로젝트 설명·실행·환경변수·검증 안내로 교체
 - [x] `app/(auth)` Route Group 생성
 - [x] 판매 등록·수정 공통 폼을 재사용 컴포넌트로 분리
 
@@ -104,6 +104,8 @@
 - [x] 주소와 상세 위치 입력 영역 작성
 - [x] Kakao 우편번호 주소 검색과 선택값 반영
 - [x] 상품 설명 입력 영역 작성
+- [x] 상품 설명을 React Quill 공통 편집기로 교체
+- [x] 저장·상세 출력 경계의 허용 HTML 정제 적용
 - [x] 사진 첨부 영역 작성
 - [x] 수정 화면의 쉼표 포함 이미지 경로 인코딩 보완
 - [x] 필수 입력 검증과 입력 완료 상태 작성
@@ -139,6 +141,8 @@
 
 - [x] `/boards/new` 라우트의 빈 화면을 실제 폼으로 교체
 - [x] 제목과 내용 입력 영역 작성
+- [x] 게시글 내용을 React Quill 공통 편집기로 교체
+- [x] 기존 일반 텍스트와 신규 리치 텍스트 상세 출력 호환
 - [x] 주소와 위치 입력 영역 작성
 - [x] 사진 첨부 영역 작성
 - [x] 입력 전·입력 완료 상태 작성
@@ -229,13 +233,14 @@
 - [x] 숙박권 카드
 - [x] 숙박권 검색·카테고리 영역
 - [x] 공통 뒤로가기·이미지 업로드
+- [x] 공통 리치 텍스트 편집기·출력 컴포넌트
 - [x] 로그인·회원가입 공통 인증 폼
 - [x] 공통 팝업
 - [x] 공통 입력 필드와 버튼은 화면별 구조·스타일 차이로 별도 컴포넌트화하지 않기로 결정
 
 ## 10. GraphQL과 데이터 연결
 
-- [x] 네이티브 `fetch` 기반 GraphQL 전송 클라이언트 작성
+- [x] `@apollo/client` 4 기반 GraphQL Query·Mutation 전송 클라이언트 작성
 - [x] `app/api/graphql/route.ts` 동일 출처 프록시 작성
 - [x] `graphql/queries.ts` 생성
 - [x] `graphql/mutations.ts` 생성
@@ -259,7 +264,10 @@
 - [x] 인증 후 마이페이지 조회와 Mutation 연결
 - [x] 게시글·댓글 수정·삭제와 숙박권 찜·문의·답변 Mutation 연결
 - [x] access token 저장·갱신 방식 결정
-- [x] Apollo Provider는 현재 네이티브 `fetch`·service 구조에 불필요해 도입하지 않기로 결정
+- [x] 기존 service API를 유지하면서 공용 전송 계층을 Apollo `query`·`mutate`로 교체
+- [x] 서버 요청 격리와 기존 no-store 동작을 유지하고 브라우저 endpoint별 Apollo Client 재사용
+- [x] multipart 파일 업로드와 원시 API 테스트 요청은 전용 `fetch` 전송 유지
+- [x] React Provider는 Apollo hook을 직접 사용하지 않는 현재 service 구조에 불필요해 추가하지 않음
 - [x] GraphQL Codegen은 기본 데이터 흐름 학습 후 다시 검토하기로 결정
 
 ## 11. 검증과 배포
@@ -314,11 +322,15 @@
 - [x] `paymentId` 없는 충전·포인트 내역·비밀번호 화면 직접 진입 확인
 - [x] 실제 화면에서 게시글·댓글 수정, 숙박권 찜, 문의·답변 등록·수정 확인
 - [x] 생성한 댓글·게시글·문의 답변·문의·숙박권 삭제 Mutation과 삭제 후 조회 불가 확인
-- [x] 전체 21개 테스트, lint, TypeScript·프로덕션 build 통과
+- [x] 전체 27개 테스트, lint, TypeScript·프로덕션 build 통과
+- [x] Apollo Query·Mutation·인증 헤더·GraphQL 오류 전달 단위 테스트 통과
+- [x] React Quill 데스크톱·모바일 작성·수정·상세와 HTML 정제 테스트 통과
+- [x] API·콘텐츠 편집 개선 PR #4를 `main`에 스쿼시 병합하고 Vercel 배포 성공 확인
+- [x] TypeScript 소스 82개에 역할·처리 흐름·주의사항 한글 주석 추가
 - [ ] 배포 후 실제 Vercel 주소에서 주요 화면 확인
 
 ## 권장 작업 순서
 
-1. 시안 확인 후 기본 Create Next App 내용이 남은 `README.md`를 프로젝트 설명으로 교체한다.
+1. 배포된 Vercel 주소에서 로그인·지도·작성 화면의 운영 환경변수 적용을 수동 확인한다.
 2. 별도 이메일 사전 중복 확인과 숙박권 날짜·지역·카테고리 상태의 다음 범위를 결정한다.
 3. 실제 결제·포인트 충전은 수업 범위를 확인한 뒤 연결한다.

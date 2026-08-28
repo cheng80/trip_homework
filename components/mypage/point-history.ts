@@ -1,3 +1,8 @@
+/**
+ * 역할: 포인트 내역을 선택한 조회 기간으로 필터링하는 순수 함수입니다.
+ * 처리 흐름: 현재 시각을 기준으로 개월 수 경계를 계산하고 생성일이 범위 안인 항목만 반환합니다.
+ * 주의사항: 날짜 파싱에 실패한 항목은 잘못 노출되지 않도록 제외합니다.
+ */
 import type { MypagePointHistory } from "@/types/mypage";
 
 export type PointHistoryPeriod = 1 | 3 | 6;

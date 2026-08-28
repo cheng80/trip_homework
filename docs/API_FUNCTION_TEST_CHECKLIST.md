@@ -1,6 +1,8 @@
 # 로그인 이후 API 기능 테스트 체크리스트
 
-테스트 대상은 `http://localhost:3000`의 실제 화면이며, 데이터 요청은 공용 연습 GraphQL 서버로 전달된다. 한글 입력은 Computer Use의 클립보드 붙여넣기를 사용한다.
+최종 갱신일: 2026-08-28
+
+테스트 대상은 `http://localhost:3000`의 실제 화면이며, 일반 Query와 Mutation은 Apollo Client에서 동일 출처 프록시를 거쳐 공용 연습 GraphQL 서버로 전달된다. 한글 입력은 Computer Use의 클립보드 붙여넣기를 사용한다.
 
 상태 표기: `대기` / `통과` / `부분 통과` / `실패` / `차단` / `UI 미연결`
 
@@ -51,9 +53,20 @@
 
 더미 이미지는 `.env.e2e.local`의 `E2E_IMAGE_1`~`E2E_IMAGE_4`에 지정된 도시 호텔·해변 리조트·산속 캐빈·한옥 사진을 사용한다.
 
+## 편집기·지도·전송
+
+| 상태 | 화면 기능 | 구현 | 확인 기준 |
+| --- | --- | --- | --- |
+| 통과 | 트립토크 리치 텍스트 | React Quill, `sanitize-html` | 작성·수정 툴바, 한글 붙여넣기, 상세 서식 출력과 빈 본문 검증 |
+| 통과 | 숙박권 상세 설명 | React Quill, `sanitize-html` | 작성·수정·상세와 390px 화면에서 가로 넘침·console 오류 없음 |
+| 통과 | 숙박권 상세 위치 | NAVER Dynamic Map·Geocoding | 지도·마커 표시와 지도 전체 클릭 시 새 창 검색 링크 이동 |
+| 통과 | Apollo 전송 | `ApolloClient.query`, `ApolloClient.mutate` | 게시판·숙박권 서버 조회와 상세 클라이언트 조회, Query·Mutation 단위 테스트 통과 |
+| 통과 | HTML 저장 경계 | GraphQL 프록시 정제 | 게시글·숙박권 본문 서식은 보존하고 실행 가능한 태그·속성 제거 |
+
 ## 실행 기록
 
 - 테스트 계정: `.env.e2e.local`에서만 읽고 출력·커밋하지 않는다.
+- 자동 검증: Node 테스트 27개, GraphQL 작업 35개, lint, production build, 운영 의존성 audit 통과.
 - 테스트 데이터: 사용자에게 보이는 문구는 실제 서비스처럼 작성하고, 생성된 ID로 기존 데이터와 구분한다.
 - 생성된 테스트 ID와 실패 원인은 이 문서에 민감정보 없이 기록한다.
 - 삭제 완료 게시글: `6a8fef29d4299d0029cd4acb`

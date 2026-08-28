@@ -1,3 +1,8 @@
+/**
+ * 역할: NAVER Geocoding API를 서버에서 호출해 주소를 위도·경도로 변환합니다.
+ * 처리 흐름: 상세 주소부터 넓은 후보까지 순차 조회하고 첫 성공 좌표를 반환합니다.
+ * 주의사항: 인증키가 없거나 모든 조회가 실패하면 예외 대신 undefined를 반환해 상세 화면을 유지합니다.
+ */
 import "server-only";
 import { createGeocodeQueries, type MapCoordinates } from "@/domain/naver-maps";
 

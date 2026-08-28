@@ -1,3 +1,8 @@
+/**
+ * 역할: 숙박권 목록·상세·판매·구매·찜·문의와 답변 GraphQL 작업을 캡슐화합니다.
+ * 처리 흐름: API 입력과 응답을 화면 타입으로 변환하고 각 mutation의 ID 필드 차이를 숨깁니다.
+ * 주의사항: 컴포넌트는 이 서비스의 의미 단위 함수만 호출하도록 유지합니다.
+ */
 import { requestGraphQL, type GraphQLRequestOptions } from "@/graphql/client";
 import {
   BUY_TRAVELPRODUCT,

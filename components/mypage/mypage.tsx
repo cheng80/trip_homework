@@ -1,3 +1,8 @@
+/**
+ * 역할: 회원 정보, 거래, 찜, 포인트와 비밀번호 변경을 통합한 마이페이지 클라이언트 화면입니다.
+ * 처리 흐름: API 데이터와 더미 충전 내역을 결합하고 URL로 선택된 섹션에 따라 필요한 UI를 렌더링합니다.
+ * 주의사항: 인증 오류는 로그인 이동으로 연결하고 일반 오류는 현재 섹션의 상태 메시지로 표시합니다.
+ */
 "use client";
 
 import Image from "next/image";
@@ -56,6 +61,7 @@ const sectionTitles: Record<MypageSection, string> = {
 const pointPageSize = 4;
 const chargeOptions = [10000, 30000, 50000, 100000];
 
+/** 거래·찜 목록이 비었을 때의 안내와 상품 카드 반복 구조를 공유합니다. */
 function ProductList({ products, bookmarked }: { products: MypageProduct[]; bookmarked?: boolean }) {
   if (products.length === 0) {
     return (
@@ -142,6 +148,10 @@ export default function Mypage({
     pointHistory: currentPointHistory,
   } = data;
 
+  /**
+   * 서버에서 최신 마이페이지 데이터를 다시 읽고 사용자별 로컬 충전 내역을 합산합니다.
+   * 인증 만료는 로그인 이동으로 처리하고 그 외 실패는 정적 초기 데이터와 오류 문구를 유지합니다.
+   */
   useEffect(() => {
     getMypage().then((nextData) => {
       let storedCharges = parseStoredPointCharges(null);
@@ -164,6 +174,7 @@ export default function Mypage({
     });
   }, [router]);
 
+  // 포인트 충전 링크로 진입한 경우 최초 마운트 직후 대화상자를 자동으로 엽니다.
   useEffect(() => {
     if (!openChargeOnMount || chargeDialogRef.current?.open) return;
     chargeDialogRef.current?.showModal();
@@ -181,6 +192,7 @@ export default function Mypage({
     requestAnimationFrame(() => document.querySelector<HTMLElement>("#mypage-title")?.focus());
   };
 
+  /** 비밀번호 형식을 먼저 검증하고 성공 시 API 요청·폼 초기화·사용자 피드백을 한 흐름으로 처리합니다. */
   const handlePasswordSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -241,6 +253,7 @@ export default function Mypage({
     requestAnimationFrame(() => chargeDialogRef.current?.querySelector<HTMLElement>("h2")?.focus());
   };
 
+  /** 선택·직접 입력한 충전 금액을 검증한 뒤 실제 반영 전 확인 단계로 이동합니다. */
   const handleChargeSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -256,6 +269,10 @@ export default function Mypage({
     focusChargeTitle();
   };
 
+  /**
+   * 더미 충전 내역을 사용자별 localStorage에 영구 저장하고 현재 화면 데이터에도 즉시 반영합니다.
+   * 저장 실패 시 메모리 값도 바꾸지 않아 새로고침 전후 포인트가 불일치하지 않게 합니다.
+   */
   const completeCharge = () => {
     const date = new Intl.DateTimeFormat("ko-KR", {
       year: "numeric",

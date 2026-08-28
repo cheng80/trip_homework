@@ -1,3 +1,8 @@
+/**
+ * 역할: 트립토크 목록의 검색·기간·정렬·페이지 조건을 해석하는 서버 컴포넌트입니다.
+ * 처리 흐름: 일반 목록과 인기 목록을 병렬 조회하고 선택한 정렬 기준을 적용해 화면에 전달합니다.
+ * 주의사항: URL 검색 조건을 단일 진실 공급원으로 사용해 새로고침 후에도 상태를 유지합니다.
+ */
 import BoardList from "@/components/boards/board-list";
 import HotBoardList from "@/components/boards/hot-board-list";
 import { getBestBoards, getBoards } from "@/services/boards";

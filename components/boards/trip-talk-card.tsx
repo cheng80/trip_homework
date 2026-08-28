@@ -1,3 +1,8 @@
+/**
+ * 역할: 인기 트립토크 한 건의 이미지, 제목, 작성자와 반응 수를 표시합니다.
+ * 처리 흐름: 카드 전체를 상세 페이지 링크로 구성하고 이미지 크기는 Next Image에 위임합니다.
+ * 주의사항: 텍스트와 이미지 대체 설명은 전달받은 게시글 데이터에서 생성합니다.
+ */
 import Image from "next/image";
 import Link from "next/link";
 import type { TripTalkPost } from "@/types/boards";

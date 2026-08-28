@@ -1,35 +1,35 @@
 # TripTrip 작업 인수인계
 
-작성일: 2026-08-27
+작성일: 2026-08-28
 
 진행 체크리스트는 [PROGRESS.md](./PROGRESS.md)에서 관리한다.
 
 ## 현재 Git 상태
 
-- 현재 체크아웃 브랜치: `dev`
-- `dev`, `origin/dev`, `main`, `origin/main`에 `paymentId` 없는 포인트 충전 검수 진입 보완까지 반영
-- 구조 변경 PR [#1](https://github.com/cheng80/trip_homework/pull/1) 병합 완료
-- 후속 작업은 단일 작업 브랜치 `dev`에서 진행
-- 병합이 끝난 `travelproducts-ui`는 로컬과 원격에서 삭제 완료
+- 통합 기준 브랜치: `main`
+- API·콘텐츠 편집 개선 PR [#4](https://github.com/cheng80/trip_homework/pull/4) 스쿼시 병합 완료
+- PR #4 병합 커밋: `8a43b9bd75a410722371247171a7d91dea9ed5de`
+- PR #4의 Vercel Preview와 `main` 배포 상태 `success` 확인
+- 후속 작업은 `codex/<작업명>` 브랜치에서 검증 후 PR로 `main`에 병합
 
 ## Git 작업 원칙
 
-- `main`은 통합 기준으로 유지하고 후속 작업은 `dev`에서 진행한다.
-- 변경 검증 후 `dev`를 먼저 push하고 `main`에 병합한다.
-- 병합 후 `dev`를 `main`까지 fast-forward해 두 브랜치를 다시 동기화한다.
+- `main`은 통합 기준으로 유지하고 후속 작업은 고유한 `codex/<작업명>` 브랜치에서 진행한다.
+- 변경 검증 후 기능 브랜치를 push하고 PR 검사 통과 뒤 `main`에 스쿼시 병합한다.
+- 병합 후 로컬 `main`을 `origin/main`까지 fast-forward하고 완료된 기능 브랜치를 정리한다.
 - 원격 브랜치가 앞서 있거나 충돌·push 실패가 발생하면 강제 push하지 않고 중단한다.
 - 작업 브랜치는 고유 커밋이 없고 병합이 완료된 경우에만 삭제한다.
 
 주요 변경 파일:
 
 - `app/(main)`의 라우트별 `page.tsx`, `page.module.css`
-- `components/commons`: 헤더, 뒤로가기, 주소 검색, 이미지 업로드, 섹션 제목
+- `components/commons`: 헤더, 뒤로가기, 주소 검색, 이미지 업로드, 리치 텍스트 편집·출력, 섹션 제목
 - `components/boards`: 트립토크 카드·목록·상세·댓글·폼
 - `components/travelproducts`: 배너·카드·검색/카테고리·상세·문의·구매·폼
 - `components/auth`: 로그인·회원가입 공통 화면과 정적 입력 상태
-- `data`: API 연결 전 화면에 주입하는 mock 데이터
-- `domain`: 인증 검증과 게시글 검색·정렬·페이지 계산 순수 로직
-- `graphql`: 전송 클라이언트, API 응답 타입, Query·Mutation 문서
+- `data`: 배너·카테고리와 API 실패 전 초기 화면에 사용하는 정적 데이터
+- `domain`: 인증 검증, 게시글 검색·정렬·페이지 계산, 리치 텍스트 정제 순수 로직
+- `graphql`: Apollo 전송 클라이언트, API 응답 타입, Query·Mutation 문서
 - `services`: GraphQL 응답을 UI 모델로 변환하고 기능별 요청을 제공하는 계층
 - `hooks`: 검색·정렬·댓글·폼 제출 상태 로직
 - `types`: 트립토크·숙박권·마이페이지 UI 데이터 계약
@@ -41,9 +41,10 @@
 - 라우트의 `page.tsx`는 데이터 공급과 컴포넌트 조립만 담당
 - `components`는 `data`를 직접 import하지 않고 props로만 데이터 수신
 - 화면 상태는 `hooks`, 재사용 가능한 검증·선택 규칙은 `domain`으로 분리
-- mock 데이터는 `data`, UI 모델은 `types`, GraphQL 원본 응답 타입은 `graphql/types.ts`에서 관리
+- 정적 예시 데이터는 `data`, UI 모델은 `types`, GraphQL 원본 응답 타입은 `graphql/types.ts`에서 관리
 - `services`가 GraphQL 원본 응답을 UI 모델로 변환하므로 컴포넌트는 API 필드명을 직접 사용하지 않음
-- API 연결 시 `page.tsx`의 mock import를 `services` 조회 함수로, 관련 hook의 로컬 처리를 service Mutation 호출로 교체
+- 실제 Query·Mutation은 `services`를 통해 Apollo Client로 실행하고 배너·카테고리 등 정적 콘텐츠만 `data`에서 유지
+- 모든 TypeScript 소스에는 파일 역할·처리 흐름·주의사항 한글 헤더를 두고 복잡한 경계 로직은 함수 단위 주석을 유지
 
 ## NAVER Maps 연동
 
@@ -63,7 +64,7 @@
 
 ## 현재 화면 범위
 
-`dev`에는 숙박권, 트립토크, 로그인·회원가입, 마이페이지 정적 화면이 구현되어 있다.
+`main`에는 숙박권, 트립토크, 로그인·회원가입, 마이페이지와 실제 GraphQL 연동 화면이 구현되어 있다.
 
 - `/travelproducts` 메인 배너 이동·페이지 표시
 - 추천 숙소 영역
@@ -76,12 +77,14 @@
 - 구매 확인과 포인트 부족 팝업
 - `/travelproducts/new` 판매 등록 폼
 - `/travelproducts/[travelproductId]/edit` 판매 수정 폼
+- 숙박권 등록·수정의 React Quill 상세 설명과 안전한 HTML 상세 출력
 - `react-daum-postcode` 기반 Kakao 우편번호 주소 검색
 - 데스크톱·태블릿·모바일 CSS 분기
 - `/boards` 핫 게시글·검색·정렬·페이지 이동 목록
 - 핫 게시글 카드의 최대 너비와 제목·날짜 영역 고정, 좁은 화면 축소 처리
 - `/boards/[boardId]` 게시글 이미지·위치·반응·댓글 상태
 - `/boards/new`, `/boards/[boardId]/edit` 등록·수정 공통 폼
+- 트립토크 등록·수정의 React Quill 본문과 기존 일반 텍스트 호환 출력
 - 트립토크 폼의 Kakao 우편번호 주소 검색
 - 현재 경로에 따른 숙박권·트립토크 헤더 활성 상태
 - 공통 헤더와 주소 검색 컴포넌트
@@ -107,10 +110,12 @@
 - `/mypage?charge=1`, `/mypage?section=points`, `/mypage?section=password` 검수 직접 진입
 - 트립트립 `(main)`과 분리된 `(dev)` Route Group의 `/dev/api-test`에서 GraphQL 예시 확인과 수동 실행
 
-게시글·숙박권 목록과 상세는 네이티브 `fetch` GraphQL service를 사용한다.
+게시글·숙박권·인증·마이페이지의 일반 Query와 Mutation은 `@apollo/client` 4의 공용 `query`·`mutate` 전송 계층을 사용한다.
 회원가입·로그인·로그아웃·현재 사용자·마이페이지·비밀번호 변경과 게시글·댓글·숙박권·문의·구매 Mutation을 동일 출처 프록시에 연결했다.
 access token은 응답 본문에서 제거해 HttpOnly 쿠키에 저장하고, refresh token 쿠키로 인증 실패 요청을 한 번 갱신·재시도한다.
-배너·카테고리와 인증 전 마이페이지 초기 화면에는 기존 정적 데이터를 유지한다.
+multipart 이미지 업로드와 원시 요청·응답을 확인하는 개발 API 테스트 페이지만 전용 `fetch`를 유지한다.
+게시글·숙박권 리치 텍스트는 저장 프록시와 상세 출력 경계에서 허용 목록으로 정제한다.
+배너·카테고리와 API 실패 전 초기 화면에는 기존 정적 데이터를 유지한다.
 
 ## 현재 검증 상태
 
@@ -150,7 +155,7 @@ access token은 응답 본문에서 제거해 HttpOnly 쿠키에 저장하고, r
 - 로그인 전·후 헤더와 데스크톱 프로필·모바일 메뉴 상태 확인
 - 전체 12개 라우트의 1920px·781px·390px 화면에서 가로 넘침·404 없음 확인
 - 트립토크·숙박권 수정 화면의 기존 미리보기 이미지 로드 확인
-- GraphQL Query·Mutation 34개 live introspection 스키마 검증 통과
+- GraphQL Query·Mutation 35개 live introspection 스키마 검증 통과
 - `/api/graphql` 프록시를 통한 `fetchBoards` 읽기 요청 성공 확인
 - API 준비 리팩터링 후 6개 대표 라우트의 1920px·781px·390px 렌더링·이미지·가로 넘침 확인
 - `paymentId` 없이 충전 팝업·포인트 내역·비밀번호 변경 직접 진입 확인
@@ -165,22 +170,26 @@ access token은 응답 본문에서 제거해 HttpOnly 쿠키에 저장하고, r
 - API 테스트 페이지 1440px·390px 렌더링, 가로 넘침·console warning/error 없음 확인
 - 신규 VPC Geocoding 엔드포인트로 서울시청 주소 조회 HTTP 200, 좌표 `126.9783882`, `37.5666103` 확인
 - 테스트 숙박권 `6a900480d4299d0029cd4add` 상세에서 NAVER Dynamic Map·마커 표시와 지도 전체 클릭 시 NAVER 지도 검색 새 탭 이동 확인
+- Apollo Client Query·Mutation·인증 헤더·GraphQL 오류 전달 테스트 통과
+- React Quill 작성·수정·상세와 390px 가로 넘침·console 오류 없음 확인
+- 리치 텍스트 빈 본문·기존 텍스트 변환·실행 가능 HTML 제거 테스트 통과
+- 전체 Node 테스트 27개, GraphQL 작업 35개, lint, production build, 운영 의존성 audit 통과
+- TypeScript 소스 82개에 상세 한글 주석 추가 후 주석 외 코드 변경 없음 자동 확인
+- PR #4와 병합 커밋 `8a43b9b`의 Vercel 배포 성공 확인
 
-## 다음 작업: README 프로젝트 설명 교체
+## 다음 작업
 
-사용자에게 프로젝트 설명 시안을 먼저 확인받은 뒤 `README.md`를 교체한다.
-
-1. 프로젝트 소개와 현재 UI·GraphQL 연결 범위를 작성
-2. 주요 화면·기술 스택·실행·검증 명령 정리
-3. GraphQL 연결 범위와 아직 연결하지 않은 결제·충전 기능을 명시
+1. 배포된 Vercel 주소에서 로그인·NAVER 지도·React Quill 작성 화면의 운영 환경변수를 수동 확인한다.
+2. 이메일 사전 중복 확인과 숙박권 날짜·지역·카테고리 선택 상태의 범위를 결정한다.
+3. 실제 결제 `paymentId` 발급 방식이 정해지면 서버 포인트 충전을 연결한다.
 
 ## 다음 세션 시작 방법
 
 1. `git status --short --branch`로 브랜치와 작업 상태를 확인한다.
-2. 승인된 시안대로 `README.md`만 교체한다.
-3. 문서의 실행·검증 명령이 `package.json`과 일치하는지 확인한다.
-4. 별도 이메일 사전 중복 확인과 숙박권 날짜·지역·카테고리 상태의 다음 범위를 결정한다.
-5. 실제 결제·포인트 충전은 수업 범위를 확인한 뒤 연결한다.
+2. `main`과 `origin/main`이 같은지 확인하고 작업별 `codex/<작업명>` 브랜치를 만든다.
+3. 배포 주소의 운영 환경변수 적용 또는 남은 기능 범위 중 하나를 선택한다.
+4. 변경 후 `npm test`, GraphQL 검사, lint와 build를 실행한다.
+5. 검증이 끝난 변경만 PR로 `main`에 병합한다.
 
 ## 주요 참고 자료
 
@@ -204,8 +213,8 @@ access token은 응답 본문에서 제거해 HttpOnly 쿠키에 저장하고, r
 - 트립토크 등록·수정 폼: `components/boards/board-form.tsx`
 - 공통 헤더: `components/commons/header.tsx`
 - 공통 주소 검색: `components/commons/address-fields.tsx`
-- mock 데이터: `data/boards.ts`, `data/travel-products.ts`, `data/mypage.ts`
-- GraphQL 요청·문서: `graphql/client.ts`, `graphql/queries.ts`, `graphql/mutations.ts`, `graphql/types.ts`
+- 정적 예시 데이터: `data/boards.ts`, `data/travel-products.ts`, `data/mypage.ts`
+- Apollo GraphQL 요청·문서: `graphql/client.ts`, `graphql/queries.ts`, `graphql/mutations.ts`, `graphql/types.ts`
 - API 응답 변환과 기능 서비스: `services/`
 - 순수 비즈니스 규칙: `domain/`
 - 상태 로직: `hooks/`

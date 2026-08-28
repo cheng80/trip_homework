@@ -37,18 +37,18 @@
 
 전체 API 표와 요청 예시는 [GRAPHQL_API.md](../GRAPHQL_API.md)에서 확인한다.
 
-## 앱 적용 준비 구조
+## 앱 적용 구조
 
-- `graphql/client.ts`: JSON 요청, 파일 업로드, GraphQL `errors` 처리
+- `graphql/client.ts`: Apollo Client `query`·`mutate`, multipart 파일 업로드, GraphQL `errors` 처리
 - `graphql/queries.ts`, `graphql/mutations.ts`: 현재 화면 범위의 작업 문서
 - `graphql/types.ts`: GraphQL 원본 응답과 Input 타입
-- `app/api/graphql/route.ts`: 브라우저 요청용 동일 출처 프록시
+- `app/api/graphql/route.ts`: 브라우저 요청용 동일 출처 프록시, 토큰 복원과 응답 redaction
 - `services/`: 원본 응답을 UI 모델로 변환하고 기능별 요청 제공
-- `domain/`: API와 UI에 독립적인 인증 검증과 목록 선택 규칙
-- `data/`: 실제 API 연결 전 사용하는 mock 데이터
+- `domain/`: 인증·목록·리치 텍스트 정제 등 API와 UI에 독립적인 규칙
+- `data/`: 배너·카테고리와 API 실패 시 초기 화면에 사용하는 정적 데이터
 
 작업 문서가 live schema와 일치하는지 검사한다.
 
     npm run api:graphql:check
 
-페이지는 아직 mock 데이터를 사용한다. 공개 조회부터 `page.tsx`의 `data` import를 `services` 함수로 교체하고, 인증 Mutation은 access token 저장·갱신 정책을 결정한 뒤 연결한다.
+게시글·숙박권·인증·마이페이지의 일반 Query와 Mutation은 Apollo Client를 사용한다. 브라우저 요청은 `/api/graphql`을 거치며 access token은 응답 본문에서 제거되어 HttpOnly 쿠키로 관리된다. 파일 업로드만 GraphQL multipart 규격 때문에 별도 전송 함수를 유지한다.
