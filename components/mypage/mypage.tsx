@@ -8,7 +8,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type SubmitEvent } from "react";
 import { isAuthenticationErrorMessage } from "@/app/api/graphql/auth-session";
 import Dialog from "@/components/commons/dialog";
 import { getMypage, resetPassword } from "@/services/account";
@@ -193,7 +193,7 @@ export default function Mypage({
   };
 
   /** 비밀번호 형식을 먼저 검증하고 성공 시 API 요청·폼 초기화·사용자 피드백을 한 흐름으로 처리합니다. */
-  const handlePasswordSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handlePasswordSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
@@ -254,7 +254,7 @@ export default function Mypage({
   };
 
   /** 선택·직접 입력한 충전 금액을 검증한 뒤 실제 반영 전 확인 단계로 이동합니다. */
-  const handleChargeSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleChargeSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const nextError = getChargeError(chargeAmount);

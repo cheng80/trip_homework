@@ -6,7 +6,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import {
   changeBoardReaction,
   createBoardComment,
@@ -46,7 +46,7 @@ export function useBoardDetail(boardId: string, board: BoardDetailData) {
   };
 
   /** 로그인 댓글과 비로그인 댓글을 모두 지원하도록 작성자·비밀번호를 FormData에서 함께 전달합니다. */
-  const submitComment = async (event: FormEvent<HTMLFormElement>) => {
+  const submitComment = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const contents = comment.trim();

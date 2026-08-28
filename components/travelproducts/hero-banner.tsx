@@ -31,7 +31,7 @@ export default function HeroBanner({ banners }: HeroBannerProps) {
         src={banner.image}
         alt={banner.alt}
         fill
-        priority
+        preload
         sizes="100vw"
       />
       <div className={styles.heroText}>
