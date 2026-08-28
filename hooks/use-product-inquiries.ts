@@ -5,7 +5,7 @@
  */
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type SubmitEvent } from "react";
 import { getLoggedInUser } from "@/services/account";
 import {
   createTravelproductQuestion,
@@ -54,7 +54,7 @@ export function useProductInquiries(
   );
 
   /** 새 문의를 등록하고 서버가 확정한 작성자 정보를 포함한 항목을 목록 맨 앞에 추가합니다. */
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const question = contents.trim();
     if (!question) return;

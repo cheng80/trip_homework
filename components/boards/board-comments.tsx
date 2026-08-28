@@ -6,7 +6,7 @@
 "use client";
 
 import Image from "next/image";
-import type { FormEvent } from "react";
+import type { SubmitEvent } from "react";
 import type { BoardComment } from "@/types/boards";
 import styles from "./board-comments.module.css";
 
@@ -17,7 +17,7 @@ type BoardCommentsProps = {
   editingContents: string;
   onCommentChange: (value: string) => void;
   onEditingContentsChange: (value: string) => void;
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onSubmit: (event: SubmitEvent<HTMLFormElement>) => void;
   onStartEditing: (comment: BoardComment) => void;
   onCancelEditing: () => void;
   onSave: (id: string) => void;

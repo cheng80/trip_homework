@@ -25,7 +25,7 @@ export default function FeaturedProducts({ products }: FeaturedProductsProps) {
               src={product.image}
               alt=""
               fill
-              priority={index === 0}
+              preload={index === 0}
               loading={index === 0 ? undefined : "eager"}
               sizes="(max-width: 780px) 100vw, 50vw"
             />

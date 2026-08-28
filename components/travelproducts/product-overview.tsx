@@ -22,7 +22,7 @@ export default function ProductOverview({ productId, product }: ProductOverviewP
             src={product.images[0]}
             alt={`${product.location} ${product.title}`}
             fill
-            priority
+            preload
             sizes="(max-width: 780px) 100vw, 55vw"
           />
         </div>

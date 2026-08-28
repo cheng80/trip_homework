@@ -5,7 +5,7 @@
  */
 "use client";
 
-import { useRef, useState, type FormEvent } from "react";
+import { useRef, useState, type SubmitEvent } from "react";
 import {
   extractApiTestIds,
   findMissingApiTestIds,
@@ -67,7 +67,7 @@ export default function ApiTestPage() {
     setStatus(`${operation.label} variables를 확인해 주세요.`);
   };
 
-  const runOperation = async (event: FormEvent<HTMLFormElement>) => {
+  const runOperation = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     let variables: unknown;

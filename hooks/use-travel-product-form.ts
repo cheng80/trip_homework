@@ -6,7 +6,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import {
   hasRichTextContent,
   productContentMaxLength,
@@ -30,7 +30,7 @@ export function useTravelProductForm(
    * 상품 폼 값을 API 입력 형태로 조립하고 이미지 업로드와 저장 mutation을 순차 실행합니다.
    * 설명이 비었거나 제한을 넘으면 서버 요청 전에 편집기로 포커스를 돌립니다.
    */
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);

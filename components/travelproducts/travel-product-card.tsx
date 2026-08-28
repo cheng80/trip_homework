@@ -10,10 +10,10 @@ import styles from "./travel-product-card.module.css";
 
 type TravelProductCardProps = {
   product: TravelProduct;
-  priority?: boolean;
+  eager?: boolean;
 };
 
-export default function TravelProductCard({ product, priority }: TravelProductCardProps) {
+export default function TravelProductCard({ product, eager }: TravelProductCardProps) {
   return (
     <Link className={styles.card} href={`/travelproducts/${product.id}`}>
       <div className={styles.image}>
@@ -21,7 +21,7 @@ export default function TravelProductCard({ product, priority }: TravelProductCa
           src={product.image}
           alt={`${product.location} ${product.title}`}
           fill
-          loading={priority ? "eager" : undefined}
+          loading={eager ? "eager" : undefined}
           sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 25vw"
         />
         <span className={styles.imageCount}>▧ {product.imageCount}</span>

@@ -5,7 +5,7 @@
  */
 "use client";
 
-import { useMemo, useState, type FormEvent } from "react";
+import { useMemo, useState, type SubmitEvent } from "react";
 import { selectBoardPosts, type BoardSort } from "@/domain/board-list";
 import type { BoardPost } from "@/types/boards";
 
@@ -29,7 +29,7 @@ export function useBoardList(posts: BoardPost[]) {
     pageSize,
   }), [dateRange, page, posts, search, sort]);
 
-  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+  const handleSearch = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSearch(keyword.trim());
     setDateRange({ start: startDate, end: endDate });

@@ -3,7 +3,14 @@
  * 처리 흐름: 실행 환경에 맞는 endpoint와 인증 헤더를 구성하고 operation 종류에 따라 query 또는 mutate를 호출합니다.
  * 주의사항: 파일 업로드만 multipart 규격 때문에 별도 전송 함수를 사용합니다.
  */
-import { ApolloClient, HttpLink, InMemoryCache, gql } from "@apollo/client/core";
+import {
+  ApolloClient,
+  HttpLink,
+  InMemoryCache,
+  gql,
+  type OperationVariables,
+  type TypedDocumentNode,
+} from "@apollo/client/core";
 
 const defaultEndpoint = "https://main-practice.codebootcamp.co.kr/graphql";
 
@@ -107,25 +114,26 @@ async function readGraphQLResponse<T>(response: Response): Promise<T> {
  * GraphQL 문서를 파싱해 Query는 client.query, Mutation은 client.mutate로 실행합니다.
  * 호출부 호환성을 위해 성공 시 Apollo 결과 객체가 아닌 data 값만 반환합니다.
  */
-export async function requestGraphQL<T, V = unknown>(
+export async function requestGraphQL<T, V extends OperationVariables = OperationVariables>(
   query: string,
   variables?: V,
   options: GraphQLRequestOptions = {},
 ) {
   const headers: Record<string, string> = { "content-type": "application/json" };
   if (options.accessToken) headers.authorization = `Bearer ${options.accessToken}`;
-  const document = gql(query);
+  const document = gql(query) as TypedDocumentNode<T, V>;
   const operation = document.definitions.find((definition) => definition.kind === "OperationDefinition");
   const context = {
     fetchOptions: { cache: options.cache ?? "no-store", signal: options.signal },
     headers,
   };
+  const requestVariables = (variables ?? {}) as V;
 
   try {
     const client = getApolloClient(options);
     const result = operation?.operation === "mutation"
-      ? await client.mutate<T>({ mutation: document, variables: variables ?? {}, context })
-      : await client.query<T>({ query: document, variables: variables ?? {}, context });
+      ? await client.mutate({ mutation: document, variables: requestVariables, context })
+      : await client.query({ query: document, variables: requestVariables, context });
 
     if (result.data === undefined || result.data === null) {
       throw new GraphQLRequestError("GraphQL 응답에 data가 없습니다.");

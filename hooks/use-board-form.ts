@@ -6,7 +6,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import {
   boardContentMaxLength,
   hasRichTextContent,
@@ -29,7 +29,7 @@ export function useBoardForm(
    * 브라우저 기본 제출을 막고 에디터·파일 입력을 FormData에서 읽습니다.
    * 본문 검증이 끝난 뒤에만 업로드와 게시글 mutation을 실행합니다.
    */
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
