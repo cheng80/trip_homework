@@ -1,3 +1,8 @@
+/**
+ * 역할: 공용 GraphQL 서버 응답과 입력 객체의 TypeScript 형태를 정의합니다.
+ * 처리 흐름: API 원본 필드명을 유지해 서비스 매퍼가 화면 타입으로 변환할 수 있게 합니다.
+ * 주의사항: 화면 표시용 타입과 분리해 서버 스키마 변경의 영향을 경계 안에 가둡니다.
+ */
 export type ApiUser = {
   _id: string;
   email: string;

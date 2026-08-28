@@ -1,3 +1,8 @@
+/**
+ * 역할: 게시글 상세의 반응, 댓글, 삭제 상태를 하나로 연결하는 클라이언트 조정 컴포넌트입니다.
+ * 처리 흐름: useBoardDetail 훅에서 받은 상태와 동작을 본문 및 댓글 하위 컴포넌트에 분배합니다.
+ * 주의사항: 서버에서 받은 초기 데이터는 훅의 로컬 상태 초기값으로만 사용합니다.
+ */
 "use client";
 
 import BackLink from "@/components/commons/back-link";

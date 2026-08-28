@@ -1,3 +1,8 @@
+/**
+ * 역할: 숙박권 한 건의 이미지, 위치, 이름, 가격과 상태를 표시하는 공통 카드입니다.
+ * 처리 흐름: 상품 ID로 상세 링크를 만들고 판매 상태와 가격 형식을 일관되게 보여줍니다.
+ * 주의사항: 카드 자체는 데이터 변경이나 네트워크 요청을 수행하지 않습니다.
+ */
 import Image from "next/image";
 import Link from "next/link";
 import type { TravelProduct } from "@/types/travel-products";

@@ -1,3 +1,8 @@
+/**
+ * 역할: 회원가입·로그인·마이페이지·포인트 관련 GraphQL 작업을 화면 친화적인 함수로 제공합니다.
+ * 처리 흐름: Apollo 응답 원본을 매퍼로 변환하고 인증 mutation의 세부 형식을 컴포넌트에서 숨깁니다.
+ * 주의사항: 쿠키 수명주기는 GraphQL 프록시가 처리하므로 access token을 화면에 반환하지 않습니다.
+ */
 import { requestGraphQL, type GraphQLRequestOptions } from "@/graphql/client";
 import {
   CREATE_USER,

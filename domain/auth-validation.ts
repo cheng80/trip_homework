@@ -1,3 +1,8 @@
+/**
+ * 역할: 로그인과 회원가입 입력값을 UI와 분리해 검증합니다.
+ * 처리 흐름: 이메일 형식, 비밀번호 길이와 이름 필수값을 모드에 맞춰 검사합니다.
+ * 주의사항: 첫 번째 오류 메시지를 반환하며 빈 문자열은 유효함을 뜻합니다.
+ */
 export type AuthMode = "login" | "signup";
 export type AuthField = "email" | "name" | "password" | "passwordCheck";
 export type AuthInput = Partial<Record<AuthField, string>>;

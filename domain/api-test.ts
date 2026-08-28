@@ -1,3 +1,8 @@
+/**
+ * 역할: GraphQL API 테스트 도구의 변수 치환과 응답 ID 추출을 담당하는 순수 로직입니다.
+ * 처리 흐름: 이전 작업에서 저장한 ID를 placeholder에 적용하고 민감한 변수는 표시용 사본에서 가립니다.
+ * 주의사항: 실제 요청 원본을 변경하지 않아 테스트 실행 데이터가 손상되지 않게 합니다.
+ */
 export type ApiTestSavedIds = Partial<Record<
   "answerId" | "boardCommentId" | "boardId" | "paymentId" | "questionId" | "travelproductId",
   string

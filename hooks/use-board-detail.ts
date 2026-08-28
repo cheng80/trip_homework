@@ -1,3 +1,8 @@
+/**
+ * 역할: 트립토크 상세의 좋아요·싫어요·댓글·삭제 상태를 관리하는 클라이언트 훅입니다.
+ * 처리 흐름: 낙관적 반응 수 갱신과 댓글 mutation 결과를 로컬 목록에 반영합니다.
+ * 주의사항: 사용자 확인이 필요한 삭제 동작은 브라우저 대화상자 이후에만 실행합니다.
+ */
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -23,6 +28,7 @@ export function useBoardDetail(boardId: string, board: BoardDetailData) {
   const [editingContents, setEditingContents] = useState("");
   const [status, setStatus] = useState("");
 
+  /** 서버가 반환한 최종 반응 수를 반영하고 같은 반응을 다시 누르면 선택 표시만 해제합니다. */
   const changeReaction = async (nextReaction: "like" | "dislike") => {
     if (reactionPending || reaction === nextReaction) return;
     setReactionPending(true);
@@ -39,6 +45,7 @@ export function useBoardDetail(boardId: string, board: BoardDetailData) {
     }
   };
 
+  /** 로그인 댓글과 비로그인 댓글을 모두 지원하도록 작성자·비밀번호를 FormData에서 함께 전달합니다. */
   const submitComment = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -64,6 +71,7 @@ export function useBoardDetail(boardId: string, board: BoardDetailData) {
     setEditingContents(item.contents);
   };
 
+  /** 댓글 수정 비밀번호를 요청한 뒤 성공한 항목만 로컬 배열에서 교체합니다. */
   const saveComment = async (id: string) => {
     const contents = editingContents.trim();
     if (!contents) return;
@@ -79,6 +87,7 @@ export function useBoardDetail(boardId: string, board: BoardDetailData) {
     }
   };
 
+  /** 복구할 수 없는 작업이므로 사용자 확인과 댓글 비밀번호 입력 후 실제 삭제를 호출합니다. */
   const deleteComment = async (id: string) => {
     if (window.confirm("댓글을 삭제할까요?")) {
       const password = window.prompt("댓글을 등록할 때 입력한 비밀번호를 입력해 주세요.");
@@ -93,6 +102,7 @@ export function useBoardDetail(boardId: string, board: BoardDetailData) {
     }
   };
 
+  /** 게시글 삭제 성공 후 목록으로 이동하고 서버 컴포넌트 캐시를 새로 고칩니다. */
   const deletePost = async () => {
     if (!window.confirm("게시글을 삭제할까요? 삭제한 게시글은 복구할 수 없습니다.")) return;
     setStatus("");

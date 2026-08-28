@@ -1,3 +1,8 @@
+/**
+ * 역할: 게시글과 상품 폼에서 공유하는 다중 이미지 선택 컴포넌트입니다.
+ * 처리 흐름: 기존 이미지와 새 파일 미리보기를 합쳐 보여주고 파일 입력 이름을 폼 제출 구조에 맞춥니다.
+ * 주의사항: 객체 URL은 변경과 언마운트 시 해제해 브라우저 메모리 누수를 막습니다.
+ */
 import Image from "next/image";
 import styles from "./image-upload.module.css";
 

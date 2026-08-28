@@ -1,3 +1,8 @@
+/**
+ * 역할: 트립토크 작성·수정 폼 제출 절차를 캡슐화한 클라이언트 훅입니다.
+ * 처리 흐름: 리치 텍스트 검증, 이미지 업로드, 입력 객체 조립, mutation과 상세 이동을 순서대로 수행합니다.
+ * 주의사항: 검증 실패 시 에디터에 오류 상태를 표시하고 네트워크 요청을 시작하지 않습니다.
+ */
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -20,6 +25,10 @@ export function useBoardForm(
   const [status, setStatus] = useState("");
   const [pending, setPending] = useState(false);
 
+  /**
+   * 브라우저 기본 제출을 막고 에디터·파일 입력을 FormData에서 읽습니다.
+   * 본문 검증이 끝난 뒤에만 업로드와 게시글 mutation을 실행합니다.
+   */
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -32,6 +41,7 @@ export function useBoardForm(
       editor?.focus();
     };
 
+    // Quill의 빈 HTML은 required 속성만으로 걸러지지 않아 실제 문자열 길이로 재검증합니다.
     if (!hasRichTextContent(contents)) {
       setStatus("내용을 입력해 주세요.");
       focusContents();
@@ -46,6 +56,7 @@ export function useBoardForm(
     setPending(true);
     setStatus("");
     try {
+      // 새 파일이 없으면 수정 화면에서 받은 기존 이미지 배열을 그대로 유지합니다.
       const images = files.length
         ? await uploadImageFiles(files)
         : initialImages;
@@ -62,6 +73,7 @@ export function useBoardForm(
       const board = mode === "edit" && boardId
         ? await updateBoard(boardId, values)
         : await createBoard(values);
+      // 저장된 실제 ID를 사용해 생성·수정 모두 같은 상세 화면으로 이동합니다.
       router.push(`/boards/${board._id}`);
       router.refresh();
     } catch (error) {

@@ -1,3 +1,8 @@
+/**
+ * 역할: React Quill 인스턴스와 툴바 설정을 캡슐화한 브라우저 전용 편집기입니다.
+ * 처리 흐름: 허용 서식과 툴바 구성을 고정하고 실제 contenteditable 영역에 접근성 속성을 연결합니다.
+ * 주의사항: 편집 결과는 HTML 문자열로 상위 제어 컴포넌트에 전달합니다.
+ */
 "use client";
 
 import { useEffect, useRef } from "react";
@@ -34,6 +39,10 @@ const formats = [
   "link",
 ];
 
+/**
+ * Quill이 생성한 내부 DOM은 JSX에서 직접 속성을 지정할 수 없어 마운트 후 접근성 정보를 보강합니다.
+ * 툴바 아이콘에도 한국어 이름을 부여해 스크린 리더가 기능을 설명할 수 있게 합니다.
+ */
 export default function QuillEditor({
   describedBy,
   editorId,
@@ -81,6 +90,7 @@ export default function QuillEditor({
       formats={formats}
       placeholder={placeholder}
       onChange={(html) => {
+        // 사용자가 입력을 시작하면 이전 제출에서 설정한 오류 상태를 즉시 해제합니다.
         editorRef.current?.getEditor().root.setAttribute("aria-invalid", "false");
         onChange(html);
       }}

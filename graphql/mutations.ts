@@ -1,3 +1,8 @@
+/**
+ * 역할: 서비스에서 사용하는 GraphQL Mutation 문서를 한곳에 정의합니다.
+ * 처리 흐름: 반복 응답 필드를 공통 문자열로 구성해 게시글과 숙박권 응답 형태를 일치시킵니다.
+ * 주의사항: 변수 이름은 서비스 함수와 API 테스트 데이터가 공동으로 의존하므로 변경 시 함께 갱신해야 합니다.
+ */
 const boardFields = `
   _id writer title contents youtubeUrl likeCount dislikeCount images createdAt updatedAt
   boardAddress { zipcode address addressDetail }
