@@ -1,4 +1,5 @@
 import Image from "next/image";
+import RichTextContent from "@/components/commons/rich-text-content";
 import type { MapCoordinates } from "@/domain/naver-maps";
 import type { TravelProductDetailData } from "@/types/travel-products";
 import ProductLocationMap from "./product-location-map";
@@ -14,7 +15,7 @@ export default function ProductInformation({ product, coordinates }: ProductInfo
     <>
       <section className={styles.section} aria-labelledby="description-title">
         <h2 id="description-title">숙박권 상세 정보</h2>
-        <p>{product.description}</p>
+        <RichTextContent sanitizedHtml={product.description} />
         <ul>
           {product.notes.map((note) => <li key={note}>{note}</li>)}
         </ul>

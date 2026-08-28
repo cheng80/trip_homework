@@ -41,7 +41,7 @@ test("GraphQL 게시글 응답을 UI 모델로 변환한다", () => {
   });
 
   const detail = mapBoardDetail(board, []);
-  assert.deepEqual(detail.paragraphs, ["첫 문단", "두 번째 문단"]);
+  assert.equal(detail.contents, "첫 문단\n\n두 번째 문단");
   assert.equal(detail.location, "서울 성수동");
   assert.equal(detail.images[0].src, "https://storage.googleapis.com/uploads/trip.png");
   assert.equal(detail.images.length, 2);

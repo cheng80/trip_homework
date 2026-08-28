@@ -236,6 +236,45 @@
   list-style: none;
 }
 
+.emptyState {
+  display: grid;
+  min-height: 180px;
+  padding: 32px;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  border: 1px dashed #dddddd;
+  border-radius: 10px;
+  color: #777777;
+  text-align: center;
+}
+
+.emptyState strong {
+  color: #333333;
+  font-size: 15px;
+}
+
+.emptyState p {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.emptyState a,
+.emptyState button {
+  min-height: 38px;
+  margin-top: 8px;
+  padding: 0 14px;
+  border: 1px solid #246fe5;
+  border-radius: 8px;
+  color: #246fe5;
+  background: #ffffff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 36px;
+  cursor: pointer;
+}
+
 .productItem {
   display: grid;
   min-width: 0;

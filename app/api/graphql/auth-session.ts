@@ -1,11 +1,20 @@
 export const accessTokenCookieName = "triptrip_access_token";
 export const refreshTokenCookieName = "refreshToken";
+const authenticationErrorPattern = /unauth|로그인|인증|access.?token|jwt|cannot read propert(?:y|ies) ['"]?_id['"]? of null/i;
 
 type JsonRecord = Record<string, unknown>;
 
 const record = (value: unknown): JsonRecord | undefined => (
   typeof value === "object" && value !== null ? value as JsonRecord : undefined
 );
+
+export function isAuthenticationErrorMessage(message: string) {
+  return authenticationErrorPattern.test(message);
+}
+
+export function hasAuthSession(accessToken?: string, refreshToken?: string) {
+  return Boolean(accessToken || refreshToken);
+}
 
 export function getProxyOrigin(requestUrl: string, originHeader: string | null) {
   return originHeader || new URL(requestUrl).origin;
@@ -27,7 +36,7 @@ export function hasAuthenticationError(body: unknown) {
 
   return errors.some((item) => {
     const message = record(item)?.message;
-    return typeof message === "string" && /unauth|로그인|인증|access.?token|jwt/i.test(message);
+    return typeof message === "string" && isAuthenticationErrorMessage(message);
   });
 }
 

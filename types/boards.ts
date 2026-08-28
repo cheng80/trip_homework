@@ -24,7 +24,7 @@ export type BoardDetailData = {
   writer: string;
   date: string;
   profile: string;
-  paragraphs: [string, string];
+  contents: string;
   images: [{ src: string; alt: string }, { src: string; alt: string }];
   location: string;
   likes: number;

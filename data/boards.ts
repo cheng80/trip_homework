@@ -32,10 +32,7 @@ export const boardDetail: BoardDetailData = {
   writer: "여행하는 고양이",
   date: "2026-08-24",
   profile: "/images/프로필 이미지/01.png",
-  paragraphs: [
-    "오래 기다렸던 산토리니 여행을 다녀왔어요. 하얀 골목 사이로 보이는 푸른 바다와 천천히 지는 노을이 정말 아름다웠습니다.",
-    "여행 중 가장 좋았던 장소를 함께 남겨요. 이른 아침에는 사람이 적어서 조용히 산책하기 좋았고, 오후에는 카페 테라스에서 바다를 바라보며 쉬었습니다.",
-  ],
+  contents: "오래 기다렸던 산토리니 여행을 다녀왔어요. 하얀 골목 사이로 보이는 푸른 바다와 천천히 지는 노을이 정말 아름다웠습니다.\n\n여행 중 가장 좋았던 장소를 함께 남겨요. 이른 아침에는 사람이 적어서 조용히 산책하기 좋았고, 오후에는 카페 테라스에서 바다를 바라보며 쉬었습니다.",
   images: [
     {
       src: "/images/트립토크 상세화면 이미지/01.png",
@@ -75,7 +72,7 @@ export const boardViewer: BoardViewer = {
 
 export const boardFormValues: BoardFormValues = {
   title: boardDetail.title,
-  contents: boardDetail.paragraphs.join("\n\n"),
+  contents: boardDetail.contents,
   address: "그리스 산토리니 이아",
   detailAddress: "이아 마을 전망대 인근",
 };

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import RichTextContent from "@/components/commons/rich-text-content";
 import type { BoardDetailData } from "@/types/boards";
 import styles from "./board-article.module.css";
 
@@ -50,7 +51,7 @@ export default function BoardArticle({
       </div>
 
       <div className={styles.contents}>
-        <p>{board.paragraphs[0]}</p>
+        <RichTextContent sanitizedHtml={board.contents} />
         <div className={styles.images}>
           <div className={styles.portraitImage}>
             <Image
@@ -71,8 +72,6 @@ export default function BoardArticle({
             />
           </div>
         </div>
-        <p>{board.paragraphs[1]}</p>
-
         <section className={styles.location} aria-labelledby="location-title">
           <Image src="/icon/outline/location.svg" alt="" width={22} height={22} />
           <div>

@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import type { BoardPost } from "@/types/boards";
@@ -49,6 +51,7 @@ export default function BoardList({
             name="sort"
             defaultValue={sort}
             form="board-filters"
+            onChange={(event) => event.currentTarget.form?.requestSubmit()}
           >
             <option value="latest">최신순</option>
             <option value="likes">좋아요순</option>

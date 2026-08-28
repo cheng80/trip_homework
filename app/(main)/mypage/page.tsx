@@ -1,5 +1,6 @@
 import Mypage from "@/components/mypage/mypage";
 import { mypageData } from "@/data/mypage";
+import { requireAuthSession } from "@/services/server-auth";
 import type { MypageSection } from "@/types/mypage";
 
 type MypagePageProps = {
@@ -7,6 +8,7 @@ type MypagePageProps = {
 };
 
 export default async function MypagePage({ searchParams }: MypagePageProps) {
+  await requireAuthSession();
   const params = await searchParams;
   const initialSection: MypageSection = params.section === "points" || params.section === "password"
     ? params.section

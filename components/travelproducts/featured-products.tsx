@@ -14,13 +14,14 @@ export default function FeaturedProducts({ products }: FeaturedProductsProps) {
         2024 끝여름 낭만있게 마무리 하고 싶다면?
       </SectionTitle>
       <div className={styles.grid}>
-        {products.slice(0, 2).map((product) => (
+        {products.slice(0, 2).map((product, index) => (
           <article className={styles.card} key={product.id}>
             <Image
               src={product.image}
               alt=""
               fill
-              loading="eager"
+              priority={index === 0}
+              loading={index === 0 ? undefined : "eager"}
               sizes="(max-width: 780px) 100vw, 50vw"
             />
             <div className={styles.content}>
