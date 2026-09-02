@@ -36,7 +36,28 @@
 }
 
 .preview img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+}
+
+.removeButton {
+  position: absolute;
+  z-index: 1;
+  top: 8px;
+  right: 8px;
+  height: 28px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 6px;
+  color: #ffffff;
+  background: rgb(17 17 17 / 72%);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .fileInput {

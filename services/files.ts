@@ -17,7 +17,7 @@ export async function uploadFile(file: File, options?: GraphQLRequestOptions) {
   return data.uploadFile;
 }
 
-export async function uploadImageFiles(files: File[], options?: GraphQLRequestOptions) {
-  validateImageFiles(files);
+export async function uploadImageFiles(files: File[], options?: GraphQLRequestOptions, existingCount = 0) {
+  validateImageFiles(files, existingCount);
   return Promise.all(files.map(async (file) => (await uploadFile(file, options)).url));
 }

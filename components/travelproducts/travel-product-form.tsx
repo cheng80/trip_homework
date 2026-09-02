@@ -23,7 +23,7 @@ type TravelProductFormProps = {
 
 export default function TravelProductForm({ mode, productId, initialValues }: TravelProductFormProps) {
   const isEdit = mode === "edit";
-  const { status, pending, handleSubmit } = useTravelProductForm(mode, productId, initialValues);
+  const { status, pending, handleSubmit, setStatus } = useTravelProductForm(mode, productId, initialValues);
   const detailHref = productId ? `/travelproducts/${productId}` : "/travelproducts";
 
   return (
@@ -105,6 +105,7 @@ export default function TravelProductForm({ mode, productId, initialValues }: Tr
                 src,
                 alt: `등록된 숙소 사진 ${index + 1}`,
               }))}
+              onError={setStatus}
             />
           </fieldset>
 

@@ -13,6 +13,7 @@ import {
   richTextLength,
   richTextPlainText,
 } from "@/domain/rich-text";
+import { maxImageCount } from "@/domain/image-preview";
 import { uploadImageFiles } from "@/services/files";
 import { createTravelproduct, updateTravelproduct } from "@/services/travel-products";
 import type { TravelProductFormValues } from "@/types/travel-products";
@@ -54,13 +55,16 @@ export function useTravelProductForm(
       return;
     }
 
+    if ((initialValues?.images?.length ?? 0) + files.length > maxImageCount) {
+      setStatus(`사진은 최대 ${maxImageCount}장까지 첨부할 수 있습니다.`);
+      return;
+    }
+
     setPending(true);
     setStatus("");
     try {
-      // 수정 시 새 파일을 고르지 않았다면 API에 저장된 이미지 경로를 유지합니다.
-      const images = files.length
-        ? await uploadImageFiles(files)
-        : initialValues?.images;
+      const uploaded = files.length ? await uploadImageFiles(files, undefined, initialValues?.images?.length ?? 0) : [];
+      const images = [...(initialValues?.images ?? []), ...uploaded];
       const values: TravelProductFormValues = {
         name: String(data.get("name") ?? ""),
         price: String(data.get("price") ?? ""),
@@ -85,5 +89,5 @@ export function useTravelProductForm(
     }
   };
 
-  return { status, pending, handleSubmit };
+  return { status, pending, handleSubmit, setStatus };
 }
