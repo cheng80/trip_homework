@@ -1,24 +1,26 @@
 # TripTrip 작업 인수인계
 
-작성일: 2026-08-28
+작성일: 2026-09-02
 
 진행 체크리스트는 [PROGRESS.md](./PROGRESS.md)에서 관리한다.
 
 ## 현재 Git 상태
 
 - 통합 기준 브랜치: `main`
-- API·콘텐츠 편집 개선 PR [#4](https://github.com/cheng80/trip_homework/pull/4) 스쿼시 병합 완료
-- PR #4 병합 커밋: `8a43b9bd75a410722371247171a7d91dea9ed5de`
-- PR #4의 Vercel Preview와 `main` 배포 상태 `success` 확인
+- API·콘텐츠 편집 개선 PR [#4](https://github.com/cheng80/trip_homework/pull/4) 병합 커밋: `8a43b9bd75a410722371247171a7d91dea9ed5de`
+- TypeScript 주석·문서 최신화 PR [#5](https://github.com/cheng80/trip_homework/pull/5) 병합 커밋: `3a7eff5ee4c1cd258566fede761e25f5115e4b74`
+- deprecated API·의존성 최신화 PR [#6](https://github.com/cheng80/trip_homework/pull/6) 병합 커밋: `b634f97b741d41776d0e9d02844d36495543b396`
+- PR #4·#5·#6의 Vercel Preview와 `main` Production 배포 상태 `success` 확인
+- `dev`와 `origin/dev`는 최신 `main`과 같은 HEAD로 유지한다
 - 후속 작업은 `codex/<작업명>` 브랜치에서 검증 후 PR로 `main`에 병합
 
 ## Git 작업 원칙
 
 - `main`은 통합 기준으로 유지하고 후속 작업은 고유한 `codex/<작업명>` 브랜치에서 진행한다.
 - 변경 검증 후 기능 브랜치를 push하고 PR 검사 통과 뒤 `main`에 스쿼시 병합한다.
-- 병합 후 로컬 `main`을 `origin/main`까지 fast-forward하고 완료된 기능 브랜치를 정리한다.
+- 병합 후 로컬 `main`을 `origin/main`까지 fast-forward하고, 참고용 `dev`도 같은 HEAD로 맞춘 뒤 완료된 기능 브랜치를 정리한다.
 - 원격 브랜치가 앞서 있거나 충돌·push 실패가 발생하면 강제 push하지 않고 중단한다.
-- 작업 브랜치는 고유 커밋이 없고 병합이 완료된 경우에만 삭제한다.
+- 작업 브랜치는 고유 커밋이 없고 병합이 완료된 경우에만 삭제한다. 스쿼시 병합으로 이력이 갈라진 `dev`는 `main`으로 맞출 때만 `--force-with-lease`를 사용한다.
 
 주요 변경 파일:
 
@@ -58,7 +60,7 @@
 - NAVER Cloud의 `Application Services > Maps`에서 `Dynamic Map`, `Static Map`, `Geocoding`을 선택한다. 현재 화면 구현은 Dynamic Map과 Geocoding을 사용하며 Static Map은 활성화만 되어 있다.
 - Dynamic Map의 Web 서비스 URL에는 포트·경로 없이 `http://localhost`와 실제 배포 도메인을 각각 등록한다.
 - Vercel 배포에는 로컬 파일과 별도로 같은 환경변수 두 개를 등록해야 한다.
-- Geocoding은 전체 주소부터 마지막 단어를 하나씩 줄여 행정구역까지 재조회한다. 더미 주소처럼 정확 주소가 0건이어도 검색 가능한 행정구역 좌표로 지도를 표시한다.
+- Geocoding은 전체 주소부터 마지막 단어를 하나씩 줄인 후보를 만든다. 현재 구현은 첫 후보의 HTTP 오류나 `status !== "OK"`에서 바로 중단하고, 좌표가 없는 경우에만 다음 후보를 조회한다.
 - Geocoding 결과는 30일 동안 캐시하고, 모든 조회가 실패하거나 키가 없으면 주소와 NAVER 지도 새 창 링크만 표시한다.
 - 상세 지도는 이동·확대 입력을 막은 미리보기이며, 지도 전체가 `target="_blank"`인 NAVER 지도 검색 링크다.
 
@@ -175,7 +177,9 @@ multipart 이미지 업로드와 원시 요청·응답을 확인하는 개발 AP
 - 리치 텍스트 빈 본문·기존 텍스트 변환·실행 가능 HTML 제거 테스트 통과
 - 전체 Node 테스트 27개, GraphQL 작업 35개, lint, production build, 운영 의존성 audit 통과
 - TypeScript 소스 82개에 상세 한글 주석 추가 후 주석 외 코드 변경 없음 자동 확인
-- PR #4와 병합 커밋 `8a43b9b`의 Vercel 배포 성공 확인
+- PR #4 `8a43b9b`, PR #5 `3a7eff5`, PR #6 `b634f97`의 Vercel Production 배포 성공 확인
+- PR #6에서 React `SubmitEvent`, Next Image `preload`, Apollo `TypedDocumentNode`로 deprecated API를 교체하고 Next.js 16.3.3을 적용
+- `dev`와 `origin/dev`를 최신 `main`과 같은 HEAD로 맞춤
 
 ## 다음 작업
 
@@ -189,7 +193,7 @@ multipart 이미지 업로드와 원시 요청·응답을 확인하는 개발 AP
 2. `main`과 `origin/main`이 같은지 확인하고 작업별 `codex/<작업명>` 브랜치를 만든다.
 3. 배포 주소의 운영 환경변수 적용 또는 남은 기능 범위 중 하나를 선택한다.
 4. 변경 후 `npm test`, GraphQL 검사, lint와 build를 실행한다.
-5. 검증이 끝난 변경만 PR로 `main`에 병합한다.
+5. 검증이 끝난 변경만 PR로 `main`에 병합하고, 필요하면 `dev`를 같은 HEAD로 맞춘다.
 
 ## 주요 참고 자료
 
