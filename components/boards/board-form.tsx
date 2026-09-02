@@ -23,7 +23,7 @@ type BoardFormProps = {
 
 export default function BoardForm({ mode, boardId = "1", initialValues }: BoardFormProps) {
   const isEdit = mode === "edit";
-  const { status, pending, handleSubmit } = useBoardForm(mode, boardId, initialValues?.images);
+  const { status, pending, handleSubmit, setStatus } = useBoardForm(mode, boardId, initialValues?.images);
 
   return (
     <main className={styles.page}>
@@ -108,6 +108,7 @@ export default function BoardForm({ mode, boardId = "1", initialValues }: BoardF
                 src,
                 alt: `첨부된 여행 사진 ${index + 1}`,
               }))}
+              onError={setStatus}
             />
           </fieldset>
 

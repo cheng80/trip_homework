@@ -12,6 +12,7 @@ import {
   hasRichTextContent,
   richTextLength,
 } from "@/domain/rich-text";
+import { maxImageCount } from "@/domain/image-preview";
 import { createBoard, updateBoard } from "@/services/boards";
 import { uploadImageFiles } from "@/services/files";
 import type { BoardFormValues } from "@/types/boards";
@@ -53,13 +54,16 @@ export function useBoardForm(
       return;
     }
 
+    if (initialImages.length + files.length > maxImageCount) {
+      setStatus(`사진은 최대 ${maxImageCount}장까지 첨부할 수 있습니다.`);
+      return;
+    }
+
     setPending(true);
     setStatus("");
     try {
-      // 새 파일이 없으면 수정 화면에서 받은 기존 이미지 배열을 그대로 유지합니다.
-      const images = files.length
-        ? await uploadImageFiles(files)
-        : initialImages;
+      const uploaded = files.length ? await uploadImageFiles(files, undefined, initialImages.length) : [];
+      const images = [...initialImages, ...uploaded];
       const values: BoardFormValues = {
         writer: String(data.get("writer") ?? "") || undefined,
         password: String(data.get("password") ?? "") || undefined,
@@ -83,5 +87,5 @@ export function useBoardForm(
     }
   };
 
-  return { status, pending, handleSubmit };
+  return { status, pending, handleSubmit, setStatus };
 }
