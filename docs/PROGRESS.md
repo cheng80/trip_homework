@@ -1,6 +1,6 @@
 # TripTrip 전체 진행 체크리스트
 
-최종 갱신일: 2026-08-28
+최종 갱신일: 2026-09-02
 
 현재 Git 상태와 다음 세션 시작 방법은 [HANDOFF.md](./HANDOFF.md)를 참고한다.
 
@@ -327,6 +327,9 @@
 - [x] React Quill 데스크톱·모바일 작성·수정·상세와 HTML 정제 테스트 통과
 - [x] API·콘텐츠 편집 개선 PR #4를 `main`에 스쿼시 병합하고 Vercel 배포 성공 확인
 - [x] TypeScript 소스 82개에 역할·처리 흐름·주의사항 한글 주석 추가
+- [x] 문서·README 최신화 PR #5를 `main`에 스쿼시 병합하고 Vercel 배포 성공 확인
+- [x] deprecated API·의존성 최신화 PR #6을 `main`에 스쿼시 병합하고 Next.js 16.3.3 Production 배포 성공 확인
+- [x] `dev`와 `origin/dev`를 최신 `main`과 같은 HEAD로 맞춤
 - [ ] 배포 후 실제 Vercel 주소에서 주요 화면 확인
 
 ## 권장 작업 순서
