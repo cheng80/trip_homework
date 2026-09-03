@@ -82,12 +82,17 @@
 }
 
 .categories li {
+  min-width: 0;
+  color: #777777;
+}
+
+.categories a {
   display: flex;
   min-width: 0;
   align-items: center;
   flex-direction: column;
   gap: 8px;
-  color: #777777;
+  color: inherit;
   font-size: 12px;
   text-align: center;
 }
@@ -104,7 +109,8 @@
 }
 
 .sellButton:focus-visible,
-.searchButton:focus-visible {
+.searchButton:focus-visible,
+.categories a:focus-visible {
   outline: 3px solid #2979ff;
   outline-offset: 3px;
 }

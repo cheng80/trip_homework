@@ -13,14 +13,15 @@ import { getBestTravelproducts, getTravelproducts } from "@/services/travel-prod
 import styles from "./page.module.css";
 
 type TravelProductsPageProps = {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ category?: string; q?: string }>;
 };
 
 export default async function TravelProductsPage({ searchParams }: TravelProductsPageProps) {
-  const { q = "" } = await searchParams;
+  const { category: rawCategory, q = "" } = await searchParams;
   const search = q.trim();
+  const category = travelCategories.some(([label]) => label === rawCategory) ? rawCategory : "";
   const [products, bestProducts] = await Promise.all([
-    getTravelproducts({ page: 1, search, isSoldout: false }),
+    getTravelproducts({ page: 1, search: category || search, isSoldout: false }),
     getBestTravelproducts(),
   ]);
 
@@ -30,7 +31,12 @@ export default async function TravelProductsPage({ searchParams }: TravelProduct
       <div className={styles.content}>
         <FeaturedProducts products={bestProducts} />
         <PromotionBanner />
-        <ProductCatalog categories={travelCategories} products={products} search={search} />
+        <ProductCatalog
+          categories={travelCategories}
+          products={products}
+          search={search}
+          selectedCategory={category}
+        />
       </div>
       <RecentProducts products={products} />
     </main>
