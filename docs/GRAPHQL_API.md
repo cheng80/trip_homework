@@ -23,7 +23,7 @@
 
 - 일반 Query와 Mutation은 `@apollo/client` 4의 `ApolloClient.query`·`ApolloClient.mutate`로 실행한다.
 - 브라우저 요청은 동일 출처 `/api/graphql` 프록시가 access token 쿠키 전달과 refresh token 기반 1회 복원을 처리한다.
-- 로그인·복원 응답의 access token은 공개 JSON에서 제거하고 HttpOnly 쿠키에 저장한다.
+- 로그인·복원 응답의 access token은 Zustand 메모리와 서버 페이지용 HttpOnly 쿠키에 함께 둔다. refresh token은 업스트림 쿠키를 HTTP에서도 저장되게 정규화한다.
 - `uploadFile`은 GraphQL multipart 요청이므로 Apollo HttpLink 대신 전용 업로드 전송 함수를 사용한다.
 - 게시글과 숙박권의 `contents`는 프록시 저장 경계와 상세 출력 경계에서 허용 HTML만 남긴다.
 - 개발 환경의 `/dev/api-test`에서는 요청·응답 원문과 후속 ID를 확인하기 위해 직접 프록시 호출 방식을 유지한다.

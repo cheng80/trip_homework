@@ -48,3 +48,20 @@ test("Apollo Client로 query와 mutation을 실행하고 GraphQL 오류를 전�
     globalThis.fetch = originalFetch;
   }
 });
+
+test("stored access token을 Authorization 헤더에 넣는다", async () => {
+  const originalFetch = globalThis.fetch;
+  const requests = [];
+  globalThis.__triptripGetAccessToken = () => "store-token";
+  globalThis.fetch = async (input, init = {}) => {
+    requests.push(new Headers(init.headers).get("authorization"));
+    return Response.json({ data: { value: true } });
+  };
+  try {
+    await requestGraphQL("query FetchValue { value }", undefined, { endpoint: "https://example.com/graphql" });
+    assert.equal(requests[0], "Bearer store-token");
+  } finally {
+    delete globalThis.__triptripGetAccessToken;
+    globalThis.fetch = originalFetch;
+  }
+});

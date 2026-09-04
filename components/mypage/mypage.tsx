@@ -12,6 +12,7 @@ import { useEffect, useRef, useState, type SubmitEvent } from "react";
 import { isAuthenticationErrorMessage } from "@/app/api/graphql/auth-session";
 import Dialog from "@/components/commons/dialog";
 import { getMypage, resetPassword } from "@/services/account";
+import { useAuthStore } from "@/stores/auth-store";
 import type {
   MypageData,
   MypageMember,
@@ -59,6 +60,8 @@ const sectionTitles: Record<MypageSection, string> = {
 };
 
 const pointPageSize = 4;
+// ponytail: practice API 목록은 페이지당 10개. API가 페이지 크기를 노출하지 않아 레퍼런스 기준을 사용한다.
+const productPageSize = 10;
 const chargeOptions = [10000, 30000, 50000, 100000];
 
 /** 거래·찜 목록이 비었을 때의 안내와 상품 카드 반복 구조를 공유합니다. */
@@ -124,10 +127,21 @@ export default function Mypage({
   openChargeOnMount = false,
 }: MypageProps) {
   const router = useRouter();
-  const [data, setData] = useState<MypageData>({ member, transactions, bookmarks, pointHistory });
+  const accessToken = useAuthStore((store) => store.accessToken);
+  const isAuthReady = useAuthStore((store) => store.isAuthReady);
+  const [data, setData] = useState<MypageData>({
+    member,
+    transactions,
+    bookmarks,
+    pointHistory,
+    boughtCount: transactions.filter((product) => product.status === "구매 완료").length,
+    soldCount: transactions.filter((product) => product.status !== "구매 완료").length,
+    bookmarkCount: bookmarks.length,
+  });
   const [dataError, setDataError] = useState("");
   const [section, setSection] = useState<MypageSection>(initialSection);
   const [productTab, setProductTab] = useState<ProductTab>("transactions");
+  const [productPage, setProductPage] = useState(1);
   const [pointPage, setPointPage] = useState(1);
   const [pointPeriod, setPointPeriod] = useState<PointHistoryPeriod>(3);
   const [passwordError, setPasswordError] = useState<PasswordError>(null);
@@ -146,6 +160,9 @@ export default function Mypage({
     transactions: currentTransactions,
     bookmarks: currentBookmarks,
     pointHistory: currentPointHistory,
+    boughtCount,
+    soldCount,
+    bookmarkCount,
   } = data;
 
   /**
@@ -153,7 +170,12 @@ export default function Mypage({
    * 인증 만료는 로그인 이동으로 처리하고 그 외 실패는 정적 초기 데이터와 오류 문구를 유지합니다.
    */
   useEffect(() => {
-    getMypage().then((nextData) => {
+    if (!isAuthReady) return;
+    if (!accessToken) {
+      router.replace("/login");
+      return;
+    }
+    getMypage(productPage).then((nextData) => {
       let storedCharges = parseStoredPointCharges(null);
       try {
         storedCharges = parseStoredPointCharges(
@@ -164,6 +186,16 @@ export default function Mypage({
       }
       setData(applyStoredPointCharges(nextData, storedCharges));
       setDataError("");
+      const nextPageCount = Math.max(
+        1,
+        productTab === "transactions"
+          ? Math.max(
+            Math.ceil(nextData.boughtCount / productPageSize),
+            Math.ceil(nextData.soldCount / productPageSize),
+          )
+          : Math.ceil(nextData.bookmarkCount / productPageSize),
+      );
+      setProductPage((current) => Math.min(current, nextPageCount));
     }).catch((error: unknown) => {
       const message = error instanceof Error ? error.message : "마이페이지 정보를 불러오지 못했습니다.";
       if (isAuthenticationErrorMessage(message)) {
@@ -172,7 +204,7 @@ export default function Mypage({
       }
       setDataError(message.split("\n")[0]);
     });
-  }, [router]);
+  }, [accessToken, isAuthReady, productPage, productTab, router]);
 
   // 포인트 충전 링크로 진입한 경우 최초 마운트 직후 대화상자를 자동으로 엽니다.
   useEffect(() => {
@@ -180,6 +212,15 @@ export default function Mypage({
     chargeDialogRef.current?.showModal();
   }, [openChargeOnMount]);
 
+  // 거래 탭은 구매·판매를 같은 page로 붙이므로 더 긴 쪽 기준으로 나눈다.
+  const productPageCount = Math.max(
+    1,
+    productTab === "transactions"
+      ? Math.max(Math.ceil(boughtCount / productPageSize), Math.ceil(soldCount / productPageSize))
+      : Math.ceil(bookmarkCount / productPageSize),
+  );
+  const visibleProductPage = Math.min(productPage, productPageCount);
+  const productCount = productTab === "transactions" ? boughtCount + soldCount : bookmarkCount;
   const filteredPointHistory = filterPointHistoryByPeriod(currentPointHistory, pointPeriod);
   const pageCount = Math.max(1, Math.ceil(filteredPointHistory.length / pointPageSize));
   const visiblePointHistory = filteredPointHistory.slice(
@@ -361,14 +402,20 @@ export default function Mypage({
                     <button
                       type="button"
                       aria-pressed={productTab === "transactions"}
-                      onClick={() => setProductTab("transactions")}
+                      onClick={() => {
+                        setProductTab("transactions");
+                        setProductPage(1);
+                      }}
                     >
                       거래내역
                     </button>
                     <button
                       type="button"
                       aria-pressed={productTab === "bookmarks"}
-                      onClick={() => setProductTab("bookmarks")}
+                      onClick={() => {
+                        setProductTab("bookmarks");
+                        setProductPage(1);
+                      }}
                     >
                       북마크
                     </button>
@@ -379,6 +426,37 @@ export default function Mypage({
                   <ProductList products={currentTransactions} />
                 ) : (
                   <ProductList products={currentBookmarks} bookmarked />
+                )}
+                {productCount > 0 && (
+                  <nav className={styles.pagination} aria-label="숙박권 보관함 페이지">
+                    <button
+                      type="button"
+                      aria-label="이전 페이지"
+                      disabled={visibleProductPage === 1}
+                      onClick={() => setProductPage((current) => current - 1)}
+                    >
+                      <Image src="/icon/outline/left_arrow.svg" alt="" width={18} height={18} />
+                    </button>
+                    {Array.from({ length: productPageCount }, (_, index) => index + 1).map((page) => (
+                      <button
+                        className={visibleProductPage === page ? styles.currentPage : undefined}
+                        type="button"
+                        aria-current={visibleProductPage === page ? "page" : undefined}
+                        onClick={() => setProductPage(page)}
+                        key={page}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                    <button
+                      type="button"
+                      aria-label="다음 페이지"
+                      disabled={visibleProductPage === productPageCount}
+                      onClick={() => setProductPage((current) => current + 1)}
+                    >
+                      <Image src="/icon/outline/right_arrow.svg" alt="" width={18} height={18} />
+                    </button>
+                  </nav>
                 )}
               </section>
             </>

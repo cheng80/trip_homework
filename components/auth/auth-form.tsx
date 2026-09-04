@@ -16,6 +16,7 @@ import {
   type AuthField,
 } from "@/domain/auth-validation";
 import { login, signup } from "@/services/account";
+import { useAuthStore } from "@/stores/auth-store";
 import styles from "./auth-form.module.css";
 
 type AuthFormProps = {
@@ -29,6 +30,8 @@ function getInput(form: HTMLFormElement, name: AuthField) {
 export default function AuthForm({ mode }: AuthFormProps) {
   const isLogin = mode === "login";
   const router = useRouter();
+  const setAccessToken = useAuthStore((store) => store.setAccessToken);
+  const finishAuth = useAuthStore((store) => store.finishAuth);
   const successDialog = useRef<HTMLDialogElement>(null);
   const [errors, setErrors] = useState<AuthErrors>({});
   const [requestError, setRequestError] = useState("");
@@ -71,7 +74,13 @@ export default function AuthForm({ mode }: AuthFormProps) {
     setIsSubmitting(true);
     try {
       if (isLogin) {
-        await login(getInput(form, "email").value, getInput(form, "password").value);
+        const accessToken = await login(getInput(form, "email").value, getInput(form, "password").value);
+        if (!accessToken) {
+          setRequestError("accessToken을 받지 못했습니다.");
+          return;
+        }
+        setAccessToken(accessToken);
+        finishAuth();
         router.replace("/travelproducts");
         router.refresh();
       } else {

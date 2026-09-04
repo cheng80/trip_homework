@@ -1,7 +1,7 @@
 /**
  * 역할: 회원가입·로그인·마이페이지·포인트 관련 GraphQL 작업을 화면 친화적인 함수로 제공합니다.
  * 처리 흐름: Apollo 응답 원본을 매퍼로 변환하고 인증 mutation의 세부 형식을 컴포넌트에서 숨깁니다.
- * 주의사항: 쿠키 수명주기는 GraphQL 프록시가 처리하므로 access token을 화면에 반환하지 않습니다.
+ * 주의사항: access token은 Zustand에 두고 refresh token 쿠키는 GraphQL 프록시가 전달합니다.
  */
 import { requestGraphQL, type GraphQLRequestOptions } from "@/graphql/client";
 import {
@@ -10,6 +10,7 @@ import {
   LOGIN_USER,
   LOGOUT_USER,
   RESET_USER_PASSWORD,
+  RESTORE_ACCESS_TOKEN,
 } from "@/graphql/mutations";
 import { FETCH_MYPAGE, FETCH_USER_LOGGED_IN } from "@/graphql/queries";
 import type { ApiPointTransaction, ApiTravelproduct, ApiUser } from "@/graphql/types";
@@ -24,12 +25,21 @@ export async function signup(input: SignupInput, options?: GraphQLRequestOptions
 }
 
 export async function login(email: string, password: string, options?: GraphQLRequestOptions) {
-  await requestGraphQL<{ loginUser: { accessToken: string } }>(
+  const data = await requestGraphQL<{ loginUser: { accessToken: string } }>(
     LOGIN_USER,
     { email: email.trim(), password },
     options,
   );
-  return true;
+  return data.loginUser.accessToken;
+}
+
+export async function restoreAccessToken(options?: GraphQLRequestOptions) {
+  const data = await requestGraphQL<{ restoreAccessToken: { accessToken: string } }>(
+    RESTORE_ACCESS_TOKEN,
+    undefined,
+    options,
+  );
+  return data.restoreAccessToken.accessToken;
 }
 
 export async function logout(options?: GraphQLRequestOptions) {
@@ -55,14 +65,17 @@ export async function getLoggedInUser(options?: GraphQLRequestOptions) {
   return mapMypageMember(data.fetchUserLoggedIn);
 }
 
-export async function getMypage(options?: GraphQLRequestOptions): Promise<MypageData> {
+export async function getMypage(page = 1, options?: GraphQLRequestOptions): Promise<MypageData> {
   const data = await requestGraphQL<{
     fetchUserLoggedIn: ApiUser;
     fetchTravelproductsIBought: ApiTravelproduct[];
     fetchTravelproductsISold: ApiTravelproduct[];
     fetchTravelproductsIPicked: ApiTravelproduct[];
+    fetchTravelproductsCountIBought: number;
+    fetchTravelproductsCountISold: number;
+    fetchTravelproductsCountIPicked: number;
     fetchPointTransactions: ApiPointTransaction[];
-  }>(FETCH_MYPAGE, { page: 1, search: "" }, options);
+  }>(FETCH_MYPAGE, { productPage: page, search: "" }, options);
 
   return {
     member: mapMypageMember(data.fetchUserLoggedIn),
@@ -74,6 +87,9 @@ export async function getMypage(options?: GraphQLRequestOptions): Promise<Mypage
     ],
     bookmarks: data.fetchTravelproductsIPicked.map((product) => mapMypageProduct(product, "북마크")),
     pointHistory: data.fetchPointTransactions.map(mapPointTransaction),
+    boughtCount: data.fetchTravelproductsCountIBought,
+    soldCount: data.fetchTravelproductsCountISold,
+    bookmarkCount: data.fetchTravelproductsCountIPicked,
   };
 }
 

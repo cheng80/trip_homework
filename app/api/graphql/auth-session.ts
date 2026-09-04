@@ -55,27 +55,6 @@ export function containsOperation(body: unknown, operation: string) {
   return typeof query === "string" && query.includes(operation);
 }
 
-/**
- * 브라우저에 공개할 응답 복사본에서 access token 값만 비웁니다.
- * 원본 객체는 수정하지 않아 이후 쿠키 생성 단계에서 토큰을 계속 사용할 수 있습니다.
- */
-export function redactAccessToken(body: unknown) {
-  const root = record(body);
-  const data = record(root?.data);
-  if (!root || !data) return body;
-
-  const nextData = { ...data };
-  let changed = false;
-  for (const field of ["loginUser", "restoreAccessToken"]) {
-    const token = record(nextData[field]);
-    if (typeof token?.accessToken !== "string") continue;
-    nextData[field] = { ...token, accessToken: "" };
-    changed = true;
-  }
-
-  return changed ? { ...root, data: nextData } : body;
-}
-
 /** access token을 1시간짜리 HttpOnly 쿠키로 만들며 빈 토큰은 즉시 만료를 뜻합니다. */
 export function accessTokenCookie(token = "", secure = false) {
   return [
@@ -92,10 +71,12 @@ export function clearRefreshTokenCookie() {
   return `${refreshTokenCookieName}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`;
 }
 
-/** 업스트림 쿠키의 Domain 제한을 제거하고 현재 애플리케이션 전체 경로에서 사용하게 만듭니다. */
-export function normalizeUpstreamCookie(cookie: string) {
+/** 업스트림 쿠키의 Domain 제한을 제거하고 현재 앱 경로에서 사용하게 만듭니다. HTTP에서는 Secure/SameSite=None을 빼 refresh token이 저장되게 합니다. */
+export function normalizeUpstreamCookie(cookie: string, secure = false) {
   const withoutDomain = cookie.replace(/;\s*Domain=[^;]*/gi, "");
-  return /;\s*Path=/i.test(withoutDomain)
+  const withPath = /;\s*Path=/i.test(withoutDomain)
     ? withoutDomain.replace(/;\s*Path=[^;]*/i, "; Path=/")
-    : `${withoutDomain}; Path=/`;
+    : withoutDomain + "; Path=/";
+  if (secure) return withPath;
+  return withPath.replace(/;\s*Secure/gi, "").replace(/;\s*SameSite=None/gi, "; SameSite=Lax");
 }

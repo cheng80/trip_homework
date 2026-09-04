@@ -21,6 +21,9 @@ test("충전 금액을 보유 포인트와 사용 내역에 반영한다", () =>
     transactions: [],
     bookmarks: [],
     pointHistory: [],
+    boughtCount: 0,
+    soldCount: 0,
+    bookmarkCount: 0,
   };
 
   const charged = applyPointCharge(data, 3000, "charge-1", "2026. 08. 27");
@@ -40,6 +43,9 @@ test("사용자별로 저장된 더미 충전 내역을 다시 반영한다", ()
     transactions: [],
     bookmarks: [],
     pointHistory: [],
+    boughtCount: 0,
+    soldCount: 0,
+    bookmarkCount: 0,
   };
   const stored = JSON.stringify([
     { id: "local-charge-1", date: "2026. 08. 27", amount: 3000 },
