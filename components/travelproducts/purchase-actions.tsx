@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { isAuthenticationErrorMessage } from "@/app/api/graphql/auth-session";
 import Dialog from "@/components/commons/dialog";
 import { getLoggedInUser } from "@/services/account";
+import { useAuthStore } from "@/stores/auth-store";
 import {
   buyTravelproduct,
   deleteTravelproduct,
@@ -45,12 +46,15 @@ export default function PurchaseActions({
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [pickedCount, setPickedCount] = useState(initialPickedCount);
   const [picked, setPicked] = useState(false);
+  const accessToken = useAuthStore((store) => store.accessToken);
+  const isAuthReady = useAuthStore((store) => store.isAuthReady);
 
   useEffect(() => {
+    if (!isAuthReady || !accessToken) return;
     getLoggedInUser().then((user) => setCurrentUserId(user.id)).catch(() => setCurrentUserId(""));
-  }, []);
+  }, [accessToken, isAuthReady]);
 
-  const isOwner = Boolean(currentUserId && currentUserId === sellerId);
+  const isOwner = Boolean(accessToken && currentUserId && currentUserId === sellerId);
 
   const togglePick = async () => {
     setStatus("");
@@ -117,7 +121,7 @@ export default function PurchaseActions({
 
   return (
     <>
-      {currentUserId !== null && !isOwner && (
+      {accessToken && currentUserId !== null && !isOwner && (
         <button
           className={styles.buyButton}
           type="button"

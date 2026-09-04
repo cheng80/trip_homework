@@ -43,4 +43,7 @@ export const mypageData: MypageData = {
   transactions: mypageTransactions,
   bookmarks: mypageBookmarks,
   pointHistory: mypagePointHistory,
+  boughtCount: mypageTransactions.filter((product) => product.status === "구매 완료").length,
+  soldCount: mypageTransactions.filter((product) => product.status !== "구매 완료").length,
+  bookmarkCount: mypageBookmarks.length,
 };

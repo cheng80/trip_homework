@@ -9,21 +9,23 @@ import ProductCatalog from "@/components/travelproducts/product-catalog";
 import PromotionBanner from "@/components/travelproducts/promotion-banner";
 import RecentProducts from "@/components/travelproducts/recent-products";
 import { travelBanners, travelCategories } from "@/data/travel-products";
+import { inDateRange } from "@/domain/date-range";
 import { getBestTravelproducts, getTravelproducts } from "@/services/travel-products";
 import styles from "./page.module.css";
 
 type TravelProductsPageProps = {
-  searchParams: Promise<{ category?: string; q?: string }>;
+  searchParams: Promise<{ category?: string; endDate?: string; q?: string; startDate?: string }>;
 };
 
 export default async function TravelProductsPage({ searchParams }: TravelProductsPageProps) {
-  const { category: rawCategory, q = "" } = await searchParams;
+  const { category: rawCategory, endDate = "", q = "", startDate = "" } = await searchParams;
   const search = q.trim();
   const category = travelCategories.some(([label]) => label === rawCategory) ? rawCategory : "";
   const [products, bestProducts] = await Promise.all([
     getTravelproducts({ page: 1, search: category || search, isSoldout: false }),
     getBestTravelproducts(),
   ]);
+  const visibleProducts = products.filter((product) => inDateRange(product.createdAt, startDate, endDate));
 
   return (
     <main className={styles.page}>
@@ -33,8 +35,10 @@ export default async function TravelProductsPage({ searchParams }: TravelProduct
         <PromotionBanner />
         <ProductCatalog
           categories={travelCategories}
-          products={products}
+          products={visibleProducts}
           search={search}
+          startDate={startDate}
+          endDate={endDate}
           selectedCategory={category}
         />
       </div>

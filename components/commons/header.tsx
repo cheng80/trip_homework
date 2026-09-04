@@ -1,7 +1,7 @@
 /**
  * 역할: 주요 서비스 라우트를 연결하는 공통 헤더입니다.
  * 처리 흐름: 현재 경로를 기준으로 활성 메뉴를 표시하고 데스크톱·모바일 탐색 구조를 공유합니다.
- * 주의사항: 로그인 여부와 무관하게 동일한 정보 구조를 유지합니다.
+ * 주의사항: 인증 복구가 끝나기 전에는 로그인 버튼을 확정하지 않습니다.
  */
 "use client";
 
@@ -10,6 +10,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getLoggedInUser, logout } from "@/services/account";
+import { useAuthStore } from "@/stores/auth-store";
 import type { MypageMember } from "@/types/mypage";
 import styles from "./header.module.css";
 
@@ -22,16 +23,22 @@ const navigationItems = [
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
+  const accessToken = useAuthStore((store) => store.accessToken);
+  const isAuthReady = useAuthStore((store) => store.isAuthReady);
+  const clearAuth = useAuthStore((store) => store.clearAuth);
   const [user, setUser] = useState<MypageMember | null>(null);
 
   useEffect(() => {
+    if (!isAuthReady || !accessToken) return;
     getLoggedInUser().then(setUser).catch(() => setUser(null));
-  }, [pathname]);
+  }, [accessToken, isAuthReady, pathname]);
+  const visibleUser = accessToken ? user : null;
 
   const handleLogout = async () => {
     try {
       await logout();
     } finally {
+      clearAuth();
       setUser(null);
       router.replace("/login");
       router.refresh();
@@ -53,12 +60,12 @@ export default function Header() {
           ))}
         </nav>
 
-        {user ? (
+        {visibleUser ? (
           <details className={styles.profile}>
             <summary aria-label="프로필 메뉴">
               <Image
                 className={styles.profileImage}
-                src={user.profile}
+                src={visibleUser.profile}
                 alt=""
                 width={36}
                 height={36}
@@ -74,15 +81,15 @@ export default function Header() {
 
             <div className={styles.profileMenu}>
               <Link className={styles.profileInfo} href="/mypage">
-                <Image src={user.profile} alt="" width={44} height={44} />
+                <Image src={visibleUser.profile} alt="" width={44} height={44} />
                 <span>
-                  <strong>{user.name}님</strong>
-                  <small>{user.email}</small>
+                  <strong>{visibleUser.name}님</strong>
+                  <small>{visibleUser.email}</small>
                 </span>
               </Link>
               <Link className={styles.profileRow} href="/mypage?section=points">
                 <Image src="/icon/outline/point.svg" alt="" width={22} height={22} />
-                <strong>{user.points.toLocaleString()} P</strong>
+                <strong>{visibleUser.points.toLocaleString()} P</strong>
               </Link>
               <Link className={styles.profileRow} href="/mypage?charge=1">
                 <Image src="/icon/filled/charge.svg" alt="" width={22} height={22} />
@@ -120,13 +127,13 @@ export default function Header() {
               ))}
             </nav>
             <div className={styles.mobileAuth}>
-              {user ? (
+              {visibleUser ? (
                 <>
                   <Link className={styles.mobileProfile} href="/mypage">
-                    <Image src={user.profile} alt="" width={40} height={40} />
+                    <Image src={visibleUser.profile} alt="" width={40} height={40} />
                     <span>
-                      <strong>{user.name}님</strong>
-                      <small>{user.points.toLocaleString()} P</small>
+                      <strong>{visibleUser.name}님</strong>
+                      <small>{visibleUser.points.toLocaleString()} P</small>
                     </span>
                   </Link>
                   <Link href="/login" onClick={(event) => {

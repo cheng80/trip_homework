@@ -93,27 +93,30 @@ export const FETCH_USER_LOGGED_IN = `
 `;
 
 export const FETCH_MYPAGE = `
-  query FetchMypage($page: Int, $search: String) {
+  query FetchMypage($productPage: Int, $search: String) {
     fetchUserLoggedIn {
       _id email name picture
       userPoint { amount }
     }
-    fetchTravelproductsIBought(page: $page, search: $search) {
+    fetchTravelproductsIBought(page: $productPage, search: $search) {
       _id name remarks contents price tags images pickedCount soldAt createdAt
       travelproductAddress { address addressDetail }
       seller { _id email name picture }
     }
-    fetchTravelproductsISold(page: $page, search: $search) {
+    fetchTravelproductsISold(page: $productPage, search: $search) {
       _id name remarks contents price tags images pickedCount soldAt createdAt
       travelproductAddress { address addressDetail }
       seller { _id email name picture }
     }
-    fetchTravelproductsIPicked(page: $page, search: $search) {
+    fetchTravelproductsIPicked(page: $productPage, search: $search) {
       _id name remarks contents price tags images pickedCount soldAt createdAt
       travelproductAddress { address addressDetail }
       seller { _id email name picture }
     }
-    fetchPointTransactions(page: $page, search: $search) {
+    fetchTravelproductsCountIBought
+    fetchTravelproductsCountISold
+    fetchTravelproductsCountIPicked
+    fetchPointTransactions(page: 1, search: $search) {
       _id amount balance status statusDetail createdAt
       travelproduct { _id name }
     }

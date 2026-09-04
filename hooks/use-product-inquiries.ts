@@ -7,6 +7,7 @@
 
 import { useEffect, useState, type SubmitEvent } from "react";
 import { getLoggedInUser } from "@/services/account";
+import { useAuthStore } from "@/stores/auth-store";
 import {
   createTravelproductQuestion,
   createTravelproductQuestionAnswer,
@@ -34,10 +35,14 @@ export function useProductInquiries(
   const [editingAnswerContents, setEditingAnswerContents] = useState("");
   const [status, setStatus] = useState("");
   const [pending, setPending] = useState(false);
+  const accessToken = useAuthStore((store) => store.accessToken);
+  const isAuthReady = useAuthStore((store) => store.isAuthReady);
 
   // 최초 문의에는 답변이 포함되지 않으므로 현재 사용자와 질문별 답변을 병렬로 보강합니다.
   useEffect(() => {
-    getLoggedInUser().then((user) => setCurrentUserId(user.id)).catch(() => undefined);
+    if (isAuthReady && accessToken) {
+      getLoggedInUser().then((user) => setCurrentUserId(user.id)).catch(() => undefined);
+    }
     Promise.all(initialInquiries.map(async (inquiry) => ({
       inquiryId: inquiry.id,
       answer: (await getTravelproductQuestionAnswers(inquiry.id).catch(() => []))[0],
@@ -47,7 +52,7 @@ export function useProductInquiries(
         answer: answers.find((item) => item.inquiryId === inquiry.id)?.answer,
       })));
     });
-  }, [initialInquiries]);
+  }, [accessToken, initialInquiries, isAuthReady]);
 
   const message = (error: unknown, fallback: string) => (
     error instanceof Error ? error.message.split("\n")[0] : fallback

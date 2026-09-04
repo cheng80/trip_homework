@@ -11,7 +11,6 @@ import {
   isAuthenticationErrorMessage,
   isLogoutSuccess,
   normalizeUpstreamCookie,
-  redactAccessToken,
 } from "./auth-session.ts";
 
 test("upstream 요청에는 항상 유효한 Origin을 사용한다", () => {
@@ -22,11 +21,10 @@ test("upstream 요청에는 항상 유효한 Origin을 사용한다", () => {
   );
 });
 
-test("인증 응답의 access token은 쿠키로 옮기고 본문에서 제거한다", () => {
+test("인증 응답의 access token은 본문에서 읽고 HttpOnly 쿠키로도 저장한다", () => {
   const body = { data: { loginUser: { accessToken: "secret.token" } } };
 
   assert.equal(getAccessToken(body), "secret.token");
-  assert.deepEqual(redactAccessToken(body), { data: { loginUser: { accessToken: "" } } });
   assert.match(accessTokenCookie("secret.token"), /HttpOnly/);
   assert.match(accessTokenCookie("secret.token", true), /SameSite=Lax; Max-Age=3600; Secure/);
 });
@@ -47,5 +45,16 @@ test("외부 refresh token 쿠키는 현재 앱 전체 경로에서만 사용한
   assert.equal(
     normalizeUpstreamCookie("refreshToken=value; Domain=codebootcamp.co.kr; Path=/graphql; HttpOnly"),
     "refreshToken=value; Path=/; HttpOnly",
+  );
+});
+
+test("HTTP에서는 refresh token의 Secure와 SameSite=None을 제거한다", () => {
+  assert.equal(
+    normalizeUpstreamCookie("refreshToken=value; Path=/; SameSite=None; Secure; httpOnly"),
+    "refreshToken=value; Path=/; SameSite=Lax; httpOnly",
+  );
+  assert.equal(
+    normalizeUpstreamCookie("refreshToken=value; Path=/; SameSite=None; Secure; httpOnly", true),
+    "refreshToken=value; Path=/; SameSite=None; Secure; httpOnly",
   );
 });

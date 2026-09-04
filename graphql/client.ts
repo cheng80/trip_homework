@@ -36,6 +36,11 @@ export class GraphQLRequestError extends Error {
 
 const browserClients = new Map<string, ApolloClient>();
 
+/** 브라우저 Zustand store가 등록한 getter를 읽어 Authorization 헤더에 넣습니다. */
+function storedAccessToken() {
+  return (globalThis as { __triptripGetAccessToken?: () => string }).__triptripGetAccessToken?.() ?? "";
+}
+
 /** 명시 endpoint, 브라우저 프록시, 서버 직결 주소 순으로 실행 위치에 맞는 목적지를 선택합니다. */
 function endpoint(options: GraphQLRequestOptions) {
   if (options.endpoint) return options.endpoint;
@@ -119,8 +124,9 @@ export async function requestGraphQL<T, V extends OperationVariables = Operation
   variables?: V,
   options: GraphQLRequestOptions = {},
 ) {
+  const accessToken = options.accessToken ?? storedAccessToken();
   const headers: Record<string, string> = { "content-type": "application/json" };
-  if (options.accessToken) headers.authorization = `Bearer ${options.accessToken}`;
+  if (accessToken) headers.authorization = "Bearer " + accessToken;
   const document = gql(query) as TypedDocumentNode<T, V>;
   const operation = document.definitions.find((definition) => definition.kind === "OperationDefinition");
   const context = {
@@ -159,8 +165,9 @@ export async function uploadGraphQLFile<T>(
   body.append("map", JSON.stringify({ 0: ["variables.file"] }));
   body.append("0", file, filename);
 
+  const accessToken = options.accessToken ?? storedAccessToken();
   const headers: Record<string, string> = {};
-  if (options.accessToken) headers.authorization = `Bearer ${options.accessToken}`;
+  if (accessToken) headers.authorization = "Bearer " + accessToken;
   const response = await fetch(endpoint(options), {
     method: "POST",
     headers,

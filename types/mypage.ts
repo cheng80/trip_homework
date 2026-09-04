@@ -32,4 +32,7 @@ export type MypageData = {
   transactions: MypageProduct[];
   bookmarks: MypageProduct[];
   pointHistory: MypagePointHistory[];
+  boughtCount: number;
+  soldCount: number;
+  bookmarkCount: number;
 };

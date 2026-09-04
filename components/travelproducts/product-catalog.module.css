@@ -30,6 +30,13 @@
   background: #ffffff;
 }
 
+.filters > .field:first-of-type {
+  height: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
 .field input {
   width: 100%;
   min-width: 0;
@@ -46,6 +53,10 @@
 
 .field:focus-within {
   border-color: #111111;
+}
+
+.filters > .field:first-of-type:focus-within {
+  border-color: transparent;
 }
 
 .searchButton,
@@ -108,6 +119,22 @@
   gap: 40px 20px;
 }
 
+.empty {
+  display: grid;
+  min-height: 220px;
+  grid-column: 1 / -1;
+  place-content: center;
+  gap: 8px;
+  color: #777777;
+  font-size: 14px;
+  text-align: center;
+}
+
+.empty strong {
+  color: #333333;
+  font-size: 16px;
+}
+
 .sellButton:focus-visible,
 .searchButton:focus-visible,
 .categories a:focus-visible {
@@ -165,6 +192,10 @@
   .field,
   .searchButton {
     height: 40px;
+  }
+
+  .filters > .field:first-of-type {
+    height: auto;
   }
 
   .sellButton {

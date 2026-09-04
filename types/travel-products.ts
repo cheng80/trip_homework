@@ -11,6 +11,7 @@ export type TravelProduct = {
   title: string;
   tags: string;
   price: string;
+  createdAt: string;
   pickedCount?: number;
   seller: { id?: string; name: string; profile: string };
 };

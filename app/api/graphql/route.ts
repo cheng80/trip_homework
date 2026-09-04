@@ -1,7 +1,7 @@
 /**
  * 역할: 브라우저와 공용 GraphQL 서버 사이의 인증 프록시 Route Handler입니다.
- * 처리 흐름: 요청 정제, 쿠키 토큰 전달, 만료 토큰 복원, 응답 토큰 비공개 처리를 순서대로 수행합니다.
- * 주의사항: 업스트림 access token은 HttpOnly 쿠키로 옮기고 공개 응답 본문에서는 제거합니다.
+ * 처리 흐름: 요청 정제, 쿠키 토큰 전달, 만료 토큰 복원, HTTP refresh cookie 정규화를 순서대로 수행합니다.
+ * 주의사항: access token은 응답 본문과 HttpOnly 쿠키에 함께 두고, refresh token 쿠키는 HTTP에서도 저장되게 정규화합니다.
  */
 import { RESTORE_ACCESS_TOKEN } from "../../../graphql/mutations";
 import { sanitizeRichTextRequest } from "@/domain/sanitize-rich-text";
@@ -15,7 +15,6 @@ import {
   hasAuthenticationError,
   isLogoutSuccess,
   normalizeUpstreamCookie,
-  redactAccessToken,
 } from "./auth-session";
 
 const endpoint = process.env.GRAPHQL_API_URL || "https://main-practice.codebootcamp.co.kr/graphql";
@@ -69,7 +68,7 @@ export async function POST(request: Request) {
     const collectCookies = (response: Response) => {
       const headers = response.headers as Headers & { getSetCookie?: () => string[] };
       const values = headers.getSetCookie?.() ?? [response.headers.get("set-cookie")].filter(Boolean) as string[];
-      setCookies.push(...values.map(normalizeUpstreamCookie));
+      setCookies.push(...values.map((value) => normalizeUpstreamCookie(value, process.env.NODE_ENV === "production")));
     };
     collectCookies(upstream);
 
@@ -102,7 +101,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // 로그인·복원으로 받은 새 토큰은 본문 대신 HttpOnly 쿠키에 저장하고 로그아웃 시 모두 만료시킵니다.
+    // 로그인·복원 토큰은 Zustand가 읽을 수 있게 본문에 남기고, 서버 페이지용 HttpOnly 쿠키도 함께 저장합니다.
     const nextToken = getAccessToken(responseJson);
     if (nextToken) setCookies.push(accessTokenCookie(nextToken, process.env.NODE_ENV === "production"));
     if (logoutRequest || isLogoutSuccess(responseJson)) {
@@ -116,7 +115,7 @@ export async function POST(request: Request) {
 
     const publicBody = responseJson === undefined
       ? responseBody
-      : JSON.stringify(redactAccessToken(responseJson));
+      : JSON.stringify(responseJson);
 
     // 업스트림 상태 코드는 유지하되 외부 도메인용 헤더는 전달하지 않습니다.
     return new Response(publicBody, {
