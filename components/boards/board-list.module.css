@@ -53,19 +53,10 @@
 }
 
 .dateFields {
-  padding: 0 14px;
-  gap: 8px;
+  border: 0;
+  background: transparent;
 }
 
-.dateFields label {
-  display: flex;
-  min-width: 0;
-  flex: 1;
-  align-items: center;
-  gap: 8px;
-}
-
-.dateFields input,
 .keywordField input {
   width: 100%;
   min-width: 0;
@@ -86,7 +77,6 @@
   color: #888888;
 }
 
-.dateFields:focus-within,
 .keywordField:focus-within {
   border-color: #111111;
 }
@@ -276,25 +266,6 @@
     grid-template-columns: 1fr;
   }
 
-  .dateFields {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .dateFields > span {
-    display: none;
-  }
-
-  .dateFields label {
-    min-height: 48px;
-  }
-
-  .dateFields label + label {
-    border-top: 1px solid #e1e1e1;
-  }
-
-  .dateFields input,
   .keywordField input {
     font-size: 16px;
   }

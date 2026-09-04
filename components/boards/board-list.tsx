@@ -7,6 +7,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import DateRangeField from "@/components/commons/date-range-field";
 import type { BoardPost } from "@/types/boards";
 import styles from "./board-list.module.css";
 
@@ -66,27 +67,15 @@ export default function BoardList({
 
       <div className={styles.tools}>
         <form className={styles.searchForm} id="board-filters" action="/boards">
-          <div className={styles.dateFields}>
-            <label>
-              <span className={styles.srOnly}>검색 시작일</span>
-              <input
-                type="date"
-                name="startDate"
-                defaultValue={startDate}
-                max={endDate || undefined}
-              />
-            </label>
-            <span aria-hidden="true">–</span>
-            <label>
-              <span className={styles.srOnly}>검색 종료일</span>
-              <input
-                type="date"
-                name="endDate"
-                defaultValue={endDate}
-                min={startDate || undefined}
-              />
-            </label>
-          </div>
+          <DateRangeField
+            className={styles.dateFields}
+            label="검색 기간"
+            startName="startDate"
+            endName="endDate"
+            startDate={startDate}
+            endDate={endDate}
+            tone="board"
+          />
           <label className={styles.keywordField}>
             <span className={styles.srOnly}>게시글 제목 검색</span>
             <Image src="/icon/outline/search.svg" alt="" width={20} height={20} />

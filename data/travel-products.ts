@@ -25,6 +25,7 @@ export const travelProducts: TravelProduct[] = [
     title: "당장 가고 싶은 숲속 감성 스테이",
     tags: "#플랜테리어 #룸서비스",
     price: "32,900원",
+    createdAt: "2026-08-20",
     seller: mockSeller,
   },
   {
@@ -35,6 +36,7 @@ export const travelProducts: TravelProduct[] = [
     title: "마을까지 깨끗해지는 하얀 숙소",
     tags: "#바다위숙소 #반신욕&스파",
     price: "32,900원",
+    createdAt: "2026-08-21",
     seller: mockSeller,
   },
   {
@@ -45,6 +47,7 @@ export const travelProducts: TravelProduct[] = [
     title: "조용히 쉬어 가기 좋은 작은 호텔",
     tags: "#호텔 #플랜테리어",
     price: "49,000원",
+    createdAt: "2026-08-22",
     seller: mockSeller,
   },
   {
@@ -55,6 +58,7 @@ export const travelProducts: TravelProduct[] = [
     title: "햇살이 머무는 하루를 위한 아지트",
     tags: "#1인전용 #룸서비스",
     price: "38,500원",
+    createdAt: "2026-08-23",
     seller: mockSeller,
   },
 ];

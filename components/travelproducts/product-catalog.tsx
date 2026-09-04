@@ -5,6 +5,7 @@
  */
 import Image from "next/image";
 import Link from "next/link";
+import DateRangeField from "@/components/commons/date-range-field";
 import SectionTitle from "@/components/commons/section-title";
 import type { TravelCategory, TravelProduct } from "@/types/travel-products";
 import TravelProductCard from "./travel-product-card";
@@ -14,6 +15,8 @@ type ProductCatalogProps = {
   categories: TravelCategory[];
   products: TravelProduct[];
   search?: string;
+  startDate?: string;
+  endDate?: string;
   selectedCategory?: string;
 };
 
@@ -21,8 +24,19 @@ export default function ProductCatalog({
   categories,
   products,
   search = "",
+  startDate = "",
+  endDate = "",
   selectedCategory = "",
 }: ProductCatalogProps) {
+  const catalogQuery = (nextCategory = "") => {
+    const params = new URLSearchParams();
+    if (search) params.set("q", search);
+    if (startDate) params.set("startDate", startDate);
+    if (endDate) params.set("endDate", endDate);
+    if (nextCategory) params.set("category", nextCategory);
+    const query = params.toString();
+    return query ? `/travelproducts?${query}` : "/travelproducts";
+  };
   return (
     <section aria-labelledby="exclusive-title">
       <SectionTitle as="h2" id="exclusive-title">여기에서만 예약할 수 있는 숙소</SectionTitle>
@@ -33,11 +47,15 @@ export default function ProductCatalog({
       </div>
 
       <form className={styles.filters} action="/travelproducts">
-        <label className={styles.srOnly} htmlFor="dates">여행 날짜</label>
-        <div className={styles.field}>
-          <Image src="/icon/outline/calendar.svg" alt="" width={20} height={20} />
-          <input id="dates" name="dates" placeholder="YYYY. MM. DD - YYYY. MM. DD" />
-        </div>
+        {selectedCategory ? <input type="hidden" name="category" value={selectedCategory} /> : null}
+        <DateRangeField
+          className={styles.field}
+          label="여행 날짜"
+          startName="startDate"
+          endName="endDate"
+          startDate={startDate}
+          endDate={endDate}
+        />
 
         <label className={styles.srOnly} htmlFor="keyword">숙소 검색어</label>
         <div className={`${styles.field} ${styles.searchField}`}>
@@ -53,8 +71,8 @@ export default function ProductCatalog({
         {categories.map(([label, icon]) => {
           const isActive = selectedCategory === label;
           const href = isActive
-            ? "/travelproducts"
-            : `/travelproducts?category=${encodeURIComponent(label)}`;
+            ? catalogQuery()
+            : catalogQuery(label);
 
           return (
             <li className={isActive ? styles.activeCategory : ""} key={label}>
@@ -68,9 +86,14 @@ export default function ProductCatalog({
       </ul>
 
       <div className={styles.productGrid}>
-        {products.map((product, index) => (
+        {products.length > 0 ? products.map((product, index) => (
           <TravelProductCard product={product} eager={index === 0} key={product.id} />
-        ))}
+        )) : (
+          <div className={styles.empty}>
+            <strong>검색 결과가 없습니다.</strong>
+            <span>날짜 또는 검색어를 바꿔 다시 검색해 주세요.</span>
+          </div>
+        )}
       </div>
     </section>
   );

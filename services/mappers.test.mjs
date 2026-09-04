@@ -91,6 +91,7 @@ test("GraphQL 숙박권과 사용자 응답을 UI 모델로 변환한다", () =>
   assert.equal(product.id, "product-1");
   assert.equal(product.price, "32,900원");
   assert.equal(product.tags, "#호텔 #스파");
+  assert.equal(product.createdAt, "2026-08-27");
   assert.equal(product.pickedCount, 2);
   assert.equal(product.seller.id, "user-1");
   assert.equal(product.seller.name, "김트립");

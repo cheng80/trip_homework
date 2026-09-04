@@ -112,6 +112,7 @@ export function mapTravelProduct(product: ApiTravelproduct): TravelProduct {
     title: product.name,
     tags: (product.tags ?? []).map((tag) => tag.startsWith("#") ? tag : `#${tag}`).join(" "),
     price: `${product.price.toLocaleString("ko-KR")}원`,
+    createdAt: dateOnly(product.createdAt),
     pickedCount: product.pickedCount,
     seller: {
       id: product.seller?._id,

@@ -5,6 +5,7 @@
  */
 import BoardList from "@/components/boards/board-list";
 import HotBoardList from "@/components/boards/hot-board-list";
+import { dateBoundary } from "@/domain/date-range";
 import { getBestBoards, getBoards } from "@/services/boards";
 import styles from "./page.module.css";
 
@@ -17,10 +18,6 @@ type BoardsPageProps = {
     startDate?: string;
   }>;
 };
-
-const dateBoundary = (value: string | undefined, end = false) => value
-  ? `${value}T${end ? "23:59:59.999" : "00:00:00.000"}Z`
-  : undefined;
 
 export default async function BoardsPage({ searchParams }: BoardsPageProps) {
   const params = await searchParams;
